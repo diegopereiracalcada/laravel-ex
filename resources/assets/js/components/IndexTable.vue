@@ -1,0 +1,159 @@
+<template>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th v-for="header in headers">
+                        {{header.label}}
+                    </th>
+                    <th>
+                        Editar
+                    </th>
+                    <th>
+                        Excluir
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in rows">
+                    <td v-for="header in headers">
+                        {{row[header.field]}}
+                    </td>
+                    <td>
+                        <router-link 
+                            v-if="editRouteName" 
+                            class="btn light-blue darken-4 white-text" 
+                            :to="{ name: editRouteName, params: {id: row.id } }"
+                            ><i class="material-icons right" aria-hidden="true">edit</i>
+                            editar</router-link>
+                    </td>
+                    <td>
+                        <button 
+                            v-if="deleteUrl"
+                            @click="sendDelete(row.id)"
+                            class="btn grey darken-1"
+                            ><i class="material-icons right" aria-hidden="true">cancel</i>
+                            remover</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div
+            v-if="loading" 
+            class="loading-wrapper">
+            <img
+                style="width: 40%"
+                src="/images/loading.gif" />
+        </div>
+
+        <div v-if="error" class="error-display">
+            <div><b>Erro ao carregar: </b></div>
+            <div>{{error}}</div>
+        </div>
+
+    </div>
+</template>
+
+
+<script>
+
+var rows = {},
+    loading = false,
+    error = null;
+
+
+export default {
+    props: [ 
+        'deleteUrl',
+        'editRouteName', 
+        'hasPagination', 
+        'headers',
+        'url',
+    ],
+    data() {
+        return {
+            rows,
+            loading,
+            error
+        };
+    },
+    created () {
+        this.fetchData()
+    },
+    watch: {
+        '$route': 'fetchData'
+    },
+    methods: {
+        fetchData () {
+            var url = this.url;
+            if(!url ||  !this.headers){
+                alert("configure as url's e os headers do fetch da tabela");
+            }
+            this.error = this.post = null
+            this.loading = true
+            fetch(url)
+                .then( resp => resp.json() )
+                .then( data => {
+                    this.setData(
+                        this.hasPagination 
+                            ? data.data 
+                            : data
+                    )
+                })
+                .catch( error => {
+                    this.loading = false
+                    this.error = error
+                })
+        },
+        getFormattedDeleteUrl(id){
+            console.log("getFormattedDeleteUrl", this.deleteUrl, id);
+            return this.deleteUrl.replace("${id}", id);
+        },
+        removeRow(){
+            alert('Registro removido com sucesso.');
+            this.fetchData();
+        },
+        sendDelete(id){
+            if(!confirm('Confirma exclusão?')){
+                return false;
+            }
+            fetch(this.getFormattedDeleteUrl(id), {
+                method: 'DELETE',
+                body: id
+            })
+                .then(response => {
+                    console.log(response, response.status);
+                    if(response.status == 200){
+                        this.removeRow();
+                    } else {
+                        throw new Error("Error ao tentar excluir");
+                    }
+                })
+                .catch(error => alert(error))
+        },
+        setData(rows) {
+            this.rows = rows;
+            this.loading = false
+        }
+    },
+    computed: {
+    },
+};
+</script>
+
+<style lang="scss">
+    .loading-wrapper{
+        display: flex;
+        justify-content: center;
+    }
+
+    .error-display{
+        color: white;
+        min-height: 60px;
+        background: #a7a7a7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
