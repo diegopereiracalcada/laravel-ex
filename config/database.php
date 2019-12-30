@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => 'pgsql',
 
     /*
     |--------------------------------------------------------------------------
@@ -68,11 +68,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env(strtoupper(env('DB_SERVICE_NAME', 'PGSQL')).'_SERVICE_HOST', env('DB_HOST', 'localhost')),
-            'port' => env(strtoupper(env('DB_SERVICE_NAME', 'PGSQL')).'_SERVICE_PORT', env('DB_PORT', '5432')),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => 'postgresql',
+            'port' => '5432',
+            'database' => 'postgres',
+            'username' => 'postgres',
+            'password' => 'postgres',
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
