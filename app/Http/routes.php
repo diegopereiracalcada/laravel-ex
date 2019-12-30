@@ -11,4 +11,10 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
+Route::resource('api/clientes', 'ClientesController');
+
+Route::resource('api/chamados', 'ChamadosController');
+
 Route::get('/{any}', 'VueController@index')->where('any', '.*');
