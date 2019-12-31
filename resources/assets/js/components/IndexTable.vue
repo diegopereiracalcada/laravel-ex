@@ -6,10 +6,10 @@
                     <th v-for="header in headers">
                         {{header.label}}
                     </th>
-                    <th>
+                    <th v-if="editRouteName">
                         Editar
                     </th>
-                    <th>
+                    <th v-if="deleteUrl">
                         Excluir
                     </th>
                 </tr>
@@ -19,7 +19,7 @@
                     <td v-for="header in headers">
                         {{row[header.field]}}
                     </td>
-                    <td>
+                    <td v-if="editRouteName">
                         <router-link 
                             v-if="editRouteName" 
                             class="btn light-blue darken-4 white-text" 
@@ -27,7 +27,7 @@
                             ><i class="material-icons right" aria-hidden="true">edit</i>
                             editar</router-link>
                     </td>
-                    <td>
+                    <td v-if="deleteUrl">
                         <button 
                             v-if="deleteUrl"
                             @click="sendDelete(row.id)"
