@@ -16,8 +16,7 @@ const router = new VueRouter({
     routes: [
         {
             path: '/',
-            name: 'home',
-            component: Home
+            redirect: '/chamados'
         },
         {
             path: '/chamados',

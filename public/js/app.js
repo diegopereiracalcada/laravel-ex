@@ -373,11 +373,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
+var loading = false;
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "App",
   components: {
     Navbar: _components_Navbar__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      loading: loading
+    };
   },
   methods: {
     successMessageHandler: function successMessageHandler(msg) {
@@ -391,6 +405,10 @@ __webpack_require__.r(__webpack_exports__);
       iziToast.error({
         message: msg
       });
+    },
+    changeLoadingStatusHandler: function changeLoadingStatusHandler(status) {
+      console.log("changeLoadingStatus", status);
+      this.loading = status;
     }
   }
 });
@@ -443,15 +461,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 var CHAMADOS_INDEX_API_URL = "/api/chamados?status=ABERTO";
 var chamados = [],
-    error = '';
+    error = "";
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Chamado: _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -463,29 +476,30 @@ var chamados = [],
     };
   },
   created: function created() {
+    this.$emit("changeLoadingStatus", true); //this.error = null;
+
     this.fetchData();
   },
   watch: {
-    '$route': 'fetchData'
+    $route: "fetchData"
   },
   methods: {
     fetchData: function fetchData() {
       var _this = this;
 
-      this.error = null;
-      this.loading = true;
       fetch(CHAMADOS_INDEX_API_URL).then(function (resp) {
         return resp.json();
       }).then(function (data) {
         _this.setData(data);
       })["catch"](function (error) {
-        _this.loading = false;
+        _this.$emit("changeLoadingStatus", false);
+
         _this.error = error;
       });
     },
     setData: function setData(chamados) {
       this.chamados = chamados;
-      this.loading = false;
+      this.$emit("changeLoadingStatus", false);
     }
   }
 });
@@ -878,6 +892,25 @@ exports.push([module.i, ".user-view {\n  text-align: center;\n}\n.user-view img 
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/App.vue?vue&type=style&index=0&lang=scss&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/views/App.vue?vue&type=style&index=0&lang=scss& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".loading-wrapper {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  z-index: 10;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  background: #3e3b3b94;\n}\n.loading-wrapper img {\n  width: 60% !important;\n  height: 30% !important;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/ChamadosAbertos.vue?vue&type=style&index=0&lang=scss&":
 /*!************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/views/chamados/ChamadosAbertos.vue?vue&type=style&index=0&lang=scss& ***!
@@ -890,7 +923,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".chamados-abertos-list {\n  padding-top: 6px;\n  padding: 6px 2px 0 2px;\n}\n.messages-bar {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: red;\n  height: 50px;\n  color: white;\n  text-align: center;\n}\n.empty-list {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}\n.empty-list h4 {\n  color: #7d7d7d;\n}\n.loading-wrapper {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  z-index: 10;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  background: #3e3b3b94;\n}\n.loading-wrapper img {\n  width: 60% !important;\n  height: 30% !important;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}", ""]);
+exports.push([module.i, ".chamados-abertos-list {\n  padding-top: 6px;\n  padding: 6px 2px 0 2px;\n}\n.messages-bar {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: red;\n  height: 50px;\n  color: white;\n  text-align: center;\n}\n.empty-list {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}\n.empty-list h4 {\n  color: #7d7d7d;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}", ""]);
 
 // exports
 
@@ -1548,6 +1581,36 @@ if(false) {}
 
 
 var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--7-2!../../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../../node_modules/vue-loader/lib??vue-loader-options!./Navbar.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Navbar.vue?vue&type=style&index=0&lang=scss&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/App.vue?vue&type=style&index=0&lang=scss&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/views/App.vue?vue&type=style&index=0&lang=scss& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--7-2!../../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../../node_modules/vue-loader/lib??vue-loader-options!./App.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/App.vue?vue&type=style&index=0&lang=scss&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -2564,17 +2627,35 @@ var render = function() {
           _c("router-view", {
             on: {
               sendsuccess: _vm.successMessageHandler,
-              senderror: _vm.errorMessageHandler
+              senderror: _vm.errorMessageHandler,
+              changeLoadingStatus: _vm.changeLoadingStatusHandler
             }
           })
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _vm.loading
+        ? _c("div", { staticClass: "loading-wrapper" }, [_vm._m(0)])
+        : _vm._e()
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "lds-facebook" }, [
+      _c("div"),
+      _vm._v(" "),
+      _c("div"),
+      _vm._v(" "),
+      _c("div")
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -2624,11 +2705,7 @@ var render = function() {
     "div",
     { staticClass: "chamados-abertos-list row" },
     [
-      _vm.loading
-        ? _c("div", { staticClass: "loading-wrapper" }, [_vm._m(0)])
-        : _vm._e(),
-      _vm._v(" "),
-      !_vm.loading && !_vm.error && _vm.chamados.length < 1
+      !_vm.error && _vm.chamados.length < 1
         ? _c("div", { staticClass: "empty-list" }, [
             _c("h4", [_vm._v("Sem chamados abertos")])
           ])
@@ -2640,7 +2717,7 @@ var render = function() {
       _vm._v(" "),
       _vm.error
         ? _c("div", { staticClass: "messages-bar" }, [
-            _vm._m(1),
+            _vm._m(0),
             _vm._v(" "),
             _c("div", [_vm._v(_vm._s(_vm.error))])
           ])
@@ -2650,16 +2727,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "lds-facebook" }, [
-      _c("div"),
-      _c("div"),
-      _c("div")
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -18434,8 +18501,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
   routes: [{
     path: '/',
-    name: 'home',
-    component: _views_Home__WEBPACK_IMPORTED_MODULE_3__["default"]
+    redirect: '/chamados'
   }, {
     path: '/chamados',
     name: 'chamados.abertos',
@@ -18740,7 +18806,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _App_vue_vue_type_template_id_50e73d1e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue?vue&type=template&id=50e73d1e& */ "./resources/assets/js/views/App.vue?vue&type=template&id=50e73d1e&");
 /* harmony import */ var _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.vue?vue&type=script&lang=js& */ "./resources/assets/js/views/App.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _App_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App.vue?vue&type=style&index=0&lang=scss& */ "./resources/assets/js/views/App.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -18748,7 +18816,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _App_vue_vue_type_template_id_50e73d1e___WEBPACK_IMPORTED_MODULE_0__["render"],
   _App_vue_vue_type_template_id_50e73d1e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -18777,6 +18845,22 @@ component.options.__file = "resources/assets/js/views/App.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./App.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/App.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/App.vue?vue&type=style&index=0&lang=scss&":
+/*!*****************************************************************************!*\
+  !*** ./resources/assets/js/views/App.vue?vue&type=style&index=0&lang=scss& ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--7-2!../../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../../node_modules/vue-loader/lib??vue-loader-options!./App.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/App.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
