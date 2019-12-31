@@ -473,8 +473,8 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json, text-plain, */*",
-          "X-Requested-With": "XMLHttpRequest" // "X-CSRF-TOKEN": token
-
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
         method: 'put',
         credentials: "same-origin",

@@ -28,8 +28,9 @@ class ChamadosController extends Controller
         return $chamado;
     }
 
-    public function update(Request $request, Chamado $chamado)
+    public function update(Request $request, $id)
     {
+        $chamado = Chamado::findOrFail($id);
         $chamado->update(request()->all());
         
         return 'updated';
@@ -37,8 +38,8 @@ class ChamadosController extends Controller
 
     public function destroy(Chamado $chamado)
     {
-        $chamado->delete();
-        return 'destroied';
+        //$chamado->delete();
+        return 'not implemented';
     }
 
     public function validateChamado(){
