@@ -461,7 +461,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var CHAMADOS_INDEX_API_URL = "/api/chamados?status=ABERTO";
 var chamados = [],
-    error = "";
+    error = "",
+    showSemChamadosMessage = false;
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Chamado: _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -496,6 +497,11 @@ var chamados = [],
     },
     setData: function setData(chamados) {
       this.chamados = chamados;
+
+      if (this.chamados.length < 1) {
+        this.showSemChamadosMessage = true;
+      }
+
       this.$emit("changeLoadingStatus", false);
     }
   }
@@ -2701,7 +2707,7 @@ var render = function() {
     "div",
     { staticClass: "chamados-abertos-list row" },
     [
-      !_vm.error && _vm.chamados.length < 1
+      _vm.showSemChamadosMessage
         ? _c("div", { staticClass: "empty-list" }, [
             _c("h4", [_vm._v("Sem chamados abertos")])
           ])

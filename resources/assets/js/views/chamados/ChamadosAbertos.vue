@@ -1,6 +1,6 @@
 <template>
   <div class="chamados-abertos-list row">
-    <div v-if="!error && chamados.length < 1" class="empty-list">
+    <div v-if="showSemChamadosMessage" class="empty-list">
       <h4>Sem chamados abertos</h4>
     </div>
     <Chamado
@@ -21,7 +21,8 @@ import Chamado from "../../components/chamados/Chamado";
 const CHAMADOS_INDEX_API_URL = "/api/chamados?status=ABERTO";
 
 let chamados = [],
-  error = "";
+  error = "",
+  showSemChamadosMessage = false;
 
 export default {
   components: {
@@ -55,6 +56,9 @@ export default {
     },
     setData(chamados) {
       this.chamados = chamados;
+      if(this.chamados.length < 1){
+        this.showSemChamadosMessage = true;
+      }
       this.$emit("changeLoadingStatus", false);
     }
   }
