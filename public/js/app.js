@@ -395,19 +395,16 @@ var loading = false;
   },
   methods: {
     successMessageHandler: function successMessageHandler(msg) {
-      console.log("successMessageHandler", msg);
       iziToast.success({
         message: msg
       });
     },
     errorMessageHandler: function errorMessageHandler(msg) {
-      console.log("errorMessageHandler", msg);
       iziToast.error({
         message: msg
       });
     },
     changeLoadingStatusHandler: function changeLoadingStatusHandler(status) {
-      console.log("changeLoadingStatus", status);
       this.loading = status;
     }
   }
@@ -597,11 +594,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var loading = true,
-    chamado = null;
+var chamado = null;
 var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
+    this.$emit("changeLoadingStatus", true);
     this.fetchData(this.$route.params.id);
   },
   data: function data() {
@@ -613,19 +610,19 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
     fetchData: function fetchData(id) {
       var _this = this;
 
-      this.error = null;
       fetch(CHAMADO_SHOW_API_URL_PREFIX + id).then(function (resp) {
         return resp.json();
       }).then(function (data) {
         _this.setData(data);
       })["catch"](function (error) {
-        _this.loading = false;
-        _this.error = error;
+        _this.$emit("changeLoadingStatus", false);
+
+        _this.$emit("senderror", error);
       });
     },
     setData: function setData(chamado) {
       this.chamado = chamado;
-      this.loading = false;
+      this.$emit("changeLoadingStatus", false);
     },
     onSubmit: function onSubmit(form) {
       console.log('apenas para prevenir o submit por enquanto');
@@ -633,7 +630,6 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
     salvarAlteracoes: function salvarAlteracoes() {
       var _this2 = this;
 
-      console.log('salvando...', this.chamado);
       var url = '/api/chamados/' + this.chamado.id;
       fetch(url, {
         headers: {
@@ -652,7 +648,7 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
 
         _this2.$emit('sendsuccess', 'Chamado salvo com sucesso');
       })["catch"](function (error) {
-        console.log(error);
+        this.$emit("senderror", error);
       });
     },
     fecharChamado: function fecharChamado() {

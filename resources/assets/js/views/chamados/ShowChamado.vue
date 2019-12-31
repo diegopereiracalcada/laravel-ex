@@ -81,13 +81,13 @@
 </template>
 
 <script>
-let loading = true,
-    chamado = null;
+let chamado = null;
 
 const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
 
 export default {
     created() {
+        this.$emit("changeLoadingStatus", true);
         this.fetchData(this.$route.params.id)
     },
     data(){
@@ -97,25 +97,23 @@ export default {
     },
     methods: {
          fetchData (id) {
-            this.error = null;
-
             fetch(CHAMADO_SHOW_API_URL_PREFIX + id)
                 .then( resp => resp.json() )
                 .then( data => { this.setData(data) } )
                 .catch( error => {
-                    this.loading = false
-                    this.error = error
+                    this.$emit("changeLoadingStatus", false);
+                    this.$emit("senderror", error);
                 })
         },
         setData(chamado) {
             this.chamado = chamado;
-            this.loading = false
+            this.$emit("changeLoadingStatus", false);
+
         },
         onSubmit(form){
             console.log('apenas para prevenir o submit por enquanto');
         },
         salvarAlteracoes(){
-            console.log('salvando...', this.chamado);
             var url = '/api/chamados/' + this.chamado.id;
 
             fetch(url, {
@@ -134,22 +132,19 @@ export default {
                 this.$emit('sendsuccess', 'Chamado salvo com sucesso');
             })
             .catch(function(error) {
-                console.log(error);
+                this.$emit("senderror", error);
             });
-            
         },
         fecharChamado(){
             if(this.chamado.solucao == null 
                 || this.chamado.solucao.trim() == ''){
-
                     alert('Para fechar o chamado preencha a solução antes');
                     return false;
             }
+
             this.chamado.status = 'FECHADO';
             this.salvarAlteracoes();
-
         }
-        
     },
     computed: {
         formAction(){

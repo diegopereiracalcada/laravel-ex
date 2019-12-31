@@ -35,19 +35,16 @@ export default {
   },
   methods: {
     successMessageHandler(msg) {
-      console.log("successMessageHandler", msg);
       iziToast.success({
         message: msg
       });
     },
     errorMessageHandler(msg) {
-      console.log("errorMessageHandler", msg);
       iziToast.error({
         message: msg
       });
     },
     changeLoadingStatusHandler(status) {
-      console.log("changeLoadingStatus", status);
       this.loading = status;
     }
   }
