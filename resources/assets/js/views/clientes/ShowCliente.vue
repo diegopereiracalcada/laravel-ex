@@ -1,19 +1,17 @@
 <template>
   <div>
-    <ul v-if="cliente" class="collapsible">
+    <ul v-if="cliente" class="collapsible show-cliente-component">
       <li>
         <div class="collapsible-header">
           <i class="material-icons">details</i>Sobre
         </div>
         <div class="collapsible-body">
           <div class="row">
-            <div class="col s12">
+            <div class="col s6">
               <label>shortname</label>
               <input v-model="cliente.shortname" disabled />
             </div>
-          </div>
-          <div class="row">
-            <div class="col s12">
+            <div class="col s6">
               <label>status</label>
               <input v-model="cliente.status" disabled />
             </div>
@@ -31,9 +29,13 @@
             </div>
           </div>
           <div class="row">
-            <div class="col s12">
+            <div class="col s6">
               <label>telefone</label>
               <input v-model="cliente.telefone" disabled />
+            </div>
+            <div class="col s6">
+              <label>cep</label>
+              <input v-model="cliente.cep" disabled />
             </div>
           </div>
           <div class="row">
@@ -43,31 +45,21 @@
             </div>
           </div>
           <div class="row">
-            <div class="col s12">
-              <label>cep</label>
-              <input v-model="cliente.cep" disabled />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col s12">
+            <div class="col s2">
               <label>natureza</label>
               <input v-model="cliente.natureza" disabled />
             </div>
-          </div>
-          <div class="row">
-            <div class="col s12">
+            <div class="col s10">
               <label>cpfcnpj</label>
               <input v-model="cliente.cpfcnpj" disabled />
             </div>
           </div>
           <div class="row">
-            <div class="col s12">
+            <div class="col s6">
               <label>vencimento</label>
               <input v-model="cliente.vencimento" disabled />
             </div>
-          </div>
-          <div class="row">
-            <div class="col s12">
+            <div class="col s6">
               <label>valor</label>
               <input v-model="cliente.valor" disabled />
             </div>
@@ -76,7 +68,7 @@
       </li>
       <li>
         <div class="collapsible-header">
-          <i class="material-icons">event_note</i>Keep
+          <i class="material-icons">event_note</i>Keep (não implementado)
         </div>
         <div class="collapsible-body">
           <span>Lorem ipsum dolor sit amet.</span>
@@ -132,3 +124,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+  .show-cliente-component label {
+    color: black !important ;
+  }
+  
+</style>
