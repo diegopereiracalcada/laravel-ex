@@ -21,8 +21,9 @@ class ChamadosController extends Controller
         return 'stored'; 
     }
 
-    public function show(Chamado $chamado)
+    public function show($id)
     {
+        $chamado = Chamado::findOrFail($id);
         $chamado->cliente_shortname = $chamado->cliente->shortname;
         return $chamado;
     }
