@@ -2,7 +2,7 @@
     <div>
         <IndexTable
             url="/api/clientes"
-           
+            showRouteName="clientes.show"
             :hasPagination=false
             v-bind:headers = "[
                 {
@@ -11,7 +11,8 @@
                 },
                 {
                     label: 'Nome',
-                    field: 'name'
+                    field: 'name',
+                    linkToShowPage: true
                 },
                 {
                     label: 'Cpf/Cnpj',

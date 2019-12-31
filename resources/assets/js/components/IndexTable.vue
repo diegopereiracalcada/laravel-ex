@@ -17,7 +17,13 @@
             <tbody>
                 <tr v-for="row in rows">
                     <td v-for="header in headers">
-                        {{row[header.field]}}
+                        <router-link  
+                            v-if="header.linkToShowPage"
+                            :to="{ name: showRouteName, params: { id: row['id'] } }"
+                            >{{row[header.field]}}</router-link>
+                        <span v-else >
+                            {{row[header.field]}}
+                        </span>
                     </td>
                     <td v-if="editRouteName">
                         <router-link 
@@ -70,6 +76,7 @@ export default {
         'hasPagination', 
         'headers',
         'url',
+        'showRouteName'
     ],
     data() {
         return {

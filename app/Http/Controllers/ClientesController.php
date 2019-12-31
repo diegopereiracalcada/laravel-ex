@@ -44,9 +44,9 @@ class ClientesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Cliente $cliente)
+    public function show($id)
     {
-        return $cliente;
+        return Cliente::findOrFail($id);
     }
 
     /**

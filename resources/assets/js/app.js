@@ -8,6 +8,7 @@ import App from './views/App'
 import Home from './views/Home'
 import ChamadosAbertos from './views/chamados/ChamadosAbertos'
 import ShowChamado from './views/chamados/ShowChamado'
+import ShowCliente from './views/clientes/ShowCliente'
 import IndexClientes from './views/clientes/IndexClientes'
 
 const router = new VueRouter({
@@ -25,14 +26,20 @@ const router = new VueRouter({
         },
         {
             path: '/chamados/:id',
-            name: 'show-chamado',
+            name: 'chamados.show',
             component: ShowChamado
         },
         {
             path: '/clientes',
-            name: 'clientes',
+            name: 'clientes.index',
             component: IndexClientes
         },
+        {
+            path: '/clientes/:id',
+            name: 'clientes.show',
+            component: ShowCliente
+        },
+
         // {
         //     // 404
         //     path: '*'
