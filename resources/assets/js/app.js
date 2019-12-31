@@ -21,7 +21,7 @@ const router = new VueRouter({
         },
         {
             path: '/chamados',
-            name: 'chamados-abertos',
+            name: 'chamados.abertos',
             component: ChamadosAbertos
         },
         {

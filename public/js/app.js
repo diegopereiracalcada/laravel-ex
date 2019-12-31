@@ -283,7 +283,7 @@ var menuItens = [// {
 //     href: "/chamados"
 // },
 {
-  label: "Ver Chamados",
+  label: "Chamados Abertos",
   icon: "clear_all",
   href: "/chamados"
 }, {
@@ -633,7 +633,7 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
         body: JSON.stringify(this.chamado)
       }).then(function (data) {
         _this2.$router.push({
-          name: 'chamados-abertos'
+          name: 'chamados.abertos'
         });
 
         _this2.$emit('sendsuccess', 'Chamado salvo com sucesso');
@@ -2490,7 +2490,9 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "router-link",
-    { attrs: { to: { name: "show-chamado", params: { id: _vm.chamado.id } } } },
+    {
+      attrs: { to: { name: "chamados.show", params: { id: _vm.chamado.id } } }
+    },
     [
       _c("div", { staticClass: "chamado col s12" }, [
         _c("h6", [_vm._v(_vm._s(_vm.chamado.descricao))]),
@@ -18436,7 +18438,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     component: _views_Home__WEBPACK_IMPORTED_MODULE_3__["default"]
   }, {
     path: '/chamados',
-    name: 'chamados-abertos',
+    name: 'chamados.abertos',
     component: _views_chamados_ChamadosAbertos__WEBPACK_IMPORTED_MODULE_4__["default"]
   }, {
     path: '/chamados/:id',

@@ -36,7 +36,7 @@ var menuItens = [
     //     href: "/chamados"
     // },
     {
-        label: "Ver Chamados",
+        label: "Chamados Abertos",
         icon: "clear_all",
         href: "/chamados"
     },

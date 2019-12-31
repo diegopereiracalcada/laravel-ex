@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{ name: 'show-chamado', params: { id: chamado.id }}">
+    <router-link :to="{ name: 'chamados.show', params: { id: chamado.id }}">
 
         <div class="chamado col s12">
             

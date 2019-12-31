@@ -130,7 +130,7 @@ export default {
                 body: JSON.stringify(this.chamado)
             })
             .then((data) => {
-                this.$router.push({ name: 'chamados-abertos' });
+                this.$router.push({ name: 'chamados.abertos' });
                 this.$emit('sendsuccess', 'Chamado salvo com sucesso');
             })
             .catch(function(error) {
