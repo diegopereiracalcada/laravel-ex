@@ -291,6 +291,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 var CHAMADOS_INDEX_API_URL = "/api/chamados?status=ABERTO";
 var chamados = [],
@@ -534,7 +539,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".chamados-abertos-list {\n  padding-top: 6px;\n  padding: 6px 2px 0 2px;\n}\n.messages-bar {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: red;\n  height: 50px;\n  color: white;\n  text-align: center;\n}\n.empty-list {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}\n.empty-list h4 {\n  color: #7d7d7d;\n}", ""]);
+exports.push([module.i, ".chamados-abertos-list {\n  padding-top: 6px;\n  padding: 6px 2px 0 2px;\n}\n.messages-bar {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: red;\n  height: 50px;\n  color: white;\n  text-align: center;\n}\n.empty-list {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}\n.empty-list h4 {\n  color: #7d7d7d;\n}\n.loading-wrapper {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  z-index: 10;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  background: #3e3b3b94;\n}\n.loading-wrapper img {\n  width: 60% !important;\n  height: 30% !important;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}", ""]);
 
 // exports
 
@@ -2003,7 +2008,11 @@ var render = function() {
     "div",
     { staticClass: "chamados-abertos-list row" },
     [
-      _vm.chamados.length < 1
+      _vm.loading
+        ? _c("div", { staticClass: "loading-wrapper" }, [_vm._m(0)])
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.loading && !_vm.error && _vm.chamados.length < 1
         ? _c("div", { staticClass: "empty-list" }, [
             _c("h4", [_vm._v("Sem chamados abertos")])
           ])
@@ -2015,7 +2024,7 @@ var render = function() {
       _vm._v(" "),
       _vm.error
         ? _c("div", { staticClass: "messages-bar" }, [
-            _vm._m(0),
+            _vm._m(1),
             _vm._v(" "),
             _c("div", [_vm._v(_vm._s(_vm.error))])
           ])
@@ -2025,6 +2034,16 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "lds-facebook" }, [
+      _c("div"),
+      _c("div"),
+      _c("div")
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
