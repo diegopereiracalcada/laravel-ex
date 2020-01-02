@@ -4,7 +4,7 @@
             <div class="nav-wrapper azul-click">
                 <a href="#" data-target="slide-out" class="sidenav-trigger"
                     ><i class="material-icons">menu</i></a>
-                <a href="#!" class="brand-logo">ClickTI</a>
+                <a href="javascript:void(0)" class="brand-logo">{{$route.meta.title || 'Click TI'}}</a>
                 <ul class="right hide-on-med-and-down">
                     <li v-for="item in menuItens">
                         <a :href="item.href">{{ item.label }}</a>

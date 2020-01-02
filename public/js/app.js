@@ -2570,9 +2570,11 @@ var render = function() {
       _c("div", { staticClass: "nav-wrapper azul-click" }, [
         _vm._m(0),
         _vm._v(" "),
-        _c("a", { staticClass: "brand-logo", attrs: { href: "#!" } }, [
-          _vm._v("ClickTI")
-        ]),
+        _c(
+          "a",
+          { staticClass: "brand-logo", attrs: { href: "javascript:void(0)" } },
+          [_vm._v(_vm._s(_vm.$route.meta.title || "Click TI"))]
+        ),
         _vm._v(" "),
         _c(
           "ul",
@@ -18663,23 +18665,38 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   }, {
     path: '/chamados',
     name: 'chamados.abertos',
-    component: _views_chamados_ChamadosAbertos__WEBPACK_IMPORTED_MODULE_4__["default"]
+    component: _views_chamados_ChamadosAbertos__WEBPACK_IMPORTED_MODULE_4__["default"],
+    meta: {
+      title: "Chamados Abertos"
+    }
   }, {
     path: '/abrir',
     name: 'chamados.abrir',
-    component: _views_chamados_AbrirChamado__WEBPACK_IMPORTED_MODULE_3__["default"]
+    component: _views_chamados_AbrirChamado__WEBPACK_IMPORTED_MODULE_3__["default"],
+    meta: {
+      title: "Abrir Chamado"
+    }
   }, {
     path: '/chamados/:id',
     name: 'chamados.show',
-    component: _views_chamados_ShowChamado__WEBPACK_IMPORTED_MODULE_5__["default"]
+    component: _views_chamados_ShowChamado__WEBPACK_IMPORTED_MODULE_5__["default"],
+    meta: {
+      title: "Chamado"
+    }
   }, {
     path: '/clientes',
     name: 'clientes.index',
-    component: _views_clientes_IndexClientes__WEBPACK_IMPORTED_MODULE_7__["default"]
+    component: _views_clientes_IndexClientes__WEBPACK_IMPORTED_MODULE_7__["default"],
+    meta: {
+      title: "Clientes"
+    }
   }, {
     path: '/clientes/:id',
     name: 'clientes.show',
-    component: _views_clientes_ShowCliente__WEBPACK_IMPORTED_MODULE_6__["default"]
+    component: _views_clientes_ShowCliente__WEBPACK_IMPORTED_MODULE_6__["default"],
+    meta: {
+      title: "Cliente"
+    }
   } // {
   //     // 404
   //     path: '*'

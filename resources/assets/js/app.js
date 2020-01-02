@@ -22,27 +22,42 @@ const router = new VueRouter({
         {
             path: '/chamados',
             name: 'chamados.abertos',
-            component: ChamadosAbertos
+            component: ChamadosAbertos,
+            meta: {
+                title: "Chamados Abertos"
+            }
         },
         {
             path: '/abrir',
             name: 'chamados.abrir',
-            component: AbrirChamado
+            component: AbrirChamado,
+            meta: {
+                title: "Abrir Chamado"
+            }
         },
         {
             path: '/chamados/:id',
             name: 'chamados.show',
-            component: ShowChamado
+            component: ShowChamado,
+            meta: {
+                title: "Chamado"
+            }
         },
         {
             path: '/clientes',
             name: 'clientes.index',
-            component: IndexClientes
+            component: IndexClientes,
+            meta: {
+                title: "Clientes"
+            }
         },
         {
             path: '/clientes/:id',
             name: 'clientes.show',
-            component: ShowCliente
+            component: ShowCliente,
+            meta: {
+                title: "Cliente"
+            }
         },
 
         // {
