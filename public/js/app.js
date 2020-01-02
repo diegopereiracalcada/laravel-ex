@@ -277,15 +277,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var menuItens = [// {
-//     label: "Abrir Chamado",
-//     icon: "add_circle",
-//     href: "/chamados"
-// },
-{
+var menuItens = [{
   label: "Chamados Abertos",
   icon: "clear_all",
   href: "/chamados"
+}, {
+  label: "Abrir Chamado",
+  icon: "add_circle",
+  href: "/abrir"
 }, {
   label: "Clientes",
   icon: "contacts",
@@ -441,14 +440,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-var chamado = null;
+var chamado = {
+  status: "ABERTO"
+};
 var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["updateMode"],
   created: function created() {
-    this.$emit("changeLoadingStatus", true);
-    this.fetchData(this.$route.params.id);
+    if (false) {}
   },
   data: function data() {
     return {
@@ -456,6 +455,27 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
     };
   },
   methods: {
+    abrirChamado: function abrirChamado() {
+      console.log("abrirChamado", this.chamado);
+
+      if (this.chamado.descricao == null || this.chamado.descricao.trim() == "") {
+        alert("Preencha a descrição para abrir o chamado");
+        return false;
+      }
+
+      this.$emit("changeloadingstatus", true);
+      this.sendAberturaChamado();
+    },
+    fecharChamado: function fecharChamado() {
+      if (this.chamado.solucao == null || this.chamado.solucao.trim() == "") {
+        alert("Para fechar o chamado preencha a solução antes");
+        return false;
+      }
+
+      this.$emit("changeloadingstatus", true);
+      this.chamado.status = "FECHADO";
+      this.sendUpdateChamado();
+    },
     fetchData: function fetchData(id) {
       var _this = this;
 
@@ -464,50 +484,94 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
       }).then(function (data) {
         _this.setData(data);
       })["catch"](function (error) {
-        _this.$emit("changeLoadingStatus", false);
+        _this.$emit("changeloadingstatus", false);
 
         _this.$emit("senderror", error);
       });
     },
-    setData: function setData(chamado) {
-      this.chamado = chamado;
-      this.$emit("changeLoadingStatus", false);
-    },
     onSubmit: function onSubmit(form) {
-      console.log('apenas para prevenir o submit por enquanto');
+      console.log("apenas para prevenir o submit por enquanto");
+
+      if (this.updateMode) {
+        this.fecharChamado();
+      } else {
+        this.abrirChamado();
+      }
     },
-    salvarAlteracoes: function salvarAlteracoes() {
+    onStatusChange: function onStatusChange(event) {
+      console.log("onStatusChange");
+      this.chamado.status = event.target.checked ? "FECHADO" : "ABERTO";
+
+      if (!event.target.checked) {
+        delete this.chamado.solucao;
+      }
+    },
+    sendAberturaChamado: function sendAberturaChamado() {
       var _this2 = this;
 
-      var url = '/api/chamados/' + this.chamado.id;
+      var url = "/api/chamados";
       fetch(url, {
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json, text-plain, */*",
+          Accept: "application/json, text-plain, */*",
           "X-Requested-With": "XMLHttpRequest",
-          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
         },
-        method: 'put',
+        method: "post",
+        credentials: "same-origin",
+        body: JSON.stringify(this.chamado)
+      }).then(function (response) {
+        if (response.ok) {
+          _this2.$emit("changeloadingstatus", false);
+
+          _this2.$router.push({
+            name: "chamados.abertos"
+          });
+
+          _this2.$emit("sendsuccess", "Chamado aberto com sucesso");
+        } else {
+          alert(response.statusText);
+          console.log("this", _this2);
+
+          _this2.$emit("senderror", response.statusText);
+        }
+      });
+    },
+    sendUpdateChamado: function sendUpdateChamado() {
+      var _this3 = this;
+
+      var url = "/api/chamados/" + this.chamado.id;
+      fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text-plain, */*",
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        },
+        method: "put",
         credentials: "same-origin",
         body: JSON.stringify(this.chamado)
       }).then(function (data) {
-        _this2.$router.push({
-          name: 'chamados.abertos'
-        });
+        console.log("then1", data);
 
-        _this2.$emit('sendsuccess', 'Chamado salvo com sucesso');
-      })["catch"](function (error) {
-        this.$emit("senderror", error);
+        if (response.ok) {
+          _this3.$emit("changeloadingstatus", false);
+
+          _this3.$router.push({
+            name: "chamados.abertos"
+          });
+
+          _this3.$emit("sendsuccess", "Chamado salvo com sucesso");
+        } else {
+          alert(response.statusText);
+
+          _this3.$emit("senderror", response.statusText);
+        }
       });
     },
-    fecharChamado: function fecharChamado() {
-      if (this.chamado.solucao == null || this.chamado.solucao.trim() == '') {
-        alert('Para fechar o chamado preencha a solução antes');
-        return false;
-      }
-
-      this.chamado.status = 'FECHADO';
-      this.salvarAlteracoes();
+    setData: function setData(chamado) {
+      this.chamado = chamado;
+      this.$emit("changeloadingstatus", false);
     }
   },
   computed: {
@@ -572,9 +636,34 @@ var loading = false;
         message: msg
       });
     },
-    changeLoadingStatusHandler: function changeLoadingStatusHandler(status) {
+    changeloadingstatusHandler: function changeloadingstatusHandler(status) {
       this.loading = status;
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_chamados_FormChamado_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/chamados/FormChamado.vue */ "./resources/assets/js/components/chamados/FormChamado.vue");
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    FormChamado: _components_chamados_FormChamado_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   }
 });
 
@@ -624,7 +713,7 @@ var chamados = [],
     };
   },
   created: function created() {
-    this.$emit("changeLoadingStatus", true); //this.error = null;
+    this.$emit("changeloadingstatus", true); //this.error = null;
 
     this.fetchData();
   },
@@ -640,7 +729,7 @@ var chamados = [],
       }).then(function (data) {
         _this.setData(data);
       })["catch"](function (error) {
-        _this.$emit("changeLoadingStatus", false);
+        _this.$emit("changeloadingstatus", false);
 
         _this.error = error;
       });
@@ -652,7 +741,7 @@ var chamados = [],
         this.showSemChamadosMessage = true;
       }
 
-      this.$emit("changeLoadingStatus", false);
+      this.$emit("changeloadingstatus", false);
     }
   }
 });
@@ -669,6 +758,8 @@ var chamados = [],
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_chamados_FormChamado_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/chamados/FormChamado.vue */ "./resources/assets/js/components/chamados/FormChamado.vue");
+//
+//
 //
 //
 //
@@ -2632,97 +2723,108 @@ var render = function() {
           on: {
             submit: function($event) {
               $event.preventDefault()
-              return _vm.fecharChamado($event)
+              return _vm.onSubmit($event)
             }
           }
         },
         [
-          _c(
-            "div",
-            { staticClass: "save-button", on: { click: _vm.salvarAlteracoes } },
-            [_c("i", { staticClass: "material-icons" }, [_vm._v("save")])]
-          ),
+          _vm.updateMode
+            ? _c(
+                "div",
+                {
+                  staticClass: "save-button",
+                  on: { click: _vm.sendUpdateChamado }
+                },
+                [_c("i", { staticClass: "material-icons" }, [_vm._v("save")])]
+              )
+            : _vm._e(),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col s2" }, [
-              _c("label", [_vm._v("Id")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.chamado.id,
-                    expression: "chamado.id"
-                  }
-                ],
-                attrs: { disabled: "" },
-                domProps: { value: _vm.chamado.id },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+          this.updateMode
+            ? _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col s2" }, [
+                  _c("label", [_vm._v("Id")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.chamado.id,
+                        expression: "chamado.id"
+                      }
+                    ],
+                    attrs: { disabled: "" },
+                    domProps: { value: _vm.chamado.id },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.chamado, "id", $event.target.value)
+                      }
                     }
-                    _vm.$set(_vm.chamado, "id", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col s6" }, [
-              _c("label", [_vm._v("Aberto em")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.chamado.dt_abertura,
-                    expression: "chamado.dt_abertura"
-                  }
-                ],
-                attrs: { disabled: "" },
-                domProps: { value: _vm.chamado.dt_abertura },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col s6" }, [
+                  _c("label", [_vm._v("Aberto em")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.chamado.dt_abertura,
+                        expression: "chamado.dt_abertura"
+                      }
+                    ],
+                    attrs: { disabled: "" },
+                    domProps: { value: _vm.chamado.dt_abertura },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.chamado,
+                          "dt_abertura",
+                          $event.target.value
+                        )
+                      }
                     }
-                    _vm.$set(_vm.chamado, "dt_abertura", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col s4" }, [
-              _c("label", [_vm._v("Cliente")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.chamado.cliente_shortname,
-                    expression: "chamado.cliente_shortname"
-                  }
-                ],
-                attrs: { disabled: "" },
-                domProps: { value: _vm.chamado.cliente_shortname },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col s4" }, [
+                  _c("label", [_vm._v("Cliente")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.chamado.cliente_shortname,
+                        expression: "chamado.cliente_shortname"
+                      }
+                    ],
+                    attrs: { disabled: "" },
+                    domProps: { value: _vm.chamado.cliente_shortname },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.chamado,
+                          "cliente_shortname",
+                          $event.target.value
+                        )
+                      }
                     }
-                    _vm.$set(
-                      _vm.chamado,
-                      "cliente_shortname",
-                      $event.target.value
-                    )
-                  }
-                }
-              })
-            ])
-          ]),
+                  })
+                ])
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col s12" }, [
@@ -2737,7 +2839,7 @@ var render = function() {
                     expression: "chamado.descricao"
                   }
                 ],
-                attrs: { disabled: "" },
+                attrs: { disabled: _vm.updateMode },
                 domProps: { value: _vm.chamado.descricao },
                 on: {
                   input: function($event) {
@@ -2836,37 +2938,20 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "input-field col s12" }, [
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.chamado.solucao,
-                    expression: "chamado.solucao"
-                  }
-                ],
-                staticClass: "materialize-textarea",
-                attrs: { id: "solucao" },
-                domProps: { value: _vm.chamado.solucao },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.chamado, "solucao", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                { staticClass: "active", attrs: { for: "solucao" } },
-                [_vm._v("Solução")]
-              )
-            ])
-          ]),
+          !_vm.updateMode
+            ? _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col s12" }, [
+                  _c("label", [
+                    _c("input", {
+                      attrs: { type: "checkbox" },
+                      on: { change: _vm.onStatusChange }
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Já resolvido")])
+                  ])
+                ])
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _c("input", {
             directives: [
@@ -2889,25 +2974,60 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _vm._m(0)
+          _vm.updateMode || _vm.chamado.status == "FECHADO"
+            ? _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "input-field col s12" }, [
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.chamado.solucao,
+                        expression: "chamado.solucao"
+                      }
+                    ],
+                    staticClass: "materialize-textarea",
+                    attrs: { id: "solucao" },
+                    domProps: { value: _vm.chamado.solucao },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.chamado, "solucao", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "active", attrs: { for: "solucao" } },
+                    [_vm._v("Solução")]
+                  )
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.updateMode
+            ? _c("div", { staticClass: "row" }, [
+                _c(
+                  "button",
+                  { staticClass: "btn waves-effect waves-light red col s12" },
+                  [_vm._v("\n      Encerrar Chamado\n    ")]
+                )
+              ])
+            : _c("div", { staticClass: "row" }, [
+                _c(
+                  "button",
+                  { staticClass: "btn waves-effect waves-light green col s12" },
+                  [_vm._v("\n      Abrir Chamado\n    ")]
+                )
+              ])
         ]
       )
     : _vm._e()
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c(
-        "button",
-        { staticClass: "btn waves-effect waves-light red col s12" },
-        [_vm._v("Encerrar Chamado")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -2942,7 +3062,7 @@ var render = function() {
             on: {
               sendsuccess: _vm.successMessageHandler,
               senderror: _vm.errorMessageHandler,
-              changeLoadingStatus: _vm.changeLoadingStatusHandler
+              changeloadingstatus: _vm.changeloadingstatusHandler
             }
           })
         ],
@@ -2970,6 +3090,30 @@ var staticRenderFns = [
     ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=template&id=4014e615&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=template&id=4014e615& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("FormChamado", { attrs: { updateMode: false } })
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -3045,7 +3189,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("FormChamado")
+  return _c("FormChamado", { attrs: { updateMode: true } })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -18491,13 +18635,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _views_App__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./views/App */ "./resources/assets/js/views/App.vue");
-/* harmony import */ var _views_chamados_ChamadosAbertos__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/chamados/ChamadosAbertos */ "./resources/assets/js/views/chamados/ChamadosAbertos.vue");
-/* harmony import */ var _views_chamados_ShowChamado__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/chamados/ShowChamado */ "./resources/assets/js/views/chamados/ShowChamado.vue");
-/* harmony import */ var _views_clientes_ShowCliente__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/clientes/ShowCliente */ "./resources/assets/js/views/clientes/ShowCliente.vue");
-/* harmony import */ var _views_clientes_IndexClientes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/clientes/IndexClientes */ "./resources/assets/js/views/clientes/IndexClientes.vue");
+/* harmony import */ var _views_chamados_AbrirChamado__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/chamados/AbrirChamado */ "./resources/assets/js/views/chamados/AbrirChamado.vue");
+/* harmony import */ var _views_chamados_ChamadosAbertos__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/chamados/ChamadosAbertos */ "./resources/assets/js/views/chamados/ChamadosAbertos.vue");
+/* harmony import */ var _views_chamados_ShowChamado__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/chamados/ShowChamado */ "./resources/assets/js/views/chamados/ShowChamado.vue");
+/* harmony import */ var _views_clientes_ShowCliente__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/clientes/ShowCliente */ "./resources/assets/js/views/clientes/ShowCliente.vue");
+/* harmony import */ var _views_clientes_IndexClientes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./views/clientes/IndexClientes */ "./resources/assets/js/views/clientes/IndexClientes.vue");
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
 
 
 
@@ -18511,19 +18657,23 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   }, {
     path: '/chamados',
     name: 'chamados.abertos',
-    component: _views_chamados_ChamadosAbertos__WEBPACK_IMPORTED_MODULE_3__["default"]
+    component: _views_chamados_ChamadosAbertos__WEBPACK_IMPORTED_MODULE_4__["default"]
+  }, {
+    path: '/abrir',
+    name: 'chamados.abrir',
+    component: _views_chamados_AbrirChamado__WEBPACK_IMPORTED_MODULE_3__["default"]
   }, {
     path: '/chamados/:id',
     name: 'chamados.show',
-    component: _views_chamados_ShowChamado__WEBPACK_IMPORTED_MODULE_4__["default"]
+    component: _views_chamados_ShowChamado__WEBPACK_IMPORTED_MODULE_5__["default"]
   }, {
     path: '/clientes',
     name: 'clientes.index',
-    component: _views_clientes_IndexClientes__WEBPACK_IMPORTED_MODULE_6__["default"]
+    component: _views_clientes_IndexClientes__WEBPACK_IMPORTED_MODULE_7__["default"]
   }, {
     path: '/clientes/:id',
     name: 'clientes.show',
-    component: _views_clientes_ShowCliente__WEBPACK_IMPORTED_MODULE_5__["default"]
+    component: _views_clientes_ShowCliente__WEBPACK_IMPORTED_MODULE_6__["default"]
   } // {
   //     // 404
   //     path: '*'
@@ -18970,6 +19120,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_50e73d1e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_50e73d1e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/chamados/AbrirChamado.vue":
+/*!*************************************************************!*\
+  !*** ./resources/assets/js/views/chamados/AbrirChamado.vue ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AbrirChamado_vue_vue_type_template_id_4014e615___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AbrirChamado.vue?vue&type=template&id=4014e615& */ "./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=template&id=4014e615&");
+/* harmony import */ var _AbrirChamado_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AbrirChamado.vue?vue&type=script&lang=js& */ "./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AbrirChamado_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AbrirChamado_vue_vue_type_template_id_4014e615___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AbrirChamado_vue_vue_type_template_id_4014e615___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/views/chamados/AbrirChamado.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AbrirChamado_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AbrirChamado.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AbrirChamado_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=template&id=4014e615&":
+/*!********************************************************************************************!*\
+  !*** ./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=template&id=4014e615& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AbrirChamado_vue_vue_type_template_id_4014e615___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AbrirChamado.vue?vue&type=template&id=4014e615& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/AbrirChamado.vue?vue&type=template&id=4014e615&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AbrirChamado_vue_vue_type_template_id_4014e615___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AbrirChamado_vue_vue_type_template_id_4014e615___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

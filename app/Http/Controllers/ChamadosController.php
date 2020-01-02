@@ -15,10 +15,14 @@ class ChamadosController extends Controller
         return Chamado::all();
     }
 
-    public function store(Chamado $chamado)
+    public function store()
     {
+        $chamado = new Chamado();
+        $chamado->descricao = request('descricao');
+        $chamado->dt_abertura = date("Y-m-d H:i:s");
+        $chamado->cliente_id = 1; //TODO: hardcoded
         $chamado->save();
-        return 'stored'; 
+        return response('Chamado aberto com sucesso. Id: ' . $chamado->id, 200); 
     }
 
     public function show($id)

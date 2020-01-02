@@ -30,15 +30,15 @@
 
 <script>
 var menuItens = [
-    // {
-    //     label: "Abrir Chamado",
-    //     icon: "add_circle",
-    //     href: "/chamados"
-    // },
     {
         label: "Chamados Abertos",
         icon: "clear_all",
         href: "/chamados"
+    },
+    {
+        label: "Abrir Chamado",
+        icon: "add_circle",
+        href: "/abrir"
     },
     {
         label: "Clientes",

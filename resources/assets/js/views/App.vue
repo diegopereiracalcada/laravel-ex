@@ -5,7 +5,7 @@
       <router-view
         v-on:sendsuccess="successMessageHandler"
         v-on:senderror="errorMessageHandler"
-        v-on:changeLoadingStatus="changeLoadingStatusHandler"
+        v-on:changeloadingstatus="changeloadingstatusHandler"
       ></router-view>
     </main>
     <div v-if="loading" class="loading-wrapper">
@@ -44,7 +44,7 @@ export default {
         message: msg
       });
     },
-    changeLoadingStatusHandler(status) {
+    changeloadingstatusHandler(status) {
       this.loading = status;
     }
   }

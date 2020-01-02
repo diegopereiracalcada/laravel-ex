@@ -36,7 +36,7 @@ export default {
     };
   },
   created() {
-    this.$emit("changeLoadingStatus", true);
+    this.$emit("changeloadingstatus", true);
     //this.error = null;
     this.fetchData();
   },
@@ -51,7 +51,7 @@ export default {
           this.setData(data);
         })
         .catch(error => {
-          this.$emit("changeLoadingStatus", false);
+          this.$emit("changeloadingstatus", false);
           this.error = error;
         });
     },
@@ -60,7 +60,7 @@ export default {
       if(this.chamados.length < 1){
         this.showSemChamadosMessage = true;
       }
-      this.$emit("changeLoadingStatus", false);
+      this.$emit("changeloadingstatus", false);
     }
   }
 };

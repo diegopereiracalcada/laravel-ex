@@ -1,6 +1,6 @@
 <template>
     <FormChamado 
-        :updateMode="true" 
+        :updateMode="false" 
         ></FormChamado>
 </template>
 
@@ -15,4 +15,5 @@ export default {
 </script>
 
 <style lang="scss">
+    
 </style>
