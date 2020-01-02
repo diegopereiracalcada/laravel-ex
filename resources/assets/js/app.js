@@ -24,7 +24,7 @@ const router = new VueRouter({
             name: 'chamados.abertos',
             component: ChamadosAbertos,
             meta: {
-                title: "Chamados Abertos"
+                title: "Cham.Abertos"
             }
         },
         {

@@ -18667,7 +18667,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     name: 'chamados.abertos',
     component: _views_chamados_ChamadosAbertos__WEBPACK_IMPORTED_MODULE_4__["default"],
     meta: {
-      title: "Chamados Abertos"
+      title: "Cham.Abertos"
     }
   }, {
     path: '/abrir',
