@@ -447,7 +447,10 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["updateMode"],
   created: function created() {
-    if (false) {}
+    if (this.updateMode) {
+      this.$parent.$emit("changeloadingstatus", true);
+      this.fetchData(this.$route.params.id);
+    }
   },
   data: function data() {
     return {
@@ -463,7 +466,12 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
         return false;
       }
 
-      this.$emit("changeloadingstatus", true);
+      if (this.chamado.status == 'FECHADO' && (!this.chamado.solucao || this.chamado.solucao.trim() == "")) {
+        alert("Preencha a solução para abrir o chamado com status 'Fechado'");
+        return false;
+      }
+
+      this.$parent.$emit("changeloadingstatus", true);
       this.sendAberturaChamado();
     },
     fecharChamado: function fecharChamado() {
@@ -472,7 +480,7 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
         return false;
       }
 
-      this.$emit("changeloadingstatus", true);
+      this.$parent.$emit("changeloadingstatus", true);
       this.chamado.status = "FECHADO";
       this.sendUpdateChamado();
     },
@@ -484,9 +492,9 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
       }).then(function (data) {
         _this.setData(data);
       })["catch"](function (error) {
-        _this.$emit("changeloadingstatus", false);
+        _this.$parent.$emit("changeloadingstatus", false);
 
-        _this.$emit("senderror", error);
+        _this.$parent.$emit("senderror", error);
       });
     },
     onSubmit: function onSubmit(form) {
@@ -522,18 +530,18 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
         body: JSON.stringify(this.chamado)
       }).then(function (response) {
         if (response.ok) {
-          _this2.$emit("changeloadingstatus", false);
+          _this2.$parent.$emit("changeloadingstatus", false);
 
           _this2.$router.push({
             name: "chamados.abertos"
           });
 
-          _this2.$emit("sendsuccess", "Chamado aberto com sucesso");
+          _this2.$parent.$emit("sendsuccess", "Chamado aberto com sucesso");
         } else {
           alert(response.statusText);
           console.log("this", _this2);
 
-          _this2.$emit("senderror", response.statusText);
+          _this2.$parent.$emit("senderror", response.statusText);
         }
       });
     },
@@ -551,27 +559,25 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
         method: "put",
         credentials: "same-origin",
         body: JSON.stringify(this.chamado)
-      }).then(function (data) {
-        console.log("then1", data);
-
+      }).then(function (response) {
         if (response.ok) {
-          _this3.$emit("changeloadingstatus", false);
+          _this3.$parent.$emit("changeloadingstatus", false);
 
           _this3.$router.push({
             name: "chamados.abertos"
           });
 
-          _this3.$emit("sendsuccess", "Chamado salvo com sucesso");
+          _this3.$parent.$emit("sendsuccess", _this3.chamado.status == "FECHADO" ? "Chamado fechado com sucesso" : "Informações salvas com sucesso");
         } else {
           alert(response.statusText);
 
-          _this3.$emit("senderror", response.statusText);
+          _this3.$parent.$emit("senderror", response.statusText);
         }
       });
     },
     setData: function setData(chamado) {
       this.chamado = chamado;
-      this.$emit("changeloadingstatus", false);
+      this.$parent.$emit("changeloadingstatus", false);
     }
   },
   computed: {

@@ -18,6 +18,7 @@ class ChamadosController extends Controller
     public function store()
     {
         $chamado = new Chamado();
+        $chamado->status = request('status');
         $chamado->descricao = request('descricao');
         $chamado->dt_abertura = date("Y-m-d H:i:s");
         $chamado->cliente_id = 1; //TODO: hardcoded

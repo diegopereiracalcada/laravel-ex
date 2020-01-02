@@ -89,9 +89,8 @@ const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
 export default {
   props: ["updateMode"],
   created() {
-    if (false) {
-      // this.updateMode
-      this.$emit("changeloadingstatus", true);
+    if (this.updateMode) {
+      this.$parent.$emit("changeloadingstatus", true);
       this.fetchData(this.$route.params.id);
     }
   },
@@ -111,7 +110,16 @@ export default {
         return false;
       }
 
-      this.$emit("changeloadingstatus", true);
+      if (
+        this.chamado.status == 'FECHADO' &&
+        (!this.chamado.solucao 
+            || this.chamado.solucao.trim() == ""  )
+      ) {
+        alert("Preencha a solução para abrir o chamado com status 'Fechado'");
+        return false;
+      }
+
+      this.$parent.$emit("changeloadingstatus", true);
       this.sendAberturaChamado();
     },
     fecharChamado() {
@@ -120,7 +128,7 @@ export default {
         return false;
       }
 
-      this.$emit("changeloadingstatus", true);
+      this.$parent.$emit("changeloadingstatus", true);
       this.chamado.status = "FECHADO";
       this.sendUpdateChamado();
     },
@@ -131,8 +139,8 @@ export default {
           this.setData(data);
         })
         .catch(error => {
-          this.$emit("changeloadingstatus", false);
-          this.$emit("senderror", error);
+          this.$parent.$emit("changeloadingstatus", false);
+          this.$parent.$emit("senderror", error);
         });
     },
     onSubmit(form) {
@@ -170,14 +178,14 @@ export default {
       })
         .then(response => {
           if (response.ok) {
-            this.$emit("changeloadingstatus", false);
+            this.$parent.$emit("changeloadingstatus", false);
             this.$router.push({ name: "chamados.abertos" });
-            this.$emit("sendsuccess", "Chamado aberto com sucesso");
+            this.$parent.$emit("sendsuccess", "Chamado aberto com sucesso");
           } else {
             alert(response.statusText);
                         console.log("this", this)
 
-            this.$emit("senderror", response.statusText);
+            this.$parent.$emit("senderror", response.statusText);
           }
         })
     },
@@ -197,21 +205,22 @@ export default {
         credentials: "same-origin",
         body: JSON.stringify(this.chamado)
       })
-        .then(data => {
-          console.log("then1", data);
+        .then(response => {
           if (response.ok) {
-            this.$emit("changeloadingstatus", false);
+            this.$parent.$emit("changeloadingstatus", false);
             this.$router.push({ name: "chamados.abertos" });
-            this.$emit("sendsuccess", "Chamado salvo com sucesso");
+            this.$parent.$emit("sendsuccess", this.chamado.status == "FECHADO"
+                    ? "Chamado fechado com sucesso"
+                    : "Informações salvas com sucesso");
           } else {
             alert(response.statusText);
-            this.$emit("senderror", response.statusText);
+            this.$parent.$emit("senderror", response.statusText);
           }
         })
     },
     setData(chamado) {
       this.chamado = chamado;
-      this.$emit("changeloadingstatus", false);
+      this.$parent.$emit("changeloadingstatus", false);
     }
   },
   computed: {
