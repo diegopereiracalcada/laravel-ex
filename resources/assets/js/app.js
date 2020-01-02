@@ -5,7 +5,6 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 import App from './views/App'
-import Home from './views/Home'
 import ChamadosAbertos from './views/chamados/ChamadosAbertos'
 import ShowChamado from './views/chamados/ShowChamado'
 import ShowCliente from './views/clientes/ShowCliente'

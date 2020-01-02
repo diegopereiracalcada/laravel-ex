@@ -31,7 +31,8 @@ export default {
   data() {
     return {
       chamados,
-      error
+      error,
+      showSemChamadosMessage
     };
   },
   created() {
