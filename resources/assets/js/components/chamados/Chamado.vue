@@ -6,7 +6,7 @@
             <h6>{{ chamado.descricao }}</h6>
             
             <div class="observacao" style="display: inline-block">
-                <p>{{ chamado.observacao }}</p>
+                <p>{{ chamado.shortname }}</p>
             </div>
         
             <i class="material-icons details-arrow">arrow_forward</i>

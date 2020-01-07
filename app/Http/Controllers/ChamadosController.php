@@ -10,9 +10,11 @@ class ChamadosController extends Controller
     public function index(Request $request)
     {
         if($request->has('status')){
-            return Chamado::where('status', $request->input('status'))->get() ;
+            return Chamado::where('status', $request->input('status'))
+                            ->join('clientes','clientes.id','=','chamados.cliente_id')
+                            ->get() ;
         }
-        return Chamado::all();
+        return Chamado::join('clientes','clientes.id','=','chamados.cliente_id')->get();
     }
 
     public function store()

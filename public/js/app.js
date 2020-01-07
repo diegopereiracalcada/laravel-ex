@@ -453,6 +453,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 var chamado = {
   status: "ABERTO"
 };
@@ -2738,7 +2740,7 @@ var render = function() {
             staticClass: "observacao",
             staticStyle: { display: "inline-block" }
           },
-          [_c("p", [_vm._v(_vm._s(_vm.chamado.observacao))])]
+          [_c("p", [_vm._v(_vm._s(_vm.chamado.shortname))])]
         ),
         _vm._v(" "),
         _c("i", { staticClass: "material-icons details-arrow" }, [
@@ -2926,32 +2928,34 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "input-field col s12" }, [
-              _c(
-                "select",
-                { on: { change: _vm.onClientesSelectChange } },
-                [
+          !_vm.updateMode
+            ? _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "input-field col s12" }, [
                   _c(
-                    "option",
-                    { attrs: { value: "", disabled: "", selected: "" } },
-                    [_vm._v("Selecionar cliente")]
+                    "select",
+                    { on: { change: _vm.onClientesSelectChange } },
+                    [
+                      _c(
+                        "option",
+                        { attrs: { value: "", disabled: "", selected: "" } },
+                        [_vm._v("Selecionar cliente")]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(_vm.clientes, function(cliente) {
+                        return _c(
+                          "option",
+                          { key: cliente.id, domProps: { value: cliente.id } },
+                          [_vm._v(_vm._s(cliente.shortname))]
+                        )
+                      })
+                    ],
+                    2
                   ),
                   _vm._v(" "),
-                  _vm._l(_vm.clientes, function(cliente) {
-                    return _c(
-                      "option",
-                      { key: cliente.id, domProps: { value: cliente.id } },
-                      [_vm._v(_vm._s(cliente.shortname))]
-                    )
-                  })
-                ],
-                2
-              ),
-              _vm._v(" "),
-              _c("label", [_vm._v("Materialize Select")])
-            ])
-          ]),
+                  _c("label", [_vm._v("Materialize Select")])
+                ])
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "input-field col s12" }, [

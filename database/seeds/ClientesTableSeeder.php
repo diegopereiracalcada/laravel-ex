@@ -26,7 +26,7 @@ class ClientesTableSeeder extends Seeder
                 'valor' => 200,
                 'email' => 'cliente' . $i . '@dominio.com',
                 'shortname' => 'c' . $i,
-                'status' => 'ATIVO'
+                'status_cliente' => 'ATIVO'
             ]);
 
         }

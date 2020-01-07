@@ -28,7 +28,9 @@
         <input v-model="chamado.descricao" :disabled="updateMode" />
       </div>
     </div>
-    <div class="row">
+    <div 
+      v-if="!updateMode"
+      class="row">
       <div class="input-field col s12">
         <select
           @change="onClientesSelectChange">
