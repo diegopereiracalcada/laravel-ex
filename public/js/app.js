@@ -440,24 +440,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var chamado = {
   status: "ABERTO"
 };
-var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
+var clientes = [];
+var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
+    CLIENTES_INDEX_API_URL = "/api/clientes"; // document.addEventListener('DOMContentLoaded', function() {
+//   var elems = document.querySelectorAll('select');
+//   var instances = M.FormSelect.init(elems);
+// })
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["updateMode"],
   created: function created() {
+    console.log("created - this.chamado", this);
+    this.$parent.$emit("changeloadingstatus", true);
+
     if (this.updateMode) {
-      this.$parent.$emit("changeloadingstatus", true);
       this.fetchData(this.$route.params.id);
+    } else {
+      this.fetchClientes();
     }
   },
   data: function data() {
     return {
-      chamado: chamado
+      chamado: chamado,
+      clientes: clientes
     };
   },
   methods: {
+    initializeM: function initializeM() {
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems);
+    },
     abrirChamado: function abrirChamado() {
       console.log("abrirChamado", this.chamado);
 
@@ -468,6 +496,11 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
 
       if (this.chamado.status == 'FECHADO' && (!this.chamado.solucao || this.chamado.solucao.trim() == "")) {
         alert("Preencha a solução para abrir o chamado com status 'Fechado'");
+        return false;
+      }
+
+      if (this.chamado.cliente_id == null || this.chamado.cliente_id.trim() == '') {
+        alert("Escolha o cliente");
         return false;
       }
 
@@ -484,17 +517,39 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
       this.chamado.status = "FECHADO";
       this.sendUpdateChamado();
     },
-    fetchData: function fetchData(id) {
+    fetchClientes: function fetchClientes(id) {
       var _this = this;
 
-      fetch(CHAMADO_SHOW_API_URL_PREFIX + id).then(function (resp) {
+      fetch(CLIENTES_INDEX_API_URL).then(function (resp) {
         return resp.json();
       }).then(function (data) {
-        _this.setData(data);
+        _this.setClientes(data);
+
+        console.log("fetchClientes", _this);
+        setTimeout(function () {
+          console.log("fetchClientes dentro do settimeout", _this);
+
+          _this.$parent.$emit("changeloadingstatus", false);
+
+          _this.initializeM();
+        }, 500); // TODO REFACTOR 
       })["catch"](function (error) {
         _this.$parent.$emit("changeloadingstatus", false);
 
         _this.$parent.$emit("senderror", error);
+      });
+    },
+    fetchData: function fetchData(id) {
+      var _this2 = this;
+
+      fetch(CHAMADO_SHOW_API_URL_PREFIX + id).then(function (resp) {
+        return resp.json();
+      }).then(function (data) {
+        _this2.setData(data);
+      })["catch"](function (error) {
+        _this2.$parent.$emit("changeloadingstatus", false);
+
+        _this2.$parent.$emit("senderror", error);
       });
     },
     onSubmit: function onSubmit(form) {
@@ -515,7 +570,7 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
       }
     },
     sendAberturaChamado: function sendAberturaChamado() {
-      var _this2 = this;
+      var _this3 = this;
 
       var url = "/api/chamados";
       fetch(url, {
@@ -530,23 +585,23 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
         body: JSON.stringify(this.chamado)
       }).then(function (response) {
         if (response.ok) {
-          _this2.$parent.$emit("changeloadingstatus", false);
+          _this3.$parent.$emit("changeloadingstatus", false);
 
-          _this2.$router.push({
+          _this3.$router.push({
             name: "chamados.abertos"
           });
 
-          _this2.$parent.$emit("sendsuccess", "Chamado aberto com sucesso");
+          _this3.$parent.$emit("sendsuccess", "Chamado aberto com sucesso");
         } else {
           alert(response.statusText);
-          console.log("this", _this2);
+          console.log("this", _this3);
 
-          _this2.$parent.$emit("senderror", response.statusText);
+          _this3.$parent.$emit("senderror", response.statusText);
         }
       });
     },
     sendUpdateChamado: function sendUpdateChamado() {
-      var _this3 = this;
+      var _this4 = this;
 
       var url = "/api/chamados/" + this.chamado.id;
       fetch(url, {
@@ -561,23 +616,33 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
         body: JSON.stringify(this.chamado)
       }).then(function (response) {
         if (response.ok) {
-          _this3.$parent.$emit("changeloadingstatus", false);
+          _this4.$parent.$emit("changeloadingstatus", false);
 
-          _this3.$router.push({
+          _this4.$router.push({
             name: "chamados.abertos"
           });
 
-          _this3.$parent.$emit("sendsuccess", _this3.chamado.status == "FECHADO" ? "Chamado fechado com sucesso" : "Informações salvas com sucesso");
+          _this4.$parent.$emit("sendsuccess", _this4.chamado.status == "FECHADO" ? "Chamado fechado com sucesso" : "Informações salvas com sucesso");
         } else {
           alert(response.statusText);
 
-          _this3.$parent.$emit("senderror", response.statusText);
+          _this4.$parent.$emit("senderror", response.statusText);
         }
       });
     },
     setData: function setData(chamado) {
       this.chamado = chamado;
       this.$parent.$emit("changeloadingstatus", false);
+    },
+    setClientes: function setClientes(clientes) {
+      this.clientes = clientes;
+      console.log("this.clientes", this.clientes);
+    },
+    onClientesSelectChange: function onClientesSelectChange(event) {
+      console.log("onClientesSelectChange", this);
+      console.log("alterou", event.target.value);
+      this.chamado.cliente_id = event.target.value;
+      console.log(this.chamado);
     }
   },
   computed: {
@@ -2858,6 +2923,33 @@ var render = function() {
                   }
                 }
               })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "input-field col s12" }, [
+              _c(
+                "select",
+                { on: { change: _vm.onClientesSelectChange } },
+                [
+                  _c(
+                    "option",
+                    { attrs: { value: "", disabled: "", selected: "" } },
+                    [_vm._v("Selecionar cliente")]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.clientes, function(cliente) {
+                    return _c(
+                      "option",
+                      { key: cliente.id, domProps: { value: cliente.id } },
+                      [_vm._v(_vm._s(cliente.shortname))]
+                    )
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("label", [_vm._v("Materialize Select")])
             ])
           ]),
           _vm._v(" "),
@@ -19547,8 +19639,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/diego/dev/clickti/laravel-ex2/resources/assets/js/app.js */"./resources/assets/js/app.js");
-module.exports = __webpack_require__(/*! /home/diego/dev/clickti/laravel-ex2/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/diego/dev/dockers/laravel-postgres/projects/laravel-ex/resources/assets/js/app.js */"./resources/assets/js/app.js");
+module.exports = __webpack_require__(/*! /home/diego/dev/dockers/laravel-postgres/projects/laravel-ex/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

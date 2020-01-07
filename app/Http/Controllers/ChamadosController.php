@@ -21,7 +21,7 @@ class ChamadosController extends Controller
         $chamado->status = request('status');
         $chamado->descricao = request('descricao');
         $chamado->dt_abertura = date("Y-m-d H:i:s");
-        $chamado->cliente_id = 1; //TODO: hardcoded
+        $chamado->cliente_id = request('cliente_id');
         $chamado->save();
         return response('Chamado aberto com sucesso. Id: ' . $chamado->id, 200); 
     }

@@ -30,6 +30,19 @@
     </div>
     <div class="row">
       <div class="input-field col s12">
+        <select
+          @change="onClientesSelectChange">
+          <option value="" disabled selected>Selecionar cliente</option>
+          <option 
+            v-for="cliente in clientes" 
+            v-bind:key="cliente.id"
+            :value="cliente.id">{{cliente.shortname}}</option>
+        </select>
+        <label>Materialize Select</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
         <textarea
           id="observacao"
           v-model="chamado.observacao"
@@ -84,22 +97,38 @@ let chamado = {
   status: "ABERTO"
 };
 
-const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/";
+let clientes = [];
+
+const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
+      CLIENTES_INDEX_API_URL = "/api/clientes";
+
+// document.addEventListener('DOMContentLoaded', function() {
+//   var elems = document.querySelectorAll('select');
+//   var instances = M.FormSelect.init(elems);
+// })
 
 export default {
   props: ["updateMode"],
   created() {
+    console.log("created - this.chamado",  this);
+    this.$parent.$emit("changeloadingstatus", true);
     if (this.updateMode) {
-      this.$parent.$emit("changeloadingstatus", true);
       this.fetchData(this.$route.params.id);
+    } else {
+      this.fetchClientes();
     }
   },
   data() {
     return {
-      chamado
+      chamado,
+      clientes
     };
   },
   methods: {
+    initializeM(){
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems);
+    },
     abrirChamado() {
       console.log("abrirChamado", this.chamado);
       if (
@@ -119,6 +148,13 @@ export default {
         return false;
       }
 
+      
+      if(this.chamado.cliente_id == null 
+          || this.chamado.cliente_id.trim() == ''){
+        alert("Escolha o cliente");
+        return false;
+      }
+
       this.$parent.$emit("changeloadingstatus", true);
       this.sendAberturaChamado();
     },
@@ -131,6 +167,23 @@ export default {
       this.$parent.$emit("changeloadingstatus", true);
       this.chamado.status = "FECHADO";
       this.sendUpdateChamado();
+    },
+    fetchClientes(id) {
+      fetch( CLIENTES_INDEX_API_URL )
+        .then(resp => resp.json())
+        .then(data => {
+          this.setClientes(data);
+          console.log("fetchClientes", this);
+          setTimeout(()=>{
+            console.log("fetchClientes dentro do settimeout", this);
+            this.$parent.$emit("changeloadingstatus", false);
+            this.initializeM();
+          }, 500);// TODO REFACTOR 
+        })
+        .catch(error => {
+          this.$parent.$emit("changeloadingstatus", false);
+          this.$parent.$emit("senderror", error);
+        });
     },
     fetchData(id) {
       fetch(CHAMADO_SHOW_API_URL_PREFIX + id)
@@ -221,6 +274,17 @@ export default {
     setData(chamado) {
       this.chamado = chamado;
       this.$parent.$emit("changeloadingstatus", false);
+    },
+    setClientes(clientes) {
+      this.clientes = clientes;
+      console.log("this.clientes", this.clientes);
+      
+    },
+    onClientesSelectChange(event){
+      console.log("onClientesSelectChange", this);
+      console.log("alterou", event.target.value);
+      this.chamado.cliente_id = event.target.value;
+      console.log(this.chamado);
     }
   },
   computed: {
