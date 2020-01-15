@@ -38,6 +38,23 @@ class ChamadosController extends Controller
                         ->get();
     }
 
+    public function itinerario(){
+        return Chamado::select(
+                            'chamados.id',
+                            'status',
+                            'descricao',
+                            'isInclusoNoItinerario',
+                            'preventiva',
+                            'dt_abertura',
+                            'dt_ag_execucao',
+                            'dt_fechamento',
+                            'solucao'
+                        )->where('status', 'ABERTO')
+                        ->where('isInclusoNoItinerario', 'true')
+                        ->join('clientes','clientes.id','=','chamados.cliente_id')
+                        ->get() ;
+    }
+
     public function store()
     {
         $chamado = new Chamado();

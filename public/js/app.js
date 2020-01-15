@@ -352,9 +352,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 var CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['chamado'],
+  props: ['chamado', 'habilitarAdicionarNoItinerario'],
   computed: {
     horaAbertura: function horaAbertura() {
       return this.chamado.dt_abertura;
@@ -537,10 +541,17 @@ var chamado = {
 };
 var clientes = [];
 var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
-    CLIENTES_INDEX_API_URL = "/api/clientes"; // document.addEventListener('DOMContentLoaded', function() {
+    CLIENTES_INDEX_API_URL = "/api/clientes";
+
+function fixTextAreaHeight() {
+  $('textarea').each(function () {
+    $(this).height($(this).prop('scrollHeight'));
+  });
+} // document.addEventListener('DOMContentLoaded', function() {
 //   var elems = document.querySelectorAll('select');
 //   var instances = M.FormSelect.init(elems);
 // })
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["updateMode"],
@@ -623,8 +634,10 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
 
       fetch(CHAMADO_SHOW_API_URL_PREFIX + id).then(function (resp) {
         return resp.json();
-      }).then(function (data) {
-        _this2.setData(data);
+      }).then(function (chamado) {
+        _this2.setData(chamado);
+
+        fixTextAreaHeight();
       })["catch"](function (error) {
         _this2.$parent.$emit("changeloadingstatus", false);
 
@@ -892,6 +905,85 @@ var chamados = [],
         this.showSemChamadosMessage = true;
       }
 
+      this.$emit("changeloadingstatus", false);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/chamados/Chamado */ "./resources/assets/js/components/chamados/Chamado.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var ITINERARIO_API_URL = "/api/itinerario";
+var chamados = [],
+    error = "",
+    showSemChamadosMessage = false;
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    Chamado: _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      chamados: chamados,
+      error: error,
+      showSemChamadosMessage: showSemChamadosMessage
+    };
+  },
+  created: function created() {
+    this.$emit("changeloadingstatus", true); //this.error = null;
+
+    this.fetchData();
+  },
+  watch: {
+    $route: "fetchData"
+  },
+  methods: {
+    fetchData: function fetchData() {
+      var _this = this;
+
+      fetch(ITINERARIO_API_URL).then(function (resp) {
+        return resp.json();
+      }).then(function (data) {
+        _this.setData(data);
+      })["catch"](function (error) {
+        _this.$emit("changeloadingstatus", false);
+
+        _this.error = error;
+      });
+    },
+    setData: function setData(chamados) {
+      if (chamados.length < 1) {
+        this.showSemChamadosMessage = true;
+      }
+
+      this.chamados = chamados;
       this.$emit("changeloadingstatus", false);
     }
   }
@@ -1184,6 +1276,25 @@ exports.push([module.i, ".loading-wrapper {\n  position: fixed;\n  top: 0;\n  bo
 /*!************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/views/chamados/ChamadosAbertos.vue?vue&type=style&index=0&lang=scss& ***!
   \************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".chamados-abertos-list {\n  padding-top: 6px;\n  padding: 6px 2px 0 2px;\n}\n.messages-bar {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: red;\n  height: 50px;\n  color: white;\n  text-align: center;\n}\n.empty-list {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}\n.empty-list h4 {\n  color: #7d7d7d;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=style&index=0&lang=scss&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=style&index=0&lang=scss& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1921,6 +2032,36 @@ if(false) {}
 
 
 var content = __webpack_require__(/*! !../../../../../node_modules/css-loader!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--7-2!../../../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ChamadosAbertos.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/ChamadosAbertos.vue?vue&type=style&index=0&lang=scss&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=style&index=0&lang=scss&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=style&index=0&lang=scss& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../../node_modules/css-loader!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--7-2!../../../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Itinerario.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=style&index=0&lang=scss&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -2807,7 +2948,15 @@ var render = function() {
     "div",
     { staticClass: "chamado col s12" },
     [
-      _c("h6", [_vm._v(_vm._s(_vm.chamado.descricao))]),
+      _c(
+        "router-link",
+        {
+          attrs: {
+            to: { name: "chamados.show", params: { id: _vm.chamado.id } }
+          }
+        },
+        [_c("h6", [_vm._v(_vm._s(_vm.chamado.descricao))])]
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "dt_ag_execucao" }, [
         _c("p", [
@@ -2839,28 +2988,32 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      !_vm.chamado.isInclusoNoItinerario
-        ? _c(
-            "button",
-            {
-              staticClass: "btn-clickti-blue",
-              attrs: { href: "#" },
-              on: { click: _vm.adicionarNoItinerario }
-            },
-            [_vm._v("Add no Itinerário\n    ")]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.chamado.isInclusoNoItinerario
-        ? _c(
-            "button",
-            {
-              staticClass: "btn-clickti-blue btn-remover-do-itinerario",
-              attrs: { href: "#" },
-              on: { click: _vm.removerDoItinerario }
-            },
-            [_vm._v("Remover do Itinerário\n    ")]
-          )
+      _vm.habilitarAdicionarNoItinerario
+        ? _c("div", [
+            !_vm.chamado.isInclusoNoItinerario
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn-clickti-blue",
+                    attrs: { href: "#" },
+                    on: { click: _vm.adicionarNoItinerario }
+                  },
+                  [_vm._v("Add no Itinerário\n        ")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.chamado.isInclusoNoItinerario
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn-clickti-blue btn-remover-do-itinerario",
+                    attrs: { href: "#" },
+                    on: { click: _vm.removerDoItinerario }
+                  },
+                  [_vm._v("Remover do Itinerário\n        ")]
+                )
+              : _vm._e()
+          ])
         : _vm._e()
     ],
     1
@@ -3352,6 +3505,63 @@ var render = function() {
         return _c("Chamado", {
           key: chamado.id,
           attrs: { chamado: chamado, habilitarAdicionarNoItinerario: true }
+        })
+      }),
+      _vm._v(" "),
+      _vm.error
+        ? _c("div", { staticClass: "messages-bar" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", [_vm._v(_vm._s(_vm.error))])
+          ])
+        : _vm._e()
+    ],
+    2
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("b", [_vm._v("Erro: ")])])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=template&id=322d3968&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=template&id=322d3968& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "itinerario row" },
+    [
+      _vm.showSemChamadosMessage
+        ? _c("div", { staticClass: "empty-list" }, [
+            _c("h4", [_vm._v("Sem itinerário por enquanto")])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._l(_vm.chamados, function(chamado) {
+        return _c("Chamado", {
+          key: chamado.id,
+          attrs: { chamado: chamado, habilitarAdicionarNoItinerario: false }
         })
       }),
       _vm._v(" "),
@@ -18843,12 +19053,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_App__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./views/App */ "./resources/assets/js/views/App.vue");
 /* harmony import */ var _views_chamados_AbrirChamado__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/chamados/AbrirChamado */ "./resources/assets/js/views/chamados/AbrirChamado.vue");
 /* harmony import */ var _views_chamados_ChamadosAbertos__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/chamados/ChamadosAbertos */ "./resources/assets/js/views/chamados/ChamadosAbertos.vue");
-/* harmony import */ var _views_chamados_ShowChamado__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/chamados/ShowChamado */ "./resources/assets/js/views/chamados/ShowChamado.vue");
-/* harmony import */ var _views_clientes_ShowCliente__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/clientes/ShowCliente */ "./resources/assets/js/views/clientes/ShowCliente.vue");
-/* harmony import */ var _views_clientes_IndexClientes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./views/clientes/IndexClientes */ "./resources/assets/js/views/clientes/IndexClientes.vue");
+/* harmony import */ var _views_chamados_Itinerario__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/chamados/Itinerario */ "./resources/assets/js/views/chamados/Itinerario.vue");
+/* harmony import */ var _views_chamados_ShowChamado__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/chamados/ShowChamado */ "./resources/assets/js/views/chamados/ShowChamado.vue");
+/* harmony import */ var _views_clientes_ShowCliente__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./views/clientes/ShowCliente */ "./resources/assets/js/views/clientes/ShowCliente.vue");
+/* harmony import */ var _views_clientes_IndexClientes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./views/clientes/IndexClientes */ "./resources/assets/js/views/clientes/IndexClientes.vue");
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
 
 
 
@@ -18860,6 +19072,13 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: [{
     path: '/',
     redirect: '/chamados'
+  }, {
+    path: '/itinerario',
+    name: 'itinerario',
+    component: _views_chamados_Itinerario__WEBPACK_IMPORTED_MODULE_5__["default"],
+    meta: {
+      title: "Itinerário"
+    }
   }, {
     path: '/chamados',
     name: 'chamados.abertos',
@@ -18877,21 +19096,21 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   }, {
     path: '/chamados/:id',
     name: 'chamados.show',
-    component: _views_chamados_ShowChamado__WEBPACK_IMPORTED_MODULE_5__["default"],
+    component: _views_chamados_ShowChamado__WEBPACK_IMPORTED_MODULE_6__["default"],
     meta: {
       title: "Chamado"
     }
   }, {
     path: '/clientes',
     name: 'clientes.index',
-    component: _views_clientes_IndexClientes__WEBPACK_IMPORTED_MODULE_7__["default"],
+    component: _views_clientes_IndexClientes__WEBPACK_IMPORTED_MODULE_8__["default"],
     meta: {
       title: "Clientes"
     }
   }, {
     path: '/clientes/:id',
     name: 'clientes.show',
-    component: _views_clientes_ShowCliente__WEBPACK_IMPORTED_MODULE_6__["default"],
+    component: _views_clientes_ShowCliente__WEBPACK_IMPORTED_MODULE_7__["default"],
     meta: {
       title: "Cliente"
     }
@@ -19497,6 +19716,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChamadosAbertos_vue_vue_type_template_id_6b8bfbee___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChamadosAbertos_vue_vue_type_template_id_6b8bfbee___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/chamados/Itinerario.vue":
+/*!***********************************************************!*\
+  !*** ./resources/assets/js/views/chamados/Itinerario.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Itinerario_vue_vue_type_template_id_322d3968___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Itinerario.vue?vue&type=template&id=322d3968& */ "./resources/assets/js/views/chamados/Itinerario.vue?vue&type=template&id=322d3968&");
+/* harmony import */ var _Itinerario_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Itinerario.vue?vue&type=script&lang=js& */ "./resources/assets/js/views/chamados/Itinerario.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _Itinerario_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Itinerario.vue?vue&type=style&index=0&lang=scss& */ "./resources/assets/js/views/chamados/Itinerario.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _Itinerario_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Itinerario_vue_vue_type_template_id_322d3968___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Itinerario_vue_vue_type_template_id_322d3968___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/views/chamados/Itinerario.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/chamados/Itinerario.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/assets/js/views/chamados/Itinerario.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Itinerario.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/chamados/Itinerario.vue?vue&type=style&index=0&lang=scss&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/assets/js/views/chamados/Itinerario.vue?vue&type=style&index=0&lang=scss& ***!
+  \*********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader!../../../../../node_modules/css-loader!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--7-2!../../../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Itinerario.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/chamados/Itinerario.vue?vue&type=template&id=322d3968&":
+/*!******************************************************************************************!*\
+  !*** ./resources/assets/js/views/chamados/Itinerario.vue?vue&type=template&id=322d3968& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_template_id_322d3968___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Itinerario.vue?vue&type=template&id=322d3968& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/views/chamados/Itinerario.vue?vue&type=template&id=322d3968&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_template_id_322d3968___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Itinerario_vue_vue_type_template_id_322d3968___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

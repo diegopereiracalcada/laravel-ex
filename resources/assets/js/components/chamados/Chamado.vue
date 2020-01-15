@@ -1,6 +1,8 @@
 <template>
     <div class="chamado col s12">
-        <h6>{{ chamado.descricao }}</h6>
+        <router-link :to="{ name: 'chamados.show', params: { id: chamado.id }}">
+            <h6>{{ chamado.descricao }}</h6>
+        </router-link>
         
         <div class="dt_ag_execucao">
             <p><b>Aberto em:</b> <span>{{ chamado.dt_abertura }}</span></p>
@@ -13,18 +15,20 @@
             <i class="material-icons details-arrow">arrow_forward</i>
         </router-link>
 
-        <button 
-            v-if="!chamado.isInclusoNoItinerario"
-            @click="adicionarNoItinerario"
-            class="btn-clickti-blue" href="#"
-            >Add no Itinerário
-        </button>
-        <button 
-            v-if="chamado.isInclusoNoItinerario"
-            @click="removerDoItinerario"
-            class="btn-clickti-blue btn-remover-do-itinerario" href="#"
-            >Remover do Itinerário
-        </button>
+        <div v-if="habilitarAdicionarNoItinerario">
+            <button 
+                v-if="!chamado.isInclusoNoItinerario"
+                @click="adicionarNoItinerario"
+                class="btn-clickti-blue" href="#"
+                >Add no Itinerário
+            </button>
+            <button 
+                v-if="chamado.isInclusoNoItinerario"
+                @click="removerDoItinerario"
+                class="btn-clickti-blue btn-remover-do-itinerario" href="#"
+                >Remover do Itinerário
+            </button>
+        </div>
         <!--div class="data-abertura" style="display: inline-block">
             <p style="font-size: 0.7rem;">Aberto</p>
             <p style="font-size: 0.7rem;">{{ chamado.dt_abertura }}</p>
@@ -39,6 +43,7 @@ const CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
 export default {
     props: [ 
         'chamado',
+        'habilitarAdicionarNoItinerario'
     ],
     computed: {
         horaAbertura(){

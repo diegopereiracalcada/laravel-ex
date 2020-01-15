@@ -7,6 +7,7 @@ import App from './views/App'
 
 import AbrirChamado from './views/chamados/AbrirChamado'
 import ChamadosAbertos from './views/chamados/ChamadosAbertos'
+import Itinerario from './views/chamados/Itinerario'
 import ShowChamado from './views/chamados/ShowChamado'
 
 import ShowCliente from './views/clientes/ShowCliente'
@@ -18,6 +19,14 @@ const router = new VueRouter({
         {
             path: '/',
             redirect: '/chamados'
+        },
+        {
+            path: '/itinerario',
+            name: 'itinerario',
+            component: Itinerario,
+            meta: {
+                title: "Itinerário"
+            }
         },
         {
             path: '/chamados',

@@ -17,4 +17,6 @@ Route::resource('api/clientes', 'ClientesController');
 
 Route::resource('api/chamados', 'ChamadosController');
 
+Route::get('api/itinerario', 'ChamadosController@itinerario');
+
 Route::get('/{any}', 'VueController@index')->where('any', '.*');
