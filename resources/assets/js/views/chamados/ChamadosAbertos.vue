@@ -6,7 +6,8 @@
     <Chamado
       v-for="chamado in chamados"
       v-bind:key="chamado.id"
-      v-bind:chamado="chamado" />
+      :chamado="chamado"
+      :habilitarAdicionarNoItinerario="true" />
 
     <div v-if="error" class="messages-bar">
       <div><b>Erro: </b></div>

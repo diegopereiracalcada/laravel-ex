@@ -53,12 +53,12 @@ return [
         ],
 
         'mysql' => [
-            'driver' => 'mysql',
-            'host' => env(strtoupper(env('DB_SERVICE_NAME', 'MYSQL')).'_SERVICE_HOST', env('DB_HOST', 'localhost')),
-            'port' => env(strtoupper(env('DB_SERVICE_NAME', 'MYSQL')).'_SERVICE_PORT', env('DB_PORT', '3306')),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+	'driver' => 'mysql',
+            'host' => 'mysql',
+            'port' => '3306',
+            'database' => 'homestead',
+            'username' => 'homestead',
+            'password' => 'secret',
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
@@ -68,11 +68,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => 'postgresql',
+            'host' => 'postgres',
             'port' => '5432',
             'database' => 'postgres',
             'username' => 'postgres',
-            'password' => 'postgres',
+            'password' => 'Postgres2019!',
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',

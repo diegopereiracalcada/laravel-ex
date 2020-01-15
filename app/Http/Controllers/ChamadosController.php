@@ -10,11 +10,32 @@ class ChamadosController extends Controller
     public function index(Request $request)
     {
         if($request->has('status')){
-            return Chamado::where('status', $request->input('status'))
+            return Chamado::select(
+                                'chamados.id',
+                                'status',
+                                'descricao',
+                                'isInclusoNoItinerario',
+                                'preventiva',
+                                'dt_abertura',
+                                'dt_ag_execucao',
+                                'dt_fechamento',
+                                'solucao'
+                            )->where('status', $request->input('status'))
                             ->join('clientes','clientes.id','=','chamados.cliente_id')
                             ->get() ;
         }
-        return Chamado::join('clientes','clientes.id','=','chamados.cliente_id')->get();
+        return Chamado::select(
+                            'chamados.id',
+                            'status',
+                            'descricao',
+                            'preventiva',
+                            'isInclusoNoItinerario',
+                            'dt_abertura',
+                            'dt_ag_execucao',
+                            'dt_fechamento',
+                            'solucao'
+                        )->join('clientes','clientes.id','=','chamados.cliente_id')
+                        ->get();
     }
 
     public function store()
@@ -25,6 +46,7 @@ class ChamadosController extends Controller
         $chamado->dt_abertura = date("Y-m-d H:i:s");
         $chamado->cliente_id = request('cliente_id');
         $chamado->save();
+
         return response('Chamado aberto com sucesso. Id: ' . $chamado->id, 200); 
     }
 
@@ -32,6 +54,7 @@ class ChamadosController extends Controller
     {
         $chamado = Chamado::findOrFail($id);
         $chamado->cliente_shortname = $chamado->cliente->shortname;
+        
         return $chamado;
     }
 
@@ -40,7 +63,7 @@ class ChamadosController extends Controller
         $chamado = Chamado::findOrFail($id);
         $chamado->update(request()->all());
         
-        return 'updated';
+        return $chamado;
     }
 
     public function destroy(Chamado $chamado)

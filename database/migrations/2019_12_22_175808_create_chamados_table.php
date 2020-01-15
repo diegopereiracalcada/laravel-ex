@@ -18,7 +18,9 @@ class CreateChamadosTable extends Migration
             $table->string('descricao');
             $table->string('observacao')->nullable();
             $table->boolean('preventiva')->default(false);
+            $table->boolean('isInclusoNoItinerario')->default(false);
             $table->timestamp('dt_abertura');
+            $table->timestamp('dt_ag_execucao')->nullable();
             $table->timestamp('dt_fechamento')->nullable();
             $table->string('solucao')->nullable();
             $table->string('status')->default('ABERTO');
