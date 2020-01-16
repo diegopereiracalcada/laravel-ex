@@ -1,38 +1,44 @@
 <template>
     <div class="chamado col s12">
         <router-link :to="{ name: 'chamados.show', params: { id: chamado.id }}">
-            <h6>{{ chamado.descricao }}</h6>
-        </router-link>
+            <h6>{{ chamado.cliente_shortname }}</h6>
+       
         
-        <div class="dt_ag_execucao">
-            <p><b>Aberto em:</b> <span>{{ chamado.dt_abertura }}</span></p>
-        </div>
-        <div class="dt_ag_execucao">
-            <p><b>Agendado para:</b> <span>{{ chamado.dt_ag_execucao || '--' }}</span></p>
-        </div>
+        <p><b>{{ chamado.descricao }}</b></p>
+        <p>Aberto em: <span><b>{{ chamado.dt_abertura }}</b></span></p>
+        <p>Agendado para: <span>{{ chamado.dt_ag_execucao || '--' }}</span></p>
+        <p 
+            v-if="chamado.preventiva" 
+            style="color: #095979; font-size: 1.3rem"
+            ><b>Preventiva Inclusa</b>
+        </p>
     
-        <router-link :to="{ name: 'chamados.show', params: { id: chamado.id }}">
-            <i class="material-icons details-arrow">arrow_forward</i>
-        </router-link>
+        <i class="material-icons details-arrow">arrow_forward</i>
 
+        <!--div class="data-abertura" style="display: inline-block">
+            <p style="font-size: 0.7rem;">Aberto</p>
+            <p style="font-size: 0.7rem;">{{ chamado.dt_abertura }}</p>
+        </div-->
+
+
+        </router-link>
         <div v-if="habilitarAdicionarNoItinerario">
             <button 
                 v-if="!chamado.isInclusoNoItinerario"
                 @click="adicionarNoItinerario"
-                class="btn-clickti-blue" href="#"
+                class="btn-clickti-blue" 
+                href="#"
+                style="border:none"
                 >Add no Itinerário
             </button>
             <button 
                 v-if="chamado.isInclusoNoItinerario"
                 @click="removerDoItinerario"
-                class="btn-clickti-blue btn-remover-do-itinerario" href="#"
+                class="btn-clickti-blue btn-remover-do-itinerario" 
+                href="#"
                 >Remover do Itinerário
             </button>
         </div>
-        <!--div class="data-abertura" style="display: inline-block">
-            <p style="font-size: 0.7rem;">Aberto</p>
-            <p style="font-size: 0.7rem;">{{ chamado.dt_abertura }}</p>
-        </div-->
     </div>
 </template>
 
@@ -168,7 +174,10 @@ h6, p{
     right: 20px;
 }
 
-.btn-clickti-blue {
+.btn-clickti-blue,
+.btn-clickti-blue:hover,
+.btn-clickti-blue:focus,
+.btn-clickti-blue:active {
     float: right;
     background: #053244;
     padding: 10px;

@@ -278,6 +278,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 var menuItens = [{
+  label: "Itinerário",
+  icon: "directions",
+  href: "/itinerario"
+}, {
   label: "Chamados Abertos",
   icon: "clear_all",
   href: "/chamados"
@@ -318,6 +322,12 @@ function initializeMaterialize() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -541,17 +551,10 @@ var chamado = {
 };
 var clientes = [];
 var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
-    CLIENTES_INDEX_API_URL = "/api/clientes";
-
-function fixTextAreaHeight() {
-  $('textarea').each(function () {
-    $(this).height($(this).prop('scrollHeight'));
-  });
-} // document.addEventListener('DOMContentLoaded', function() {
+    CLIENTES_INDEX_API_URL = "/api/clientes"; // document.addEventListener('DOMContentLoaded', function() {
 //   var elems = document.querySelectorAll('select');
 //   var instances = M.FormSelect.init(elems);
 // })
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["updateMode"],
@@ -637,11 +640,16 @@ function fixTextAreaHeight() {
       }).then(function (chamado) {
         _this2.setData(chamado);
 
-        fixTextAreaHeight();
+        setTimeout(_this2.fixTextAreaHeight, 100);
       })["catch"](function (error) {
         _this2.$parent.$emit("changeloadingstatus", false);
 
         _this2.$parent.$emit("senderror", error);
+      });
+    },
+    fixTextAreaHeight: function fixTextAreaHeight() {
+      $('textarea').each(function () {
+        $(this).height($(this).prop('scrollHeight'));
       });
     },
     onSubmit: function onSubmit(form) {
@@ -1341,7 +1349,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.chamado {\n    position: relative;\n    border-radius: 10px;\n    background: #eaeaea;\n    padding: 6px !important;\n    margin-bottom: 5px;\n    box-shadow: 2px 2px 3px #cecece;\n    min-height: 75px !important;\n}\n.observacao{\n    max-width: 80%;\n}\n.data-abertura {\n    position: absolute;\n    bottom: 5px;\n    right: 5px;\n}\nh6 {\n    font-size: 1.5rem;\n    margin-bottom: 3px;\n    color: #095979;\n    font-weight: bold;\n}\np {\n    color: #808080;\n}\nh6, p{\n    margin: 0\n}\n.details-arrow {\n    position: absolute;\n    top: 8px;\n    right: 20px;\n}\n.btn-clickti-blue {\n    float: right;\n    background: #053244;\n    padding: 10px;\n    color: white;\n    font-weight: bold;\n    cursor: pointer;\n}\n.btn-remover-do-itinerario{\n    background: transparent !important;\n    color: #545454;\n    cursor: pointer;\n}\n", ""]);
+exports.push([module.i, "\n.chamado {\n    position: relative;\n    border-radius: 10px;\n    background: #eaeaea;\n    padding: 6px !important;\n    margin-bottom: 5px;\n    box-shadow: 2px 2px 3px #cecece;\n    min-height: 75px !important;\n}\n.observacao{\n    max-width: 80%;\n}\n.data-abertura {\n    position: absolute;\n    bottom: 5px;\n    right: 5px;\n}\nh6 {\n    font-size: 1.5rem;\n    margin-bottom: 3px;\n    color: #095979;\n    font-weight: bold;\n}\np {\n    color: #808080;\n}\nh6, p{\n    margin: 0\n}\n.details-arrow {\n    position: absolute;\n    top: 8px;\n    right: 20px;\n}\n.btn-clickti-blue,\n.btn-clickti-blue:hover,\n.btn-clickti-blue:focus,\n.btn-clickti-blue:active {\n    float: right;\n    background: #053244;\n    padding: 10px;\n    color: white;\n    font-weight: bold;\n    cursor: pointer;\n}\n.btn-remover-do-itinerario{\n    background: transparent !important;\n    color: #545454;\n    cursor: pointer;\n}\n", ""]);
 
 // exports
 
@@ -2955,33 +2963,29 @@ var render = function() {
             to: { name: "chamados.show", params: { id: _vm.chamado.id } }
           }
         },
-        [_c("h6", [_vm._v(_vm._s(_vm.chamado.descricao))])]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "dt_ag_execucao" }, [
-        _c("p", [
-          _c("b", [_vm._v("Aberto em:")]),
-          _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(_vm.chamado.dt_abertura))])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "dt_ag_execucao" }, [
-        _c("p", [
-          _c("b", [_vm._v("Agendado para:")]),
-          _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(_vm.chamado.dt_ag_execucao || "--"))])
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "router-link",
-        {
-          attrs: {
-            to: { name: "chamados.show", params: { id: _vm.chamado.id } }
-          }
-        },
         [
+          _c("h6", [_vm._v(_vm._s(_vm.chamado.cliente_shortname))]),
+          _vm._v(" "),
+          _c("p", [_c("b", [_vm._v(_vm._s(_vm.chamado.descricao))])]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v("Aberto em: "),
+            _c("span", [_c("b", [_vm._v(_vm._s(_vm.chamado.dt_abertura))])])
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v("Agendado para: "),
+            _c("span", [_vm._v(_vm._s(_vm.chamado.dt_ag_execucao || "--"))])
+          ]),
+          _vm._v(" "),
+          _vm.chamado.preventiva
+            ? _c(
+                "p",
+                { staticStyle: { color: "#095979", "font-size": "1.3rem" } },
+                [_c("b", [_vm._v("Preventiva Inclusa")])]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _c("i", { staticClass: "material-icons details-arrow" }, [
             _vm._v("arrow_forward")
           ])
@@ -2995,6 +2999,7 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn-clickti-blue",
+                    staticStyle: { border: "none" },
                     attrs: { href: "#" },
                     on: { click: _vm.adicionarNoItinerario }
                   },

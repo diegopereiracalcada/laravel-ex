@@ -190,13 +190,19 @@ export default {
     fetchData(id) {
       fetch(CHAMADO_SHOW_API_URL_PREFIX + id)
         .then(resp => resp.json())
-        .then(data => {
-          this.setData(data);
+        .then(chamado => {
+          this.setData(chamado);
+          setTimeout(this.fixTextAreaHeight, 100);
         })
         .catch(error => {
           this.$parent.$emit("changeloadingstatus", false);
           this.$parent.$emit("senderror", error);
         });
+    },
+    fixTextAreaHeight() {
+      $('textarea').each(function () {
+          $(this).height($(this).prop('scrollHeight'));
+      });
     },
     onSubmit(form) {
       console.log("apenas para prevenir o submit por enquanto");

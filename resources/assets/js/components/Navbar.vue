@@ -31,6 +31,11 @@
 <script>
 var menuItens = [
     {
+        label: "Itinerário",
+        icon: "directions",
+        href: "/itinerario"
+    },
+    {
         label: "Chamados Abertos",
         icon: "clear_all",
         href: "/chamados"

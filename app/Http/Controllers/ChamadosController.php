@@ -12,6 +12,7 @@ class ChamadosController extends Controller
         if($request->has('status')){
             return Chamado::select(
                                 'chamados.id',
+                                'clientes.shortname',
                                 'status',
                                 'descricao',
                                 'isInclusoNoItinerario',
@@ -26,6 +27,7 @@ class ChamadosController extends Controller
         }
         return Chamado::select(
                             'chamados.id',
+                            'clientes.shortname',
                             'status',
                             'descricao',
                             'preventiva',
@@ -41,6 +43,7 @@ class ChamadosController extends Controller
     public function itinerario(){
         return Chamado::select(
                             'chamados.id',
+                            'clientes.shortname as cliente_shortname',
                             'status',
                             'descricao',
                             'isInclusoNoItinerario',
