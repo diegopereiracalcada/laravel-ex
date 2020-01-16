@@ -310,7 +310,7 @@ export default {
   top: 0;
   right: 0;
   color: white;
-  padding: 13px;
+  padding: 10px;
 }
 .save-button i {
   font-size: 30px;

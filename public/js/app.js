@@ -277,6 +277,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var menuItens = [{
   label: "Itinerário",
   icon: "directions",
@@ -1254,7 +1263,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".edit-button,\n.save-button {\n  position: fixed;\n  top: 0;\n  right: 0;\n  color: white;\n  padding: 13px;\n}\n.save-button i {\n  font-size: 30px;\n}", ""]);
+exports.push([module.i, ".edit-button,\n.save-button {\n  position: fixed;\n  top: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n}\n.save-button i {\n  font-size: 30px;\n}", ""]);
 
 // exports
 
@@ -2900,7 +2909,24 @@ var render = function() {
               _vm._v(_vm._s(item.label))
             ])
           ])
-        })
+        }),
+        _vm._v(" "),
+        _c(
+          "li",
+          {
+            staticClass: "versao",
+            staticStyle: {
+              position: "absolute",
+              bottom: "60px",
+              color: "rgb(142, 141, 141)",
+              width: "100%",
+              "text-align": "center",
+              "/* padding": "30px",
+              "*/\n            left": "0"
+            }
+          },
+          [_vm._v("v0.3")]
+        )
       ],
       2
     )

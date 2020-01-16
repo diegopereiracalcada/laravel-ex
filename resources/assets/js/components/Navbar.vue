@@ -24,6 +24,15 @@
                     ><i class="material-icons">{{ item.icon }}</i
                     >{{ item.label }}</a>
             </li>
+            <li class="versao" style="
+                position: absolute;
+                bottom: 60px;
+                color: rgb(142, 141, 141);
+                width: 100%;
+                text-align: center;
+                /* padding: 30px; */
+                left: 0;
+            ">v0.3</li>
         </ul>
     </div>
 </template>
