@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Chamado;
+use App\Cliente;
 use Illuminate\Http\Request;
 
 class ChamadosController extends Controller
@@ -12,7 +13,7 @@ class ChamadosController extends Controller
         if($request->has('status')){
             return Chamado::select(
                                 'chamados.id',
-                                'clientes.shortname',
+                                'clientes.shortname as cliente_shortname',
                                 'status',
                                 'descricao',
                                 'isInclusoNoItinerario',
@@ -27,7 +28,7 @@ class ChamadosController extends Controller
         }
         return Chamado::select(
                             'chamados.id',
-                            'clientes.shortname',
+                            'clientes.shortname as cliente_shortname',
                             'status',
                             'descricao',
                             'preventiva',
@@ -80,9 +81,11 @@ class ChamadosController extends Controller
 
     public function update(Request $request, $id)
     {
+        //dd(request()->all());
         $chamado = Chamado::findOrFail($id);
         $chamado->update(request()->all());
         
+        $chamado->cliente_shortname = Cliente::find($chamado->cliente_id)->shortname;
         return $chamado;
     }
 
@@ -96,6 +99,7 @@ class ChamadosController extends Controller
         return request()->validate([
             'id' => 'required',
             'descricao' => 'required',
+            'isInclusoNoItinerario' => 'required',
             'observacao' => 'nullable',
             'preventiva' => 'nullable',
             'dt_abertura' => 'nullable',

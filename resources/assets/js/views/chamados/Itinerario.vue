@@ -1,7 +1,7 @@
 <template>
   <div class="itinerario row">
     <div v-if="showSemChamadosMessage" class="empty-list">
-      <h4>Sem itinerário por enquanto</h4>
+      <h5>Sem itinerário por enquanto</h5>
     </div>
     <Chamado
       v-for="chamado in chamados"

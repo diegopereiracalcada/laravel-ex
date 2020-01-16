@@ -2,23 +2,24 @@
     <div class="chamado col s12">
         <router-link :to="{ name: 'chamados.show', params: { id: chamado.id }}">
             <h6>{{ chamado.cliente_shortname }}</h6>
-       
         
-        <p><b>{{ chamado.descricao }}</b></p>
-        <p>Aberto em: <span><b>{{ chamado.dt_abertura }}</b></span></p>
-        <p>Agendado para: <span>{{ chamado.dt_ag_execucao || '--' }}</span></p>
-        <p 
-            v-if="chamado.preventiva" 
-            style="color: #095979; font-size: 1.3rem"
-            ><b>Preventiva Inclusa</b>
-        </p>
-    
-        <i class="material-icons details-arrow">arrow_forward</i>
+            <p><b>{{ chamado.descricao }}</b></p>
+            <p>Aberto em: <span><b>{{ chamado.dt_abertura }}</b></span></p>
+            <p v-if="chamado.dt_ag_execucao">
+                Agendado para: <span>{{ chamado.dt_ag_execucao }}</span>
+            </p>
+            <p 
+                v-if="chamado.preventiva" 
+                style="color: #095979; font-size: 1.3rem"
+                ><b>Preventiva Inclusa</b>
+            </p>
+        
+            <i class="material-icons details-arrow">arrow_forward</i>
 
-        <!--div class="data-abertura" style="display: inline-block">
-            <p style="font-size: 0.7rem;">Aberto</p>
-            <p style="font-size: 0.7rem;">{{ chamado.dt_abertura }}</p>
-        </div-->
+            <!--div class="data-abertura" style="display: inline-block">
+                <p style="font-size: 0.7rem;">Aberto</p>
+                <p style="font-size: 0.7rem;">{{ chamado.dt_abertura }}</p>
+            </div-->
 
 
         </router-link>
@@ -190,5 +191,12 @@ h6, p{
     background: transparent !important;
     color: #545454;
     cursor: pointer;
+}
+
+.btn-remover-do-itinerario:focus,
+.btn-remover-do-itinerario:hover,
+.btn-remover-do-itinerario:active{
+        color: #545454;
+
 }
 </style>

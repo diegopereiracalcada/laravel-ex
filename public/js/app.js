@@ -375,6 +375,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['chamado', 'habilitarAdicionarNoItinerario'],
@@ -1358,7 +1359,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.chamado {\n    position: relative;\n    border-radius: 10px;\n    background: #eaeaea;\n    padding: 6px !important;\n    margin-bottom: 5px;\n    box-shadow: 2px 2px 3px #cecece;\n    min-height: 75px !important;\n}\n.observacao{\n    max-width: 80%;\n}\n.data-abertura {\n    position: absolute;\n    bottom: 5px;\n    right: 5px;\n}\nh6 {\n    font-size: 1.5rem;\n    margin-bottom: 3px;\n    color: #095979;\n    font-weight: bold;\n}\np {\n    color: #808080;\n}\nh6, p{\n    margin: 0\n}\n.details-arrow {\n    position: absolute;\n    top: 8px;\n    right: 20px;\n}\n.btn-clickti-blue,\n.btn-clickti-blue:hover,\n.btn-clickti-blue:focus,\n.btn-clickti-blue:active {\n    float: right;\n    background: #053244;\n    padding: 10px;\n    color: white;\n    font-weight: bold;\n    cursor: pointer;\n}\n.btn-remover-do-itinerario{\n    background: transparent !important;\n    color: #545454;\n    cursor: pointer;\n}\n", ""]);
+exports.push([module.i, "\n.chamado {\n    position: relative;\n    border-radius: 10px;\n    background: #eaeaea;\n    padding: 6px !important;\n    margin-bottom: 5px;\n    box-shadow: 2px 2px 3px #cecece;\n    min-height: 75px !important;\n}\n.observacao{\n    max-width: 80%;\n}\n.data-abertura {\n    position: absolute;\n    bottom: 5px;\n    right: 5px;\n}\nh6 {\n    font-size: 1.5rem;\n    margin-bottom: 3px;\n    color: #095979;\n    font-weight: bold;\n}\np {\n    color: #808080;\n}\nh6, p{\n    margin: 0\n}\n.details-arrow {\n    position: absolute;\n    top: 8px;\n    right: 20px;\n}\n.btn-clickti-blue,\n.btn-clickti-blue:hover,\n.btn-clickti-blue:focus,\n.btn-clickti-blue:active {\n    float: right;\n    background: #053244;\n    padding: 10px;\n    color: white;\n    font-weight: bold;\n    cursor: pointer;\n}\n.btn-remover-do-itinerario{\n    background: transparent !important;\n    color: #545454;\n    cursor: pointer;\n}\n.btn-remover-do-itinerario:focus,\n.btn-remover-do-itinerario:hover,\n.btn-remover-do-itinerario:active{\n        color: #545454;\n}\n", ""]);
 
 // exports
 
@@ -2999,10 +3000,12 @@ var render = function() {
             _c("span", [_c("b", [_vm._v(_vm._s(_vm.chamado.dt_abertura))])])
           ]),
           _vm._v(" "),
-          _c("p", [
-            _vm._v("Agendado para: "),
-            _c("span", [_vm._v(_vm._s(_vm.chamado.dt_ag_execucao || "--"))])
-          ]),
+          _vm.chamado.dt_ag_execucao
+            ? _c("p", [
+                _vm._v("\n            Agendado para: "),
+                _c("span", [_vm._v(_vm._s(_vm.chamado.dt_ag_execucao))])
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _vm.chamado.preventiva
             ? _c(
@@ -3585,7 +3588,7 @@ var render = function() {
     [
       _vm.showSemChamadosMessage
         ? _c("div", { staticClass: "empty-list" }, [
-            _c("h4", [_vm._v("Sem itinerário por enquanto")])
+            _c("h5", [_vm._v("Sem itinerário por enquanto")])
           ])
         : _vm._e(),
       _vm._v(" "),
