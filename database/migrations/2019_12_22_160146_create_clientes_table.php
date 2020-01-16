@@ -24,7 +24,7 @@ class CreateClientesTable extends Migration
             $table->string('natureza');
             $table->string('cpfcnpj');
             $table->integer('vencimento')->nullable();
-            $table->integer('valor')->nullable();
+            $table->string('valor')->nullable();
             $table->string('status_cliente');
             $table->timestamps();
         });

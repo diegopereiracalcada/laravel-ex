@@ -14,21 +14,19 @@ class ClientesTableSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
-        for($i = 1; $i <= 6; $i++){
-            DB::table('clientes')->insert([
-                'name' => 'Cliente' . $i,
-                'telefone' => '(21) 99999-9999',
-                'endereco' => 'Rua de teste, 1',
-                'cep' => '20999-999',
-                'natureza' => 'PJ',
-                'cpfcnpj' => '19.919.999/0000-99',
-                'vencimento' => 5,
-                'valor' => 200,
-                'email' => 'cliente' . $i . '@dominio.com',
-                'shortname' => 'c' . $i,
-                'status_cliente' => 'ATIVO'
-            ]);
+        DB::table('clientes')->insert([
+            'name' => 'PINHEIRO PEZINHO COM. DE CALCADOS EIRELI',
+            'telefone' => '(21) 98801-7769',
+            'endereco' => 'ESTRADA DO MONTEIRO 1200 LOJA 103F',
+            'cep' => '23045-830',
+            'natureza' => 'PJ',
+            'cpfcnpj' => '25.312.516/0001-00',
+            'vencimento' => 5,
+            'valor' => 'R$ 91.21',
+            'email' => 'neif@oi.com.br',
+            'shortname' => 'Bibi Cpo Gde',
+            'status_cliente' => 'ATIVO'
+        ]);
 
-        }
     }
 }
