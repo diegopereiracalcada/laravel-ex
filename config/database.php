@@ -68,11 +68,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => 'postgres',
+            'host' => 'postgresql',
             'port' => '5432',
             'database' => 'postgres',
             'username' => 'postgres',
-            'password' => 'Postgres2019!',
+            'password' => 'postgres',
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
