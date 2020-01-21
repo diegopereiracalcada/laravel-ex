@@ -8,6 +8,9 @@
             <p v-if="chamado.dt_ag_execucao">
                 Agendado para: <span>{{ chamado.dt_ag_execucao }}</span>
             </p>
+            <p v-if="mostrarDataFechamento">
+                Fechado em: <span>{{ chamado.dt_fechamento }}</span>
+            </p>
             <p 
                 v-if="chamado.preventiva" 
                 style="color: #095979; font-size: 1.3rem"
@@ -50,7 +53,8 @@ const CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
 export default {
     props: [ 
         'chamado',
-        'habilitarAdicionarNoItinerario'
+        'habilitarAdicionarNoItinerario',
+        'mostrarDataFechamento'
     ],
     computed: {
         horaAbertura(){

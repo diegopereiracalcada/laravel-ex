@@ -59,6 +59,10 @@ class ChamadosController extends Controller
                         ->get() ;
     }
 
+    public function fechados(){
+        return Chamado::where('status', 'FECHADO')->get() ;
+    }
+
     public function store()
     {
         $chamado = new Chamado();

@@ -7,6 +7,7 @@ import App from './views/App'
 
 import AbrirChamado from './views/chamados/AbrirChamado'
 import ChamadosAbertos from './views/chamados/ChamadosAbertos'
+import ChamadosFechados from './views/chamados/ChamadosFechados'
 import Itinerario from './views/chamados/Itinerario'
 import ShowChamado from './views/chamados/ShowChamado'
 
@@ -34,6 +35,14 @@ const router = new VueRouter({
             component: ChamadosAbertos,
             meta: {
                 title: "Cham.Abertos"
+            }
+        },
+        {
+            path: '/fechados',
+            name: 'chamados.fechados',
+            component: ChamadosFechados,
+            meta: {
+                title: "Cham.Fechados"
             }
         },
         {
