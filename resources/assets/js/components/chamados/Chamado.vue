@@ -3,17 +3,20 @@
         <router-link :to="{ name: 'chamados.show', params: { id: chamado.id }}">
             <h6>{{ chamado.cliente_shortname || chamado.cliente.shortname }}</h6>
         
-            <p><b>{{ chamado.descricao }}</b></p>
-            <p>Aberto em: <span><b>{{ chamado.dt_abertura }}</b></span></p>
+            <p>
+                <b>{{ chamado.descricao }}</b>
+            </p>
+            <p v-if="mostrarDataAbertura != false">
+                Aberto em: <span>{{ chamado.dt_abertura }}</span>
+            </p>
             <p v-if="chamado.dt_ag_execucao">
                 Agendado para: <span>{{ chamado.dt_ag_execucao }}</span>
             </p>
             <p v-if="mostrarDataFechamento">
                 Fechado em: <span>{{ chamado.dt_fechamento }}</span>
             </p>
-            <p 
-                v-if="chamado.preventiva" 
-                style="color: #095979; font-size: 1.3rem"
+            <p v-if="chamado.preventiva" 
+                style="color: #095979; font-size: 1.2rem"
                 ><b>Preventiva Inclusa</b>
             </p>
         
@@ -54,7 +57,8 @@ export default {
     props: [ 
         'chamado',
         'habilitarAdicionarNoItinerario',
-        'mostrarDataFechamento'
+        'mostrarDataFechamento',
+        'mostrarDataAbertura'
     ],
     computed: {
         horaAbertura(){

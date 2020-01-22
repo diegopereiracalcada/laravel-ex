@@ -383,9 +383,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 var CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['chamado', 'habilitarAdicionarNoItinerario', 'mostrarDataFechamento'],
+  props: ['chamado', 'habilitarAdicionarNoItinerario', 'mostrarDataFechamento', 'mostrarDataAbertura'],
   computed: {
     horaAbertura: function horaAbertura() {
       return this.chamado.dt_abertura;
@@ -947,7 +950,6 @@ var chamados = [],
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/chamados/Chamado */ "./resources/assets/js/components/chamados/Chamado.vue");
-//
 //
 //
 //
@@ -3139,10 +3141,12 @@ var render = function() {
           _vm._v(" "),
           _c("p", [_c("b", [_vm._v(_vm._s(_vm.chamado.descricao))])]),
           _vm._v(" "),
-          _c("p", [
-            _vm._v("Aberto em: "),
-            _c("span", [_c("b", [_vm._v(_vm._s(_vm.chamado.dt_abertura))])])
-          ]),
+          _vm.mostrarDataAbertura != false
+            ? _c("p", [
+                _vm._v("\n            Aberto em: "),
+                _c("span", [_vm._v(_vm._s(_vm.chamado.dt_abertura))])
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _vm.chamado.dt_ag_execucao
             ? _c("p", [
@@ -3161,7 +3165,7 @@ var render = function() {
           _vm.chamado.preventiva
             ? _c(
                 "p",
-                { staticStyle: { color: "#095979", "font-size": "1.3rem" } },
+                { staticStyle: { color: "#095979", "font-size": "1.2rem" } },
                 [_c("b", [_vm._v("Preventiva Inclusa")])]
               )
             : _vm._e(),
@@ -3746,11 +3750,7 @@ var render = function() {
       _vm._l(_vm.chamados, function(chamado) {
         return _c("Chamado", {
           key: chamado.id,
-          attrs: {
-            chamado: chamado,
-            mostrarDataAbertura: true,
-            mostrarDataFechamento: true
-          }
+          attrs: { chamado: chamado, mostrarDataFechamento: true }
         })
       }),
       _vm._v(" "),

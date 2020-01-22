@@ -7,7 +7,6 @@
       v-for="chamado in chamados"
       v-bind:key="chamado.id"
       :chamado="chamado"
-      :mostrarDataAbertura="true"
       :mostrarDataFechamento="true"
       />
 
