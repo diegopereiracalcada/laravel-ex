@@ -24,7 +24,7 @@ class ClientesTableSeeder extends Seeder
             'vencimento' => 5,
             'valor' => 'R$ 91.21',
             'email' => 'neif@oi.com.br',
-            'shortname' => 'Bibi Cpo Gde',
+            'shortname' => 'BIBI CAMPO GDE',
             'status_cliente' => 'ATIVO'
         ]);
         DB::table('clientes')->insert([

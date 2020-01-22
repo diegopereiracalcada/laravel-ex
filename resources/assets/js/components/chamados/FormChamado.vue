@@ -22,12 +22,6 @@
         <input v-model="chamado.cliente_shortname" disabled />
       </div>
     </div>
-    <div class="row">
-      <div class="col s12">
-        <label>Descrição</label>
-        <input v-model="chamado.descricao" :disabled="updateMode" />
-      </div>
-    </div>
     <div 
       v-if="!updateMode"
       class="row">
@@ -40,7 +34,13 @@
             v-bind:key="cliente.id"
             :value="cliente.id">{{cliente.shortname}}</option>
         </select>
-        <label>Materialize Select</label>
+        <label>Cliente</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12">
+        <label>Descrição</label>
+        <input v-model="chamado.descricao" :disabled="updateMode" />
       </div>
     </div>
     <div class="row">

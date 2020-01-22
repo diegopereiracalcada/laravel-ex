@@ -32,7 +32,7 @@
                 text-align: center;
                 /* padding: 30px; */
                 left: 0;
-            ">v0.3</li>
+            ">v0.4</li>
         </ul>
     </div>
 </template>
@@ -40,9 +40,9 @@
 <script>
 var menuItens = [
     {
-        label: "Itinerário",
-        icon: "directions",
-        href: "/itinerario"
+        label: "Abrir Chamado",
+        icon: "add_circle",
+        href: "/abrir"
     },
     {
         label: "Chamados Abertos",
@@ -55,14 +55,14 @@ var menuItens = [
         href: "/fechados"
     },
     {
-        label: "Abrir Chamado",
-        icon: "add_circle",
-        href: "/abrir"
-    },
-    {
         label: "Clientes",
         icon: "contacts",
         href: "/clientes"
+    },
+    {
+        label: "Itinerário",
+        icon: "directions",
+        href: "/itinerario"
     }
 ];
 

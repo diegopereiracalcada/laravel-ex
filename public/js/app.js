@@ -287,9 +287,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 var menuItens = [{
-  label: "Itinerário",
-  icon: "directions",
-  href: "/itinerario"
+  label: "Abrir Chamado",
+  icon: "add_circle",
+  href: "/abrir"
 }, {
   label: "Chamados Abertos",
   icon: "clear_all",
@@ -299,13 +299,13 @@ var menuItens = [{
   icon: "business_center",
   href: "/fechados"
 }, {
-  label: "Abrir Chamado",
-  icon: "add_circle",
-  href: "/abrir"
-}, {
   label: "Clientes",
   icon: "contacts",
   href: "/clientes"
+}, {
+  label: "Itinerário",
+  icon: "directions",
+  href: "/itinerario"
 }];
 document.addEventListener("DOMContentLoaded", function () {
   initializeMaterialize();
@@ -3110,7 +3110,7 @@ var render = function() {
               "*/\n            left": "0"
             }
           },
-          [_vm._v("v0.3")]
+          [_vm._v("v0.4")]
         )
       ],
       2
@@ -3400,6 +3400,35 @@ var render = function() {
               ])
             : _vm._e(),
           _vm._v(" "),
+          !_vm.updateMode
+            ? _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "input-field col s12" }, [
+                  _c(
+                    "select",
+                    { on: { change: _vm.onClientesSelectChange } },
+                    [
+                      _c(
+                        "option",
+                        { attrs: { value: "", disabled: "", selected: "" } },
+                        [_vm._v("Selecionar cliente")]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(_vm.clientes, function(cliente) {
+                        return _c(
+                          "option",
+                          { key: cliente.id, domProps: { value: cliente.id } },
+                          [_vm._v(_vm._s(cliente.shortname))]
+                        )
+                      })
+                    ],
+                    2
+                  ),
+                  _vm._v(" "),
+                  _c("label", [_vm._v("Cliente")])
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col s12" }, [
               _c("label", [_vm._v("Descrição")]),
@@ -3426,35 +3455,6 @@ var render = function() {
               })
             ])
           ]),
-          _vm._v(" "),
-          !_vm.updateMode
-            ? _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "input-field col s12" }, [
-                  _c(
-                    "select",
-                    { on: { change: _vm.onClientesSelectChange } },
-                    [
-                      _c(
-                        "option",
-                        { attrs: { value: "", disabled: "", selected: "" } },
-                        [_vm._v("Selecionar cliente")]
-                      ),
-                      _vm._v(" "),
-                      _vm._l(_vm.clientes, function(cliente) {
-                        return _c(
-                          "option",
-                          { key: cliente.id, domProps: { value: cliente.id } },
-                          [_vm._v(_vm._s(cliente.shortname))]
-                        )
-                      })
-                    ],
-                    2
-                  ),
-                  _vm._v(" "),
-                  _c("label", [_vm._v("Materialize Select")])
-                ])
-              ])
-            : _vm._e(),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "input-field col s12" }, [
