@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Chamado;
 use App\Cliente;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChamadosController extends Controller
 {
@@ -60,7 +62,9 @@ class ChamadosController extends Controller
     }
 
     public function fechados(){
-        return Chamado::where('status', 'FECHADO')->get() ;
+        return Chamado::where('status', 'FECHADO')
+                        ->with('cliente')
+                        ->get() ;
     }
 
     public function store()
@@ -85,11 +89,20 @@ class ChamadosController extends Controller
 
     public function update(Request $request, $id)
     {
-        //dd(request()->all());
         $chamado = Chamado::findOrFail($id);
+        $statusAnterior = $chamado->status;
+        $statusNovo = request('status');
+
         $chamado->update(request()->all());
+
+        if($statusAnterior == 'ABERTO' && $statusNovo == 'FECHADO'){
+            DB::table('chamados')
+                ->where('id', $id)
+                ->update(['dt_fechamento' => Carbon::now()]);
+        }
         
         $chamado->cliente_shortname = Cliente::find($chamado->cliente_id)->shortname;
+
         return $chamado;
     }
 

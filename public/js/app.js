@@ -295,6 +295,10 @@ var menuItens = [{
   icon: "clear_all",
   href: "/chamados"
 }, {
+  label: "Chamados Fechados",
+  icon: "business_center",
+  href: "/fechados"
+}, {
   label: "Abrir Chamado",
   icon: "add_circle",
   href: "/abrir"
@@ -3125,7 +3129,13 @@ var render = function() {
           }
         },
         [
-          _c("h6", [_vm._v(_vm._s(_vm.chamado.cliente_shortname))]),
+          _c("h6", [
+            _vm._v(
+              _vm._s(
+                _vm.chamado.cliente_shortname || _vm.chamado.cliente.shortname
+              )
+            )
+          ]),
           _vm._v(" "),
           _c("p", [_c("b", [_vm._v(_vm._s(_vm.chamado.descricao))])]),
           _vm._v(" "),

@@ -50,6 +50,11 @@ var menuItens = [
         href: "/chamados"
     },
     {
+        label: "Chamados Fechados",
+        icon: "business_center",
+        href: "/fechados"
+    },
+    {
         label: "Abrir Chamado",
         icon: "add_circle",
         href: "/abrir"

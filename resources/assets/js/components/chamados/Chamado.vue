@@ -1,7 +1,7 @@
 <template>
     <div class="chamado col s12">
         <router-link :to="{ name: 'chamados.show', params: { id: chamado.id }}">
-            <h6>{{ chamado.cliente_shortname }}</h6>
+            <h6>{{ chamado.cliente_shortname || chamado.cliente.shortname }}</h6>
         
             <p><b>{{ chamado.descricao }}</b></p>
             <p>Aberto em: <span><b>{{ chamado.dt_abertura }}</b></span></p>
