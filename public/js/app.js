@@ -482,6 +482,8 @@ var CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
       }).then(function (chamado) {
         _this3.setData(chamado);
 
+        alert("Chamado '" + chamado.descricao + "' reaberto");
+
         _this3.$emit("refreshList", false);
       })["catch"](function (error) {
         _this3.$emit("changeloadingstatus", false);

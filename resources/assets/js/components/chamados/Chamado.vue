@@ -166,6 +166,7 @@ export default {
                 .then(resp => resp.json())
                 .then(chamado => {
                     this.setData(chamado);
+                    alert("Chamado '" + chamado.descricao + "' reaberto");
                     this.$emit("refreshList", false);
                 })
                 .catch(error => {
