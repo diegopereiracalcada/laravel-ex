@@ -244,8 +244,6 @@ export default {
             this.$parent.$emit("sendsuccess", "Chamado aberto com sucesso");
           } else {
             alert(response.statusText);
-                        console.log("this", this)
-
             this.$parent.$emit("senderror", response.statusText);
           }
         })

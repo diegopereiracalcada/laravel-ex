@@ -15,6 +15,13 @@
         <div></div>
       </div>
     </div>
+    <div class="fixed-action-btn">
+      <router-link 
+        :to="{ name: 'chamados.abrir' }" 
+        class="btn-floating btn-large red">
+        <i class="clickti-blue large material-icons">add</i>
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -107,4 +114,10 @@ export default {
     height: 32px;
   }
 }
+
+.clickti-blue {
+    background: #053244;
+    color: white;
+}
+
 </style>
