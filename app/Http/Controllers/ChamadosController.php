@@ -26,6 +26,7 @@ class ChamadosController extends Controller
                                 'solucao'
                             )->where('status', $request->input('status'))
                             ->join('clientes','clientes.id','=','chamados.cliente_id')
+                            ->orderBy('dt_abertura', 'asc')
                             ->get() ;
         }
         return Chamado::select(
@@ -40,6 +41,7 @@ class ChamadosController extends Controller
                             'dt_fechamento',
                             'solucao'
                         )->join('clientes','clientes.id','=','chamados.cliente_id')
+                        ->orderBy('dt_abertura', 'asc')
                         ->get();
     }
 
@@ -58,6 +60,7 @@ class ChamadosController extends Controller
                         )->where('status', 'ABERTO')
                         ->where('isInclusoNoItinerario', 'true')
                         ->join('clientes','clientes.id','=','chamados.cliente_id')
+                        ->orderBy('dt_abertura', 'asc')
                         ->get() ;
     }
 
