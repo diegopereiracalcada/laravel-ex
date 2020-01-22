@@ -7,13 +7,13 @@
                 <b>{{ chamado.descricao }}</b>
             </p>
             <p v-if="mostrarDataAbertura != false">
-                Aberto em: <span>{{ chamado.dt_abertura }}</span>
+                Aberto em: <span>{{ horaAbertura }}</span>
             </p>
             <p v-if="chamado.dt_ag_execucao">
-                Agendado para: <span>{{ chamado.dt_ag_execucao }}</span>
+                Agendado para: <span>{{ horaAgendamento }}</span>
             </p>
             <p v-if="mostrarDataFechamento">
-                Fechado em: <span>{{ chamado.dt_fechamento }}</span>
+                Fechado em: <span>{{ horaFechamento }}</span>
             </p>
             <p v-if="chamado.preventiva" 
                 style="color: #095979; font-size: 1.2rem"
@@ -62,6 +62,21 @@
 
 const CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
 
+function getFormattedDate(dt){
+    console.log("dt", dt);
+    var ano = dt.slice(0,4);
+    var mes = dt.slice(5,7);
+    var dia = dt.slice(8,10);
+    var horas = dt.slice(11,13);
+    var minutos = dt.slice(14,16);
+    var segundos = dt.slice(17);
+
+    var formatted = dia + "/" + mes + "/" + ano + " " + horas + ":" + minutos;
+    //var formattedWithSeconds = dia + "/" + mes + "/" + ano + " " + horas + ":" + minutos + ":" + segundos;
+
+    return formatted;
+}
+
 export default {
     props: [ 
         'chamado',
@@ -71,11 +86,16 @@ export default {
         'mostrarBotaoReabrir'
     ],
     computed: {
-        horaAbertura(){
-            return this.chamado.dt_abertura;
+        horaAgendamento(){
+            return getFormattedDate(this.chamado.dt_ag_execucao);
         },
-        dataAbertura(){
-
+        
+        horaAbertura(){
+            return getFormattedDate(this.chamado.dt_abertura);
+        },
+        
+        horaFechamento(){
+            return getFormattedDate(this.chamado.dt_fechamento);
         }
     },
     methods: {

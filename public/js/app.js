@@ -396,13 +396,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 var CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
+
+function getFormattedDate(dt) {
+  console.log("dt", dt);
+  var ano = dt.slice(0, 4);
+  var mes = dt.slice(5, 7);
+  var dia = dt.slice(8, 10);
+  var horas = dt.slice(11, 13);
+  var minutos = dt.slice(14, 16);
+  var segundos = dt.slice(17);
+  var formatted = dia + "/" + mes + "/" + ano + " " + horas + ":" + minutos; //var formattedWithSeconds = dia + "/" + mes + "/" + ano + " " + horas + ":" + minutos + ":" + segundos;
+
+  return formatted;
+}
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['chamado', 'habilitarAdicionarNoItinerario', 'mostrarDataAbertura', 'mostrarDataFechamento', 'mostrarBotaoReabrir'],
   computed: {
-    horaAbertura: function horaAbertura() {
-      return this.chamado.dt_abertura;
+    horaAgendamento: function horaAgendamento() {
+      return getFormattedDate(this.chamado.dt_ag_execucao);
     },
-    dataAbertura: function dataAbertura() {}
+    horaAbertura: function horaAbertura() {
+      return getFormattedDate(this.chamado.dt_abertura);
+    },
+    horaFechamento: function horaFechamento() {
+      return getFormattedDate(this.chamado.dt_fechamento);
+    }
   },
   methods: {
     adicionarNoItinerario: function adicionarNoItinerario() {
@@ -3194,21 +3213,21 @@ var render = function() {
           _vm.mostrarDataAbertura != false
             ? _c("p", [
                 _vm._v("\n            Aberto em: "),
-                _c("span", [_vm._v(_vm._s(_vm.chamado.dt_abertura))])
+                _c("span", [_vm._v(_vm._s(_vm.horaAbertura))])
               ])
             : _vm._e(),
           _vm._v(" "),
           _vm.chamado.dt_ag_execucao
             ? _c("p", [
                 _vm._v("\n            Agendado para: "),
-                _c("span", [_vm._v(_vm._s(_vm.chamado.dt_ag_execucao))])
+                _c("span", [_vm._v(_vm._s(_vm.horaAgendamento))])
               ])
             : _vm._e(),
           _vm._v(" "),
           _vm.mostrarDataFechamento
             ? _c("p", [
                 _vm._v("\n            Fechado em: "),
-                _c("span", [_vm._v(_vm._s(_vm.chamado.dt_fechamento))])
+                _c("span", [_vm._v(_vm._s(_vm.horaFechamento))])
               ])
             : _vm._e(),
           _vm._v(" "),
