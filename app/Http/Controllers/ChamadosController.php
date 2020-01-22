@@ -64,6 +64,7 @@ class ChamadosController extends Controller
     public function fechados(){
         return Chamado::where('status', 'FECHADO')
                         ->with('cliente')
+                        ->orderBy('dt_fechamento', 'desc')
                         ->get() ;
     }
 

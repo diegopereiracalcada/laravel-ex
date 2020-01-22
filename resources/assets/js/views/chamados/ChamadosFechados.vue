@@ -8,6 +8,8 @@
       v-bind:key="chamado.id"
       :chamado="chamado"
       :mostrarDataFechamento="true"
+      :mostrarBotaoReabrir="true"
+      @refreshList="refreshList"
       />
 
     <div v-if="error" class="messages-bar">
@@ -38,8 +40,6 @@ export default {
     };
   },
   created() {
-    this.$emit("changeloadingstatus", true);
-    //this.error = null;
     this.fetchData();
   },
   watch: {
@@ -47,6 +47,8 @@ export default {
   },
   methods: {
     fetchData() {
+      this.$emit("changeloadingstatus", true);
+
       fetch(CHAMADOS_FECHADOS_INDEX_API_URL)
         .then(resp => resp.json())
         .then(data => {
@@ -56,6 +58,10 @@ export default {
           this.$emit("changeloadingstatus", false);
           this.error = error;
         });
+    },
+    refreshList(){
+      console.log("refreshList;;;");
+      this.fetchData();
     },
     setData(chamados) {
       this.chamados = chamados;

@@ -386,9 +386,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['chamado', 'habilitarAdicionarNoItinerario', 'mostrarDataFechamento', 'mostrarDataAbertura'],
+  props: ['chamado', 'habilitarAdicionarNoItinerario', 'mostrarDataAbertura', 'mostrarDataFechamento', 'mostrarBotaoReabrir'],
   computed: {
     horaAbertura: function horaAbertura() {
       return this.chamado.dt_abertura;
@@ -450,6 +459,34 @@ var CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
         _this2.$emit("changeloadingstatus", false);
 
         _this2.error = error;
+      });
+    },
+    reabrirChamado: function reabrirChamado() {
+      var _this3 = this;
+
+      this.$parent.$emit("changeloadingstatus", true);
+      console.log("reabrirChamado...", this.chamado);
+      this.chamado.status = 'ABERTO';
+      fetch(CHAMADOS_UPDATE_API_URL_PREFIX + this.chamado.id, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text-plain, */*",
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        },
+        method: "put",
+        credentials: "same-origin",
+        body: JSON.stringify(this.chamado)
+      }).then(function (resp) {
+        return resp.json();
+      }).then(function (chamado) {
+        _this3.setData(chamado);
+
+        _this3.$emit("refreshList", false);
+      })["catch"](function (error) {
+        _this3.$emit("changeloadingstatus", false);
+
+        _this3.error = error;
       });
     },
     setData: function setData(chamado) {
@@ -969,6 +1006,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 var CHAMADOS_FECHADOS_INDEX_API_URL = "/api/fechados";
 var chamados = [],
@@ -986,8 +1025,6 @@ var chamados = [],
     };
   },
   created: function created() {
-    this.$emit("changeloadingstatus", true); //this.error = null;
-
     this.fetchData();
   },
   watch: {
@@ -997,6 +1034,7 @@ var chamados = [],
     fetchData: function fetchData() {
       var _this = this;
 
+      this.$emit("changeloadingstatus", true);
       fetch(CHAMADOS_FECHADOS_INDEX_API_URL).then(function (resp) {
         return resp.json();
       }).then(function (data) {
@@ -1006,6 +1044,10 @@ var chamados = [],
 
         _this.error = error;
       });
+    },
+    refreshList: function refreshList() {
+      console.log("refreshList;;;");
+      this.fetchData();
     },
     setData: function setData(chamados) {
       this.chamados = chamados;
@@ -3203,6 +3245,20 @@ var render = function() {
                 )
               : _vm._e()
           ])
+        : _vm._e(),
+      _vm._v(" "),
+      this.mostrarBotaoReabrir
+        ? _c("div", [
+            _c(
+              "button",
+              {
+                staticClass: "btn-clickti-blue btn-reabrir-chamado",
+                attrs: { href: "#" },
+                on: { click: _vm.reabrirChamado }
+              },
+              [_vm._v("Reabrir\n        ")]
+            )
+          ])
         : _vm._e()
     ],
     1
@@ -3750,7 +3806,12 @@ var render = function() {
       _vm._l(_vm.chamados, function(chamado) {
         return _c("Chamado", {
           key: chamado.id,
-          attrs: { chamado: chamado, mostrarDataFechamento: true }
+          attrs: {
+            chamado: chamado,
+            mostrarDataFechamento: true,
+            mostrarBotaoReabrir: true
+          },
+          on: { refreshList: _vm.refreshList }
         })
       }),
       _vm._v(" "),

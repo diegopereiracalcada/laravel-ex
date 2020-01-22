@@ -46,6 +46,15 @@
                 >Remover do Itinerário
             </button>
         </div>
+        <div v-if="this.mostrarBotaoReabrir">
+            <button 
+                @click="reabrirChamado"
+                class="btn-clickti-blue btn-reabrir-chamado" 
+                href="#"
+                >Reabrir
+            </button>
+        
+        </div>
     </div>
 </template>
 
@@ -57,8 +66,9 @@ export default {
     props: [ 
         'chamado',
         'habilitarAdicionarNoItinerario',
+        'mostrarDataAbertura',
         'mostrarDataFechamento',
-        'mostrarDataAbertura'
+        'mostrarBotaoReabrir'
     ],
     computed: {
         horaAbertura(){
@@ -125,6 +135,38 @@ export default {
                 .then(chamado => {
                     console.log("voltou", chamado);
                     this.setData(chamado);
+                })
+                .catch(error => {
+                    this.$emit("changeloadingstatus", false);
+                    this.error = error;
+                });
+            
+            
+        },
+        reabrirChamado(){
+            this.$parent.$emit("changeloadingstatus", true);
+
+            console.log("reabrirChamado...", this.chamado);
+
+            this.chamado.status = 'ABERTO';
+
+            fetch(CHAMADOS_UPDATE_API_URL_PREFIX + this.chamado.id, {
+                headers: {
+                    "Content-Type": "application/json",
+                Accept: "application/json, text-plain, */*",
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRF-TOKEN": document
+                                            .querySelector('meta[name="csrf-token"]')
+                                            .getAttribute("content")
+                },
+                method: "put",
+                credentials: "same-origin",
+                body: JSON.stringify(this.chamado)
+            })
+                .then(resp => resp.json())
+                .then(chamado => {
+                    this.setData(chamado);
+                    this.$emit("refreshList", false);
                 })
                 .catch(error => {
                     this.$emit("changeloadingstatus", false);
