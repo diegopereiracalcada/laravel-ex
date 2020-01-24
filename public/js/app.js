@@ -1000,7 +1000,8 @@ var chamados = [],
     updateStatus: function updateStatus() {
       var data = new Date();
       var horas = data.getHours();
-      var minutos = data.getMinutes();
+      var minutos =  data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes() ;
+      
       var horario = horas + ':' + minutos;
       this.$emit("statusMessage", "Atualizado às " + horario);
     }
@@ -1096,7 +1097,7 @@ var chamados = [],
     updateStatus: function updateStatus() {
       var data = new Date();
       var horas = data.getHours();
-      var minutos = data.getMinutes();
+      var minutos = data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes();
       var horario = horas + ':' + minutos;
       this.$emit("statusMessage", "Atualizado às " + horario);
     }
@@ -1184,7 +1185,7 @@ var chamados = [],
     updateStatus: function updateStatus() {
       var data = new Date();
       var horas = data.getHours();
-      var minutos = data.getMinutes();
+      var minutos = data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes();
       var horario = horas + ':' + minutos;
       this.$emit("statusMessage", "Atualizado às " + horario);
     }
