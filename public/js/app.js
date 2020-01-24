@@ -624,6 +624,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var chamado = {
   status: "ABERTO"
 };
@@ -3638,17 +3639,21 @@ var render = function() {
           _vm._v(" "),
           _vm.updateMode
             ? _c("div", { staticClass: "row" }, [
-                _c(
-                  "button",
-                  { staticClass: "btn waves-effect waves-light red col s12" },
-                  [_vm._v("\n      Encerrar Chamado\n    ")]
-                )
+                _vm.chamado.status != "FECHADO"
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn waves-effect waves-light red col s12"
+                      },
+                      [_vm._v("Encerrar Chamado")]
+                    )
+                  : _vm._e()
               ])
             : _c("div", { staticClass: "row" }, [
                 _c(
                   "button",
                   { staticClass: "btn waves-effect waves-light green col s12" },
-                  [_vm._v("\n      Abrir Chamado\n    ")]
+                  [_vm._v("Abrir Chamado")]
                 )
               ])
         ]
@@ -3915,7 +3920,7 @@ var render = function() {
       _vm._l(_vm.chamados, function(chamado) {
         return _c("Chamado", {
           key: chamado.id,
-          attrs: { chamado: chamado, habilitarAdicionarNoItinerario: false }
+          attrs: { chamado: chamado, habilitarAdicionarNoItinerario: true }
         })
       }),
       _vm._v(" "),

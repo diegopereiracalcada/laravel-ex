@@ -15,14 +15,14 @@ class CreateChamadosTable extends Migration
     {
         Schema::create('chamados', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('descricao');
-            $table->string('observacao')->nullable();
+            $table->string('descricao', 4000);
+            $table->string('observacao', 4000)->nullable();
             $table->boolean('preventiva')->default(false);
             $table->boolean('isInclusoNoItinerario')->default(false);
             $table->timestamp('dt_abertura');
             $table->timestamp('dt_ag_execucao')->nullable();
             $table->timestamp('dt_fechamento')->nullable();
-            $table->string('solucao')->nullable();
+            $table->string('solucao', 4000)->nullable();
             $table->string('status')->default('ABERTO');
             $table->unsignedBigInteger('cliente_id');
             $table->timestamps();

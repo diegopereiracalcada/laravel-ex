@@ -82,14 +82,15 @@
     </div>
 
     <div class="row" v-if="updateMode">
-      <button class="btn waves-effect waves-light red col s12">
-        Encerrar Chamado
-      </button>
+      <button 
+        v-if="chamado.status != 'FECHADO'" 
+        class="btn waves-effect waves-light red col s12"
+        >Encerrar Chamado</button>
     </div>
     <div class="row" v-else>
-      <button class="btn waves-effect waves-light green col s12">
-        Abrir Chamado
-      </button>
+      <button 
+        class="btn waves-effect waves-light green col s12"
+        >Abrir Chamado</button>
     </div>
   </form>
 </template>
