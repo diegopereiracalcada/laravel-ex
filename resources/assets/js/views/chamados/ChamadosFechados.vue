@@ -9,6 +9,7 @@
       :chamado="chamado"
       :mostrarDataFechamento="true"
       :mostrarBotaoReabrir="true"
+      :mostrarSolucao="true"
       @refreshList="refreshList"
       />
 
@@ -52,15 +53,16 @@ export default {
       fetch(CHAMADOS_FECHADOS_INDEX_API_URL)
         .then(resp => resp.json())
         .then(data => {
+          this.updateStatus();
           this.setData(data);
         })
         .catch(error => {
           this.$emit("changeloadingstatus", false);
+          console.log("Erro na resposta da reequisição", error);
           this.error = error;
         });
     },
     refreshList(){
-      console.log("refreshList;;;");
       this.fetchData();
     },
     setData(chamados) {
@@ -69,6 +71,15 @@ export default {
         this.showSemChamadosMessage = true;
       }
       this.$emit("changeloadingstatus", false);
+    },
+    updateStatus(){
+      var data = new Date();
+      var horas = data.getHours();
+      var minutos = data.getMinutes();
+
+      var horario = horas + ':' + minutos;
+      this.$emit("statusMessage", "Atualizado às " + horario);
+
     }
   }
 };

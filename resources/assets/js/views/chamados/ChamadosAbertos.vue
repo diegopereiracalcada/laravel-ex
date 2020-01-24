@@ -50,6 +50,7 @@ export default {
         .then(resp => resp.json())
         .then(data => {
           this.setData(data);
+          this.updateStatus();
         })
         .catch(error => {
           this.$emit("changeloadingstatus", false);
@@ -62,6 +63,15 @@ export default {
         this.showSemChamadosMessage = true;
       }
       this.$emit("changeloadingstatus", false);
+    },
+    updateStatus(){
+      var data = new Date();
+      var horas = data.getHours();
+      var minutos = data.getMinutes();
+
+      var horario = horas + ':' + minutos;
+      this.$emit("statusMessage", "Atualizado às " + horario);
+
     }
   }
 };

@@ -199,7 +199,6 @@ var rows = {},
       });
     },
     getFormattedDeleteUrl: function getFormattedDeleteUrl(id) {
-      console.log("getFormattedDeleteUrl", this.deleteUrl, id);
       return this.deleteUrl.replace("${id}", id);
     },
     removeRow: function removeRow() {
@@ -217,8 +216,6 @@ var rows = {},
         method: 'DELETE',
         body: id
       }).then(function (response) {
-        console.log(response, response.status);
-
         if (response.status == 200) {
           _this2.removeRow();
         } else {
@@ -395,10 +392,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 var CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
 
 function getFormattedDate(dt) {
-  console.log("dt", dt);
+  if (dt == null) {
+    return null;
+  }
+
   var ano = dt.slice(0, 4);
   var mes = dt.slice(5, 7);
   var dia = dt.slice(8, 10);
@@ -411,7 +417,7 @@ function getFormattedDate(dt) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['chamado', 'habilitarAdicionarNoItinerario', 'mostrarDataAbertura', 'mostrarDataFechamento', 'mostrarBotaoReabrir'],
+  props: ['chamado', 'habilitarAdicionarNoItinerario', 'mostrarDataAbertura', 'mostrarDataFechamento', 'mostrarBotaoReabrir', 'mostrarSolucao'],
   computed: {
     horaAgendamento: function horaAgendamento() {
       return getFormattedDate(this.chamado.dt_ag_execucao);
@@ -428,7 +434,6 @@ function getFormattedDate(dt) {
       var _this = this;
 
       this.$parent.$emit("changeloadingstatus", true);
-      console.log("adicionarNoItinerario...", this.chamado);
       this.chamado.isInclusoNoItinerario = true;
       fetch(CHAMADOS_UPDATE_API_URL_PREFIX + this.chamado.id, {
         headers: {
@@ -443,8 +448,6 @@ function getFormattedDate(dt) {
       }).then(function (resp) {
         return resp.json();
       }).then(function (chamado) {
-        console.log("voltou", chamado);
-
         _this.setData(chamado);
       })["catch"](function (error) {
         _this.$emit("changeloadingstatus", false);
@@ -456,7 +459,6 @@ function getFormattedDate(dt) {
       var _this2 = this;
 
       this.$parent.$emit("changeloadingstatus", true);
-      console.log("removerDoItinerario...", this.chamado);
       this.chamado.isInclusoNoItinerario = false;
       fetch(CHAMADOS_UPDATE_API_URL_PREFIX + this.chamado.id, {
         headers: {
@@ -471,8 +473,6 @@ function getFormattedDate(dt) {
       }).then(function (resp) {
         return resp.json();
       }).then(function (chamado) {
-        console.log("voltou", chamado);
-
         _this2.setData(chamado);
       })["catch"](function (error) {
         _this2.$emit("changeloadingstatus", false);
@@ -484,7 +484,6 @@ function getFormattedDate(dt) {
       var _this3 = this;
 
       this.$parent.$emit("changeloadingstatus", true);
-      console.log("reabrirChamado...", this.chamado);
       this.chamado.status = 'ABERTO';
       fetch(CHAMADOS_UPDATE_API_URL_PREFIX + this.chamado.id, {
         headers: {
@@ -638,7 +637,6 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["updateMode"],
   created: function created() {
-    console.log("created - this.chamado", this);
     this.$parent.$emit("changeloadingstatus", true);
 
     if (this.updateMode) {
@@ -659,8 +657,6 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
       var instances = M.FormSelect.init(elems);
     },
     abrirChamado: function abrirChamado() {
-      console.log("abrirChamado", this.chamado);
-
       if (this.chamado.descricao == null || this.chamado.descricao.trim() == "") {
         alert("Preencha a descrição para abrir o chamado");
         return false;
@@ -697,10 +693,7 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
       }).then(function (data) {
         _this.setClientes(data);
 
-        console.log("fetchClientes", _this);
         setTimeout(function () {
-          console.log("fetchClientes dentro do settimeout", _this);
-
           _this.$parent.$emit("changeloadingstatus", false);
 
           _this.initializeM();
@@ -732,8 +725,6 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
       });
     },
     onSubmit: function onSubmit(form) {
-      console.log("apenas para prevenir o submit por enquanto");
-
       if (this.updateMode) {
         this.fecharChamado();
       } else {
@@ -741,7 +732,6 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
       }
     },
     onStatusChange: function onStatusChange(event) {
-      console.log("onStatusChange");
       this.chamado.status = event.target.checked ? "FECHADO" : "ABERTO";
 
       if (!event.target.checked) {
@@ -814,13 +804,9 @@ var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
     },
     setClientes: function setClientes(clientes) {
       this.clientes = clientes;
-      console.log("this.clientes", this.clientes);
     },
     onClientesSelectChange: function onClientesSelectChange(event) {
-      console.log("onClientesSelectChange", this);
-      console.log("alterou", event.target.value);
       this.chamado.cliente_id = event.target.value;
-      console.log(this.chamado);
     }
   },
   computed: {
@@ -869,8 +855,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
-var loading = false;
+var loading = false,
+    statusMessage = '';
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "App",
   components: {
@@ -878,7 +869,8 @@ var loading = false;
   },
   data: function data() {
     return {
-      loading: loading
+      loading: loading,
+      statusMessage: statusMessage
     };
   },
   methods: {
@@ -894,6 +886,9 @@ var loading = false;
     },
     changeloadingstatusHandler: function changeloadingstatusHandler(status) {
       this.loading = status;
+    },
+    setStatusMessage: function setStatusMessage(msg) {
+      this.statusMessage = msg;
     }
   }
 });
@@ -985,6 +980,8 @@ var chamados = [],
         return resp.json();
       }).then(function (data) {
         _this.setData(data);
+
+        _this.updateStatus();
       })["catch"](function (error) {
         _this.$emit("changeloadingstatus", false);
 
@@ -999,6 +996,13 @@ var chamados = [],
       }
 
       this.$emit("changeloadingstatus", false);
+    },
+    updateStatus: function updateStatus() {
+      var data = new Date();
+      var horas = data.getHours();
+      var minutos = data.getMinutes();
+      var horario = horas + ':' + minutos;
+      this.$emit("statusMessage", "Atualizado às " + horario);
     }
   }
 });
@@ -1015,6 +1019,7 @@ var chamados = [],
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/chamados/Chamado */ "./resources/assets/js/components/chamados/Chamado.vue");
+//
 //
 //
 //
@@ -1066,15 +1071,17 @@ var chamados = [],
       fetch(CHAMADOS_FECHADOS_INDEX_API_URL).then(function (resp) {
         return resp.json();
       }).then(function (data) {
+        _this.updateStatus();
+
         _this.setData(data);
       })["catch"](function (error) {
         _this.$emit("changeloadingstatus", false);
 
+        console.log("Erro na resposta da reequisição", error);
         _this.error = error;
       });
     },
     refreshList: function refreshList() {
-      console.log("refreshList;;;");
       this.fetchData();
     },
     setData: function setData(chamados) {
@@ -1085,6 +1092,13 @@ var chamados = [],
       }
 
       this.$emit("changeloadingstatus", false);
+    },
+    updateStatus: function updateStatus() {
+      var data = new Date();
+      var horas = data.getHours();
+      var minutos = data.getMinutes();
+      var horario = horas + ':' + minutos;
+      this.$emit("statusMessage", "Atualizado às " + horario);
     }
   }
 });
@@ -1151,6 +1165,8 @@ var chamados = [],
         return resp.json();
       }).then(function (data) {
         _this.setData(data);
+
+        _this.updateStatus();
       })["catch"](function (error) {
         _this.$emit("changeloadingstatus", false);
 
@@ -1164,6 +1180,13 @@ var chamados = [],
 
       this.chamados = chamados;
       this.$emit("changeloadingstatus", false);
+    },
+    updateStatus: function updateStatus() {
+      var data = new Date();
+      var horas = data.getHours();
+      var minutos = data.getMinutes();
+      var horario = horas + ':' + minutos;
+      this.$emit("statusMessage", "Atualizado às " + horario);
     }
   }
 });
@@ -1364,7 +1387,6 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
       this.loading = false;
     },
     initializeCollapsibles: function initializeCollapsibles() {
-      console.log("initializeCollapsibles");
       setTimeout(function () {
         var elems = document.querySelectorAll(".collapsible");
         var instances = M.Collapsible.init(elems);
@@ -1444,7 +1466,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".loading-wrapper {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  z-index: 10;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  background: #3e3b3b94;\n}\n.loading-wrapper img {\n  width: 60% !important;\n  height: 30% !important;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n.clickti-blue {\n  background: #053244;\n  color: white;\n}", ""]);
+exports.push([module.i, ".loading-wrapper {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  z-index: 10;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  background: #3e3b3b94;\n}\n.loading-wrapper img {\n  width: 60% !important;\n  height: 30% !important;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n.bg-clickti-blue {\n  background: #053244;\n  color: white;\n}\n.footer-status {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: #ccc;\n  z-index: 5;\n  padding: 2px 8px;\n}", ""]);
 
 // exports
 
@@ -3211,6 +3233,15 @@ var render = function() {
           _vm._v(" "),
           _c("p", [_c("b", [_vm._v(_vm._s(_vm.chamado.descricao))])]),
           _vm._v(" "),
+          _vm.chamado.observacao
+            ? _c("p", { staticStyle: { color: "red" } }, [
+                _c("b", [
+                  _vm._v("Observação: "),
+                  _c("span", [_vm._v(_vm._s(_vm.chamado.observacao))])
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
           _vm.mostrarDataAbertura != false
             ? _c("p", [
                 _vm._v("\n            Aberto em: "),
@@ -3229,6 +3260,13 @@ var render = function() {
             ? _c("p", [
                 _vm._v("\n            Fechado em: "),
                 _c("span", [_vm._v(_vm._s(_vm.horaFechamento))])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.chamado.solucao
+            ? _c("p", [
+                _vm._v("\n            Solucao: "),
+                _c("span", [_vm._v(_vm._s(_vm.chamado.solucao))])
               ])
             : _vm._e(),
           _vm._v(" "),
@@ -3332,7 +3370,7 @@ var render = function() {
             ? _c(
                 "div",
                 {
-                  staticClass: "save-button",
+                  staticClass: "bg-clickti-blue save-button",
                   on: { click: _vm.sendUpdateChamado }
                 },
                 [_c("i", { staticClass: "material-icons" }, [_vm._v("save")])]
@@ -3695,7 +3733,8 @@ var render = function() {
             on: {
               sendsuccess: _vm.successMessageHandler,
               senderror: _vm.errorMessageHandler,
-              changeloadingstatus: _vm.changeloadingstatusHandler
+              changeloadingstatus: _vm.changeloadingstatusHandler,
+              statusMessage: _vm.setStatusMessage
             }
           })
         ],
@@ -3717,14 +3756,18 @@ var render = function() {
               attrs: { to: { name: "chamados.abrir" } }
             },
             [
-              _c("i", { staticClass: "clickti-blue large material-icons" }, [
+              _c("i", { staticClass: "bg-clickti-blue large material-icons" }, [
                 _vm._v("add")
               ])
             ]
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "footer-status" }, [
+        _vm._v("\n    " + _vm._s(_vm.statusMessage) + "\n  ")
+      ])
     ],
     1
   )
@@ -3861,7 +3904,8 @@ var render = function() {
           attrs: {
             chamado: chamado,
             mostrarDataFechamento: true,
-            mostrarBotaoReabrir: true
+            mostrarBotaoReabrir: true,
+            mostrarSolucao: true
           },
           on: { refreshList: _vm.refreshList }
         })

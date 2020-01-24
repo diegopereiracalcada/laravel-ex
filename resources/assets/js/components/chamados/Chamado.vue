@@ -6,6 +6,9 @@
             <p>
                 <b>{{ chamado.descricao }}</b>
             </p>
+            <p v-if="chamado.observacao" style="color:red;">
+                <b>Observação: <span>{{ chamado.observacao }}</span></b>
+            </p>
             <p v-if="mostrarDataAbertura != false">
                 Aberto em: <span>{{ horaAbertura }}</span>
             </p>
@@ -14,6 +17,9 @@
             </p>
             <p v-if="mostrarDataFechamento">
                 Fechado em: <span>{{ horaFechamento }}</span>
+            </p>
+            <p v-if="chamado.solucao">
+                Solucao: <span>{{ chamado.solucao }}</span>
             </p>
             <p v-if="chamado.preventiva" 
                 style="color: #095979; font-size: 1.2rem"
@@ -63,7 +69,10 @@
 const CHAMADOS_UPDATE_API_URL_PREFIX = "/api/chamados/";
 
 function getFormattedDate(dt){
-    console.log("dt", dt);
+    if(dt == null){
+        return null;
+    }
+
     var ano = dt.slice(0,4);
     var mes = dt.slice(5,7);
     var dia = dt.slice(8,10);
@@ -83,7 +92,8 @@ export default {
         'habilitarAdicionarNoItinerario',
         'mostrarDataAbertura',
         'mostrarDataFechamento',
-        'mostrarBotaoReabrir'
+        'mostrarBotaoReabrir',
+        'mostrarSolucao'
     ],
     computed: {
         horaAgendamento(){
@@ -102,8 +112,6 @@ export default {
         adicionarNoItinerario(){
             this.$parent.$emit("changeloadingstatus", true);
 
-            console.log("adicionarNoItinerario...", this.chamado);
-
             this.chamado.isInclusoNoItinerario = true;
 
             fetch(CHAMADOS_UPDATE_API_URL_PREFIX + this.chamado.id, {
@@ -121,7 +129,6 @@ export default {
             })
                 .then(resp => resp.json())
                 .then(chamado => {
-                    console.log("voltou", chamado);
                     this.setData(chamado);
                 })
                 .catch(error => {
@@ -133,8 +140,6 @@ export default {
         },
         removerDoItinerario(){
             this.$parent.$emit("changeloadingstatus", true);
-
-            console.log("removerDoItinerario...", this.chamado);
 
             this.chamado.isInclusoNoItinerario = false;
 
@@ -153,7 +158,6 @@ export default {
             })
                 .then(resp => resp.json())
                 .then(chamado => {
-                    console.log("voltou", chamado);
                     this.setData(chamado);
                 })
                 .catch(error => {
@@ -165,8 +169,6 @@ export default {
         },
         reabrirChamado(){
             this.$parent.$emit("changeloadingstatus", true);
-
-            console.log("reabrirChamado...", this.chamado);
 
             this.chamado.status = 'ABERTO';
 

@@ -5,7 +5,7 @@
     v-on:submit.prevent="onSubmit"
     class="chamado"
   >
-    <div v-if="updateMode" @click="sendUpdateChamado" class="save-button">
+    <div v-if="updateMode" @click="sendUpdateChamado" class="bg-clickti-blue save-button">
       <i class="material-icons">save</i>
     </div>
     <div class="row" v-if="this.updateMode">
@@ -113,7 +113,6 @@ const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
 export default {
   props: ["updateMode"],
   created() {
-    console.log("created - this.chamado",  this);
     this.$parent.$emit("changeloadingstatus", true);
     if (this.updateMode) {
       this.fetchData(this.$route.params.id);
@@ -133,7 +132,6 @@ export default {
       var instances = M.FormSelect.init(elems);
     },
     abrirChamado() {
-      console.log("abrirChamado", this.chamado);
       if (
         this.chamado.descricao == null ||
         this.chamado.descricao.trim() == ""
@@ -176,9 +174,7 @@ export default {
         .then(resp => resp.json())
         .then(data => {
           this.setClientes(data);
-          console.log("fetchClientes", this);
           setTimeout(()=>{
-            console.log("fetchClientes dentro do settimeout", this);
             this.$parent.$emit("changeloadingstatus", false);
             this.initializeM();
           }, 500);// TODO REFACTOR 
@@ -206,7 +202,6 @@ export default {
       });
     },
     onSubmit(form) {
-      console.log("apenas para prevenir o submit por enquanto");
       if (this.updateMode) {
         this.fecharChamado();
       } else {
@@ -214,7 +209,6 @@ export default {
       }
     },
     onStatusChange(event) {
-      console.log("onStatusChange");
 
       this.chamado.status = event.target.checked ? "FECHADO" : "ABERTO";
 
@@ -284,14 +278,10 @@ export default {
     },
     setClientes(clientes) {
       this.clientes = clientes;
-      console.log("this.clientes", this.clientes);
       
     },
     onClientesSelectChange(event){
-      console.log("onClientesSelectChange", this);
-      console.log("alterou", event.target.value);
       this.chamado.cliente_id = event.target.value;
-      console.log(this.chamado);
     }
   },
   computed: {

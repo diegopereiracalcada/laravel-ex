@@ -6,6 +6,7 @@
         v-on:sendsuccess="successMessageHandler"
         v-on:senderror="errorMessageHandler"
         v-on:changeloadingstatus="changeloadingstatusHandler"
+        v-on:statusMessage="setStatusMessage"
       ></router-view>
     </main>
     <div v-if="loading" class="loading-wrapper">
@@ -19,8 +20,11 @@
       <router-link 
         :to="{ name: 'chamados.abrir' }" 
         class="btn-floating btn-large red">
-        <i class="clickti-blue large material-icons">add</i>
+        <i class="bg-clickti-blue large material-icons">add</i>
       </router-link>
+    </div>
+    <div class="footer-status">
+      {{statusMessage}}
     </div>
   </div>
 </template>
@@ -28,7 +32,8 @@
 <script>
 import Navbar from "../components/Navbar";
 
-let loading = false;
+let loading = false,
+  statusMessage = '';
 
 export default {
   name: "App",
@@ -37,7 +42,8 @@ export default {
   },
   data() {
     return {
-      loading
+      loading,
+      statusMessage
     };
   },
   methods: {
@@ -53,6 +59,9 @@ export default {
     },
     changeloadingstatusHandler(status) {
       this.loading = status;
+    },
+    setStatusMessage(msg){
+      this.statusMessage = msg;
     }
   }
 };
@@ -115,9 +124,19 @@ export default {
   }
 }
 
-.clickti-blue {
+.bg-clickti-blue {
     background: #053244;
     color: white;
+}
+
+.footer-status {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ccc;
+    z-index: 5;
+    padding: 2px 8px;
 }
 
 </style>

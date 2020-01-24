@@ -114,7 +114,6 @@ export default {
                 })
         },
         getFormattedDeleteUrl(id){
-            console.log("getFormattedDeleteUrl", this.deleteUrl, id);
             return this.deleteUrl.replace("${id}", id);
         },
         removeRow(){
@@ -130,7 +129,6 @@ export default {
                 body: id
             })
                 .then(response => {
-                    console.log(response, response.status);
                     if(response.status == 200){
                         this.removeRow();
                     } else {

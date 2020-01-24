@@ -115,7 +115,6 @@ export default {
       this.loading = false;
     },
     initializeCollapsibles() {
-      console.log("initializeCollapsibles");
       setTimeout(function(){
          var elems = document.querySelectorAll(".collapsible");
       var instances = M.Collapsible.init(elems);
