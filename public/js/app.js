@@ -283,6 +283,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 var menuItens = [{
   label: "Abrir Chamado",
   icon: "add_circle",
@@ -1000,8 +1007,7 @@ var chamados = [],
     updateStatus: function updateStatus() {
       var data = new Date();
       var horas = data.getHours();
-      var minutos =  data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes() ;
-      
+      var minutos = data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes();
       var horario = horas + ':' + minutos;
       this.$emit("statusMessage", "Atualizado às " + horario);
     }
@@ -3134,6 +3140,8 @@ var render = function() {
       [
         _vm._m(1),
         _vm._v(" "),
+        _vm._m(2),
+        _vm._v(" "),
         _vm._l(_vm.menuItens, function(item) {
           return _c("li", [
             _c("a", { attrs: { href: item.href } }, [
@@ -3159,7 +3167,7 @@ var render = function() {
               "*/\n            left": "0"
             }
           },
-          [_vm._v("v0.4")]
+          [_vm._v("v0.5")]
         )
       ],
       2
@@ -3184,11 +3192,44 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("div", { staticClass: "user-view" }, [
-        _c("img", { attrs: { src: "/images/logo_60x60.jpg" } })
-      ])
+    return _c("li", { staticClass: "user-view" }, [
+      _c("img", { attrs: { src: "/images/logo_60x60.jpg" } })
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "li",
+      {
+        staticStyle: {
+          display: "flex",
+          "align-items": "center",
+          padding: "0 32px",
+          "margin-bottom": "50px"
+        }
+      },
+      [
+        _c("input", {
+          staticStyle: {
+            "/* width": "calc(100% - 46px)",
+            "*/margin-left": "25px",
+            "margin-right": "4px"
+          },
+          attrs: { placeholder: "Buscar..." }
+        }),
+        _vm._v(" "),
+        _c(
+          "i",
+          {
+            staticClass: "material-icons sufix",
+            staticStyle: { padding: "0 10px", color: "rgba(0,0,0,0.54)" }
+          },
+          [_vm._v("search")]
+        )
+      ]
+    )
   }
 ]
 render._withStripped = true

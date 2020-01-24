@@ -14,10 +14,17 @@
         </nav>
 
         <ul id="slide-out" class="sidenav">
-            <li>
-                <div class="user-view">
+            <li class="user-view">
                     <img class="" src="/images/logo_60x60.jpg" />
-                </div>
+            </li>
+            <li style="
+                    display: flex;
+                    align-items: center;
+                    padding: 0 32px;
+                    margin-bottom: 50px;
+                "><input placeholder="Buscar..." style="/* width: calc(100% - 46px); */margin-left: 25px;margin-right: 4px;"> 
+                    <i class="material-icons sufix" 
+                        style="padding: 0 10px; color: rgba(0,0,0,0.54);">search</i>
             </li>
             <li v-for="item in menuItens">
                 <a :href="item.href"
@@ -32,7 +39,7 @@
                 text-align: center;
                 /* padding: 30px; */
                 left: 0;
-            ">v0.4</li>
+            ">v0.5</li>
         </ul>
     </div>
 </template>
