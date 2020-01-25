@@ -9,6 +9,7 @@ import AbrirChamado from './views/chamados/AbrirChamado'
 import ChamadosAbertos from './views/chamados/ChamadosAbertos'
 import ChamadosFechados from './views/chamados/ChamadosFechados'
 import Itinerario from './views/chamados/Itinerario'
+import ResultadoBusca from './views/chamados/ResultadoBusca'
 import ShowChamado from './views/chamados/ShowChamado'
 
 import ShowCliente from './views/clientes/ShowCliente'
@@ -27,6 +28,14 @@ const router = new VueRouter({
             component: Itinerario,
             meta: {
                 title: "Itinerário"
+            }
+        },
+        {
+            path: '/resultadobusca',
+            name: 'resultadobusca',
+            component: ResultadoBusca,
+            meta: {
+                title: "Result. Busca"
             }
         },
         {

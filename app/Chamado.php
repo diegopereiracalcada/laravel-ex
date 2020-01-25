@@ -11,7 +11,7 @@ class Chamado extends Model
         'descricao',
         'observacao',
         'preventiva',
-        'isInclusoNoItinerario',
+        'isinclusonoitinerario',
         'dt_abertura',
         'dt_ag_execucao',
         'dt_fechamento',

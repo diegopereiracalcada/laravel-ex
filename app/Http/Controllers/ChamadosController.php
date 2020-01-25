@@ -19,7 +19,7 @@ class ChamadosController extends Controller
                                 'status',
                                 'descricao',
                                 'observacao',
-                                'isInclusoNoItinerario',
+                                'isinclusonoitinerario',
                                 'preventiva',
                                 'dt_abertura',
                                 'dt_ag_execucao',
@@ -37,7 +37,7 @@ class ChamadosController extends Controller
                             'descricao',
                             'observacao',
                             'preventiva',
-                            'isInclusoNoItinerario',
+                            'isinclusonoitinerario',
                             'dt_abertura',
                             'dt_ag_execucao',
                             'dt_fechamento',
@@ -54,14 +54,14 @@ class ChamadosController extends Controller
                             'status',
                             'descricao',
                             'observacao',
-                            'isInclusoNoItinerario',
+                            'isinclusonoitinerario',
                             'preventiva',
                             'dt_abertura',
                             'dt_ag_execucao',
                             'dt_fechamento',
                             'solucao'
                         )->where('status', 'ABERTO')
-                        ->where('isInclusoNoItinerario', 'true')
+                        ->where('isinclusonoitinerario', 'true')
                         ->join('clientes','clientes.id','=','chamados.cliente_id')
                         ->orderBy('dt_abertura', 'asc')
                         ->get() ;
@@ -123,7 +123,7 @@ class ChamadosController extends Controller
         return request()->validate([
             'id' => 'required',
             'descricao' => 'required',
-            'isInclusoNoItinerario' => 'required',
+            'isinclusonoitinerario' => 'required',
             'observacao' => 'nullable',
             'preventiva' => 'nullable',
             'dt_abertura' => 'nullable',

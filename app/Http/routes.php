@@ -21,5 +21,6 @@ Route::get('api/fechados', 'ChamadosController@fechados');
 
 Route::get('api/itinerario', 'ChamadosController@itinerario');
 
+Route::get('api/busca', 'BuscaController@search');
 
 Route::get('/{any}', 'VueController@index')->where('any', '.*');

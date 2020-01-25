@@ -2,7 +2,7 @@
     <div class="chamado col s12">
         <router-link :to="{ name: 'chamados.show', params: { id: chamado.id }}">
             <h6>{{ chamado.cliente_shortname || chamado.cliente.shortname }}</h6>
-        
+
             <p>
                 <b>{{ chamado.descricao }}</b>
             </p>
@@ -10,7 +10,7 @@
                 <b>Observação: <span>{{ chamado.observacao }}</span></b>
             </p>
             <p v-if="mostrarDataAbertura != false">
-                Aberto em: <span>{{ horaAbertura }}</span>
+                Aberto em: <span><b> {{horaAbertura }}</b></span>
             </p>
             <p v-if="chamado.dt_ag_execucao">
                 Agendado para: <span>{{ horaAgendamento }}</span>
@@ -37,7 +37,7 @@
         </router-link>
         <div v-if="habilitarAdicionarNoItinerario">
             <button 
-                v-if="!chamado.isInclusoNoItinerario"
+                v-if="!chamado.isinclusonoitinerario"
                 @click="adicionarNoItinerario"
                 class="btn-clickti-blue" 
                 href="#"
@@ -45,7 +45,7 @@
                 >Add no Itinerário
             </button>
             <button 
-                v-if="chamado.isInclusoNoItinerario"
+                v-if="chamado.isinclusonoitinerario"
                 @click="removerDoItinerario"
                 class="btn-clickti-blue btn-remover-do-itinerario" 
                 href="#"
@@ -112,7 +112,7 @@ export default {
         adicionarNoItinerario(){
             this.$parent.$emit("changeloadingstatus", true);
 
-            this.chamado.isInclusoNoItinerario = true;
+            this.chamado.isinclusonoitinerario = true;
 
             fetch(CHAMADOS_UPDATE_API_URL_PREFIX + this.chamado.id, {
                 headers: {
@@ -141,7 +141,7 @@ export default {
         removerDoItinerario(){
             this.$parent.$emit("changeloadingstatus", true);
 
-            this.chamado.isInclusoNoItinerario = false;
+            this.chamado.isinclusonoitinerario = false;
 
             fetch(CHAMADOS_UPDATE_API_URL_PREFIX + this.chamado.id, {
                 headers: {

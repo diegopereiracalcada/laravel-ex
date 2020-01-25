@@ -22,8 +22,10 @@
                     align-items: center;
                     padding: 0 32px;
                     margin-bottom: 50px;
-                "><input placeholder="Buscar..." style="/* width: calc(100% - 46px); */margin-left: 25px;margin-right: 4px;"> 
-                    <i class="material-icons sufix" 
+                "><input id="input-busca" placeholder="Buscar..." style="/* width: calc(100% - 46px); */margin-left: 25px;margin-right: 4px;"> 
+                    <i 
+                        @click="onBuscaSubmit()"
+                        class="material-icons sufix" 
                         style="padding: 0 10px; color: rgba(0,0,0,0.54);">search</i>
             </li>
             <li v-for="item in menuItens">
@@ -85,7 +87,15 @@ function initializeMaterialize() {
 export default {
     data() {
         return { menuItens };
-    }
+    },
+    methods: {
+        onBuscaSubmit(){
+            console.log("onBuscaSubmit...",$("#input-busca").val());
+            var palavras = $("#input-busca").val();
+            this.$router.push({name: 'resultadobusca', params: { palavras: palavras }})
+
+        }
+    },
 };
 </script>
 
