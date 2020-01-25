@@ -1306,21 +1306,28 @@ var chamados = [],
       console.log('highlight words', words);
       setTimeout(function () {
         $("#app").highlight(words);
-      }, 500);
+      }, 100);
+      setTimeout(function () {
+        $("#app").highlight(words);
+      }, 200);
+      setTimeout(function () {
+        $("#app").highlight(words);
+      }, 700);
+      setTimeout(function () {
+        $("#app").highlight(words);
+      }, 1500);
     },
     onBuscaInternaSubmit: function onBuscaInternaSubmit() {
-      console.log("onBuscaInternaSubmit...");
       this.setIsLoading(true);
       var palavras = $(".input-busca-interna").val();
-      console.log("palavras", palavras);
 
       if (palavras == null || palavras.trim() == '') {
         alert('Preencha o campo de busca');
         return false;
       }
 
-      this.showSemChamadosMessage = false; //this.$router.push({name: 'resultadobusca', params: { palavras: palavras }})
-
+      this.showSemChamadosMessage = false;
+      $("#app").unhighlight();
       this.fetchData(palavras);
     },
     onInputBuscaInternaKeyup: function onInputBuscaInternaKeyup(e) {

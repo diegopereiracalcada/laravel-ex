@@ -9,7 +9,6 @@ class BuscaController extends Controller
     public function search()
     {
         $param = request('palavras');
-        $palavrasBuscadas = explode("_",$param);
 
         if(!isset($param)){
             return "sem palavras na request";
@@ -38,11 +37,19 @@ class BuscaController extends Controller
 
         foreach($palavras as $palavra){
             if($isFirstWhere){
-                $sql = $sql . " WHERE UPPER(descricao) like '%" . $palavra . "%' ";
+                $sql = $sql . " WHERE ";
                 $isFirstWhere = false;
             } else {
-                $sql = $sql . " OR UPPER(descricao) like '%" . $palavra . "%' ";
+                $sql = $sql . " OR ";
             }
+            $sql = $sql . " UPPER(descricao) like '%" . $palavra . "%' ";
+
+            $sql = $sql . " OR UPPER(observacao) like '%" . $palavra . "%' ";
+
+            $sql = $sql . " OR UPPER(solucao) like '%" . $palavra . "%' ";
+
+            $sql = $sql . " OR UPPER(clientes.shortname) like '%" . $palavra . "%' ";
+
         }
 
         //return $sql;
