@@ -12,6 +12,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
 
+    <link rel="stylesheet" href="/css/app.css">
+
+
 </head>
 <body>
     <div id="app">
@@ -26,6 +29,10 @@
         src="https://code.jquery.com/jquery-2.2.4.min.js"
         integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
         crossorigin="anonymous"></script>
+
+    <script src="/js/highlight/jquery.highlight.js"></script>
+
+    
 
 </body>
 </html>

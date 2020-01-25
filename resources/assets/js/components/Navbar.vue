@@ -22,7 +22,9 @@
                     align-items: center;
                     padding: 0 32px;
                     margin-bottom: 50px;
-                "><input id="input-busca" placeholder="Buscar..." style="/* width: calc(100% - 46px); */margin-left: 25px;margin-right: 4px;"> 
+                "><input 
+                    class="input-busca" placeholder="Buscar..." 
+                    style="/* width: calc(100% - 46px); */margin-left: 25px;margin-right: 4px;"> 
                     <i 
                         @click="onBuscaSubmit()"
                         class="material-icons sufix" 

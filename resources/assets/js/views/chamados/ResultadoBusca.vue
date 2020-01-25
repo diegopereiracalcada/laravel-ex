@@ -1,13 +1,28 @@
 <template>
   <div class="resultado-busca row">
-    <div v-if="showSemChamadosMessage" class="empty-list">
-      <h4 class="row">Não foram encontrados resultados com as palavras: </h4>
-      <h6 class="row">{{this.$route.params.palavras}}</h6>
+    <div style="display: flex; align-items: center; padding: 0px 32px; margin-bottom: 30px;">
+      <input 
+        @keyup="onInputBuscaInternaKeyup"
+        class="input-busca-interna" 
+        placeholder="Buscar..." 
+        style="margin-right: 4px;"> 
+      <i 
+        @click="onBuscaInternaSubmit()"
+        class="btn-buscar material-icons sufix" 
+        style="padding: 0px 10px; color: rgba(0, 0, 0, 0.54);"
+        >search</i>
+    </div>
+    <div v-if="showSemChamadosMessage" class="empty-list row">
+      <div class="col s12">
+        <h4>Não foram encontrados resultados com as palavras: </h4>
+        <h6>{{this.$route.params.palavras}}</h6>
+      </div>
     </div>
     <Chamado 
       v-for="chamado in chamados"
       :chamado="chamado"
-      v-bind:key="chamado.id" />
+      v-bind:key="chamado.id" 
+      />
   </div>
 </template>
 
@@ -38,19 +53,68 @@ export default {
     this.palavras = this.$route.params.palavras;
     this.$emit("changeloadingstatus", true);
     //this.error = null;
-    this.fetchData();
+    this.fetchData(this.palavras);
   },
   methods: {
-    fetchData() {
-      fetch(SEARCH_API_URL + this.palavras)
+    collapseMenu(){
+      console.log("collapseMenu");
+      $(".sidenav-overlay").click();
+    },
+    fetchData(palavras) {
+      fetch(SEARCH_API_URL + palavras)
         .then(resp => resp.json())
         .then(data => {
           this.setData(data);
+          console.log("no fetch:", palavras);
+          this.highlight(palavras);
+          this.collapseMenu();
         })
         .catch(error => {
           this.$emit("changeloadingstatus", false);
           this.error = error;
         });
+    },
+    highlight(palavras){
+      var words = palavras;
+      console.log('highlight words', words);
+      setTimeout(function(){$("#app").highlight(words)}, 500);
+    },
+    onBuscaInternaSubmit(){
+      console.log("onBuscaInternaSubmit...");
+      this.setIsLoading(true);
+
+      var palavras = $(".input-busca-interna").val();
+      console.log("palavras", palavras);
+
+      if(palavras == null || palavras.trim() == ''){
+        alert('Preencha o campo de busca');
+        return false;
+      }
+      this.showSemChamadosMessage = false;
+      //this.$router.push({name: 'resultadobusca', params: { palavras: palavras }})
+      this.fetchData(palavras);
+
+    },
+    onInputBuscaInternaKeyup(e){
+      if(e.which == 27){
+        return false;
+      }
+      console.log('onInputBuscaInternaKeyup',e);
+      
+      
+      if(this.showSemChamadosMessage){
+        this.showSemChamadosMessage = false;
+      }
+      var palavras = $(".input-busca-interna").val();
+
+      if(e.which == 10 || e.which == 13) {
+        console.log("$(e.target).parent().find(.btn-buscar).click();", $(e.target).parent().find(".btn-buscar"));
+        if(palavras == null || palavras.trim() == ''){
+          alert('Preencha o campo de busca');
+          return false;
+        }
+        this.onBuscaInternaSubmit();
+      }
     },
     setData(chamados) {
       console.log("setdata", chamados);
@@ -59,7 +123,14 @@ export default {
         this.showSemChamadosMessage = true;
       }
       this.$emit("changeloadingstatus", false);
+    },
+    setIsLoading(status){
+      console.log("setIsLoading...")
+      this.$emit("changeloadingstatus", status);
     }
+  },
+  watch: {
+    $route: "fetchData"
   }
 };
 </script>
@@ -131,5 +202,9 @@ export default {
 
 .resultado-busca .empty-list{
   display: inline-block;
+}
+
+.btn-buscar{
+  cursor: pointer;
 }
 </style>
