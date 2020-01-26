@@ -102,9 +102,7 @@ export default {
             $(".sidenav-overlay").click();
         },
         onBuscaSubmit(){
-            console.log("onBuscaSubmit...", $(".input-busca").val());
             var palavras = $(".input-busca").val();
-            console.log(this.$route);
             if(this.$route.name == 'resultadobusca'){
                 var textoBuscado =  $(".input-busca").val();
                 $(".input-busca-interna").val(textoBuscado);
@@ -112,6 +110,7 @@ export default {
                 this.collapseMenu();
             }
 
+            $(".input-busca").val("");
             this.$router.push({name: 'resultadobusca', params: { palavras: palavras }});
 
         },

@@ -58,7 +58,6 @@ export default {
         })
         .catch(error => {
           this.$emit("changeloadingstatus", false);
-          console.log("Erro na resposta da reequisição", error);
           this.error = error;
         });
     },

@@ -74,7 +74,6 @@ export default {
     },
     highlight(palavras){
       var words = palavras;
-      console.log('highlight words', words);
       setTimeout(function(){$(".resultado-busca").highlight(words)}, 100);
       setTimeout(function(){$(".resultado-busca").highlight(words)}, 200);
       setTimeout(function(){$(".resultado-busca").highlight(words)}, 700);
@@ -99,16 +98,14 @@ export default {
       if(e.which == 27){
         return false;
       }
-      console.log('onInputBuscaInternaKeyup',e);
-      
       
       if(this.showSemChamadosMessage){
         this.showSemChamadosMessage = false;
       }
+
       var palavras = $(".input-busca-interna").val();
 
       if(e.which == 10 || e.which == 13) {
-        console.log("$(e.target).parent().find(.btn-buscar).click();", $(e.target).parent().find(".btn-buscar"));
         if(palavras == null || palavras.trim() == ''){
           alert('Preencha o campo de busca');
           return false;
@@ -117,7 +114,6 @@ export default {
       }
     },
     setData(chamados) {
-      console.log("setdata", chamados);
       this.chamados = chamados;
       if(this.chamados.length < 1){
         this.showSemChamadosMessage = true;
@@ -125,7 +121,6 @@ export default {
       this.$emit("changeloadingstatus", false);
     },
     setIsLoading(status){
-      console.log("setIsLoading...")
       this.$emit("changeloadingstatus", status);
     }
   },

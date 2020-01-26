@@ -341,9 +341,7 @@ function initializeMaterialize() {
       $(".sidenav-overlay").click();
     },
     onBuscaSubmit: function onBuscaSubmit() {
-      console.log("onBuscaSubmit...", $(".input-busca").val());
       var palavras = $(".input-busca").val();
-      console.log(this.$route);
 
       if (this.$route.name == 'resultadobusca') {
         var textoBuscado = $(".input-busca").val();
@@ -352,6 +350,7 @@ function initializeMaterialize() {
         this.collapseMenu();
       }
 
+      $(".input-busca").val("");
       this.$router.push({
         name: 'resultadobusca',
         params: {
@@ -1134,7 +1133,6 @@ var chamados = [],
       })["catch"](function (error) {
         _this.$emit("changeloadingstatus", false);
 
-        console.log("Erro na resposta da reequisição", error);
         _this.error = error;
       });
     },
@@ -1334,7 +1332,6 @@ var chamados = [],
     },
     highlight: function highlight(palavras) {
       var words = palavras;
-      console.log('highlight words', words);
       setTimeout(function () {
         $(".resultado-busca").highlight(words);
       }, 100);
@@ -1366,8 +1363,6 @@ var chamados = [],
         return false;
       }
 
-      console.log('onInputBuscaInternaKeyup', e);
-
       if (this.showSemChamadosMessage) {
         this.showSemChamadosMessage = false;
       }
@@ -1375,8 +1370,6 @@ var chamados = [],
       var palavras = $(".input-busca-interna").val();
 
       if (e.which == 10 || e.which == 13) {
-        console.log("$(e.target).parent().find(.btn-buscar).click();", $(e.target).parent().find(".btn-buscar"));
-
         if (palavras == null || palavras.trim() == '') {
           alert('Preencha o campo de busca');
           return false;
@@ -1386,7 +1379,6 @@ var chamados = [],
       }
     },
     setData: function setData(chamados) {
-      console.log("setdata", chamados);
       this.chamados = chamados;
 
       if (this.chamados.length < 1) {
@@ -1396,7 +1388,6 @@ var chamados = [],
       this.$emit("changeloadingstatus", false);
     },
     setIsLoading: function setIsLoading(status) {
-      console.log("setIsLoading...");
       this.$emit("changeloadingstatus", status);
     }
   },
