@@ -22,17 +22,19 @@
                     display: flex;
                     align-items: center;
                     padding: 0 32px;
-                    margin-bottom: 50px;
+                    margin-bottom: 20px;
                 "><input 
                     @keyup="onInputBuscaKeyup"
                     class="input-busca" placeholder="Buscar..." 
-                    style="/* width: calc(100% - 46px); */margin-left: 25px;margin-right: 4px;"> 
+                    style="margin-left: 25px;margin-right: 4px;"> 
                     <i 
                         @click="onBuscaSubmit()"
                         class="material-icons sufix" 
                         style="padding: 0 10px; color: rgba(0,0,0,0.54);">search</i>
             </li>
-            <li v-for="item in menuItens">
+            <li 
+                v-for="item in menuItens"
+                :class="item.classes">
                 <a :href="item.href"
                     ><i class="material-icons">{{ item.icon }}</i
                     >{{ item.label }}</a>
@@ -45,7 +47,7 @@
                 text-align: center;
                 /* padding: 30px; */
                 left: 0;
-            ">v0.5</li>
+            ">v0.6</li>
         </ul>
     </div>
 </template>
@@ -60,7 +62,8 @@ var menuItens = [
     {
         label: "Buscar",
         icon: "search",
-        href: "/resultadobusca"
+        href: "/resultadobusca",
+        classes: "hidden-elem"
     },
     {
         label: "Chamados Abertos",
@@ -148,5 +151,9 @@ export default {
 
 .brand-logo {
     padding: 0 14px !important;
+}
+
+.user-view {
+    margin-bottom: 0 !important;
 }
 </style>

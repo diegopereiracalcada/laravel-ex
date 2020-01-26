@@ -40,7 +40,7 @@
     <div class="row">
       <div class="col s12">
         <label>Descrição</label>
-        <input v-model="chamado.descricao" :disabled="updateMode" />
+        <input id="descricao"  v-model="chamado.descricao" :disabled="updateMode" />
       </div>
     </div>
     <div class="row">
@@ -96,19 +96,18 @@
 </template>
 
 <script>
-let chamado = {
-  status: "ABERTO"
-};
 
-let clientes = [];
+let clientes = [],
+    chamado = {
+      status: "ABERTO"
+    };
 
 const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
       CLIENTES_INDEX_API_URL = "/api/clientes";
 
-// document.addEventListener('DOMContentLoaded', function() {
-//   var elems = document.querySelectorAll('select');
-//   var instances = M.FormSelect.init(elems);
-// })
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("input-busca-interna").focus();
+});
 
 export default {
   props: ["updateMode"],

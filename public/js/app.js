@@ -287,6 +287,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 var menuItens = [{
   label: "Abrir Chamado",
   icon: "add_circle",
@@ -294,7 +296,8 @@ var menuItens = [{
 }, {
   label: "Buscar",
   icon: "search",
-  href: "/resultadobusca"
+  href: "/resultadobusca",
+  classes: "hidden-elem"
 }, {
   label: "Chamados Abertos",
   icon: "clear_all",
@@ -671,16 +674,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var chamado = {
+var clientes = [],
+    chamado = {
   status: "ABERTO"
 };
-var clientes = [];
 var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
-    CLIENTES_INDEX_API_URL = "/api/clientes"; // document.addEventListener('DOMContentLoaded', function() {
-//   var elems = document.querySelectorAll('select');
-//   var instances = M.FormSelect.init(elems);
-// })
-
+    CLIENTES_INDEX_API_URL = "/api/clientes";
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("input-busca-interna").focus();
+});
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["updateMode"],
   created: function created() {
@@ -1277,12 +1279,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 var SEARCH_API_URL = "/api/busca?palavras=";
 var chamados = [],
     error = "",
     showSemChamadosMessage = false,
     palavras;
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("input-busca-interna").focus();
+});
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Chamado: _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -1627,7 +1633,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".user-view {\n  text-align: center;\n}\n.user-view img {\n  width: 40%;\n}\n.azul-click {\n  background-color: #053244 !important;\n}\n.brand-logo {\n  padding: 0 14px !important;\n}", ""]);
+exports.push([module.i, ".user-view {\n  text-align: center;\n}\n.user-view img {\n  width: 40%;\n}\n.azul-click {\n  background-color: #053244 !important;\n}\n.brand-logo {\n  padding: 0 14px !important;\n}\n.user-view {\n  margin-bottom: 0 !important;\n}", ""]);
 
 // exports
 
@@ -3330,17 +3336,13 @@ var render = function() {
               display: "flex",
               "align-items": "center",
               padding: "0 32px",
-              "margin-bottom": "50px"
+              "margin-bottom": "20px"
             }
           },
           [
             _c("input", {
               staticClass: "input-busca",
-              staticStyle: {
-                "/* width": "calc(100% - 46px)",
-                "*/margin-left": "25px",
-                "margin-right": "4px"
-              },
+              staticStyle: { "margin-left": "25px", "margin-right": "4px" },
               attrs: { placeholder: "Buscar..." },
               on: { keyup: _vm.onInputBuscaKeyup }
             }),
@@ -3362,7 +3364,7 @@ var render = function() {
         ),
         _vm._v(" "),
         _vm._l(_vm.menuItens, function(item) {
-          return _c("li", [
+          return _c("li", { class: item.classes }, [
             _c("a", { attrs: { href: item.href } }, [
               _c("i", { staticClass: "material-icons" }, [
                 _vm._v(_vm._s(item.icon))
@@ -3386,7 +3388,7 @@ var render = function() {
               "*/\n            left": "0"
             }
           },
-          [_vm._v("v0.5")]
+          [_vm._v("v0.6")]
         )
       ],
       2
@@ -3732,7 +3734,7 @@ var render = function() {
                     expression: "chamado.descricao"
                   }
                 ],
-                attrs: { disabled: _vm.updateMode },
+                attrs: { id: "descricao", disabled: _vm.updateMode },
                 domProps: { value: _vm.chamado.descricao },
                 on: {
                   input: function($event) {
@@ -4252,7 +4254,7 @@ var render = function() {
           _c("input", {
             staticClass: "input-busca-interna",
             staticStyle: { "margin-right": "4px" },
-            attrs: { placeholder: "Buscar..." },
+            attrs: { id: "input-busca-interna", placeholder: "Buscar..." },
             on: { keyup: _vm.onInputBuscaInternaKeyup }
           }),
           _vm._v(" "),

@@ -1,3 +1,7 @@
+.hidden-elem {
+  display: none !important;
+}
+
 .loading-wrapper {
   position: fixed;
   top: 0;

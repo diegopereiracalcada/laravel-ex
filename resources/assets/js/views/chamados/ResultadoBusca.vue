@@ -3,6 +3,7 @@
     <div style="display: flex; align-items: center; padding: 0px 32px; margin-bottom: 30px;">
       <input 
         @keyup="onInputBuscaInternaKeyup"
+        id="input-busca-interna"
         class="input-busca-interna" 
         placeholder="Buscar..." 
         style="margin-right: 4px;"> 
@@ -36,7 +37,9 @@ let chamados = [],
   showSemChamadosMessage = false,
   palavras;
 
-
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("input-busca-interna").focus();
+});
 
 export default {
   components: {
