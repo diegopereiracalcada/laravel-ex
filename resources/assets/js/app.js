@@ -35,7 +35,7 @@ const router = new VueRouter({
             name: 'resultadobusca',
             component: ResultadoBusca,
             meta: {
-                title: "Result. Busca"
+                title: "Busca"
             }
         },
         {

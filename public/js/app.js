@@ -1332,6 +1332,7 @@ var chamados = [],
     },
     highlight: function highlight(palavras) {
       var words = palavras;
+      console.log('words.length', words.length);
       setTimeout(function () {
         $(".resultado-busca").highlight(words);
       }, 100);
@@ -1347,16 +1348,17 @@ var chamados = [],
     },
     onBuscaInternaSubmit: function onBuscaInternaSubmit() {
       this.setIsLoading(true);
-      var palavras = $(".input-busca-interna").val();
+      this.palavras = $(".input-busca-interna").val();
 
-      if (palavras == null || palavras.trim() == '') {
+      if (this.palavras == null || this.palavras.trim() == '') {
         alert('Preencha o campo de busca');
+        this.$emit("changeloadingstatus", false);
         return false;
       }
 
       this.showSemChamadosMessage = false;
       $(".resultado-busca").unhighlight();
-      this.fetchData(palavras);
+      this.fetchData(this.palavras);
     },
     onInputBuscaInternaKeyup: function onInputBuscaInternaKeyup(e) {
       if (e.which == 27) {
@@ -1380,8 +1382,9 @@ var chamados = [],
     },
     setData: function setData(chamados) {
       this.chamados = chamados;
+      console.log("setdata---", this.palavras);
 
-      if (this.chamados.length < 1) {
+      if (this.palavras && this.chamados.length < 1) {
         this.showSemChamadosMessage = true;
       }
 
@@ -4297,7 +4300,7 @@ var render = function() {
                 _vm._v("Não foram encontrados resultados com as palavras: ")
               ]),
               _vm._v(" "),
-              _c("h6", [_vm._v(_vm._s(this.$route.params.palavras))])
+              _c("h6", [_vm._v(_vm._s(this.palavras))])
             ])
           ])
         : _vm._e(),
@@ -19814,7 +19817,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     name: 'resultadobusca',
     component: _views_chamados_ResultadoBusca__WEBPACK_IMPORTED_MODULE_7__["default"],
     meta: {
-      title: "Result. Busca"
+      title: "Busca"
     }
   }, {
     path: '/chamados',

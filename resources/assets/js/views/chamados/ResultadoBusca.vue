@@ -15,7 +15,7 @@
     <div v-if="showSemChamadosMessage" class="empty-list row">
       <div class="col s12">
         <h4>Não foram encontrados resultados com as palavras: </h4>
-        <h6>{{this.$route.params.palavras}}</h6>
+        <h6>{{this.palavras}}</h6>
       </div>
     </div>
     <Chamado 
@@ -74,6 +74,7 @@ export default {
     },
     highlight(palavras){
       var words = palavras;
+      console.log('words.length', words.length);
       setTimeout(function(){$(".resultado-busca").highlight(words)}, 100);
       setTimeout(function(){$(".resultado-busca").highlight(words)}, 200);
       setTimeout(function(){$(".resultado-busca").highlight(words)}, 700);
@@ -82,16 +83,18 @@ export default {
     onBuscaInternaSubmit(){
       this.setIsLoading(true);
 
-      var palavras = $(".input-busca-interna").val();
+      this.palavras = $(".input-busca-interna").val();
 
-      if(palavras == null || palavras.trim() == ''){
+      if(this.palavras == null || this.palavras.trim() == ''){
         alert('Preencha o campo de busca');
+        this.$emit("changeloadingstatus", false);
+
         return false;
       }
 
       this.showSemChamadosMessage = false;
       $(".resultado-busca").unhighlight();
-      this.fetchData(palavras);
+      this.fetchData(this.palavras);
 
     },
     onInputBuscaInternaKeyup(e){
@@ -115,7 +118,8 @@ export default {
     },
     setData(chamados) {
       this.chamados = chamados;
-      if(this.chamados.length < 1){
+      console.log("setdata---", this.palavras);
+      if(this.palavras && this.chamados.length < 1){
         this.showSemChamadosMessage = true;
       }
       this.$emit("changeloadingstatus", false);
