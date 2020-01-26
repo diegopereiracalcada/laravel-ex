@@ -8,7 +8,7 @@
         style="margin-right: 4px;"> 
       <i 
         @click="onBuscaInternaSubmit()"
-        class="btn-buscar material-icons sufix" 
+        class="btn-buscar btn-buscar-interno material-icons sufix" 
         style="padding: 0px 10px; color: rgba(0, 0, 0, 0.54);"
         >search</i>
     </div>
@@ -57,7 +57,6 @@ export default {
   },
   methods: {
     collapseMenu(){
-      console.log("collapseMenu");
       $(".sidenav-overlay").click();
     },
     fetchData(palavras) {
@@ -65,7 +64,6 @@ export default {
         .then(resp => resp.json())
         .then(data => {
           this.setData(data);
-          console.log("no fetch:", palavras);
           this.highlight(palavras);
           this.collapseMenu();
         })
@@ -77,10 +75,10 @@ export default {
     highlight(palavras){
       var words = palavras;
       console.log('highlight words', words);
-      setTimeout(function(){$("#app").highlight(words)}, 100);
-      setTimeout(function(){$("#app").highlight(words)}, 200);
-      setTimeout(function(){$("#app").highlight(words)}, 700);
-      setTimeout(function(){$("#app").highlight(words)}, 1500);
+      setTimeout(function(){$(".resultado-busca").highlight(words)}, 100);
+      setTimeout(function(){$(".resultado-busca").highlight(words)}, 200);
+      setTimeout(function(){$(".resultado-busca").highlight(words)}, 700);
+      setTimeout(function(){$(".resultado-busca").highlight(words)}, 1500);
     },
     onBuscaInternaSubmit(){
       this.setIsLoading(true);
@@ -93,7 +91,7 @@ export default {
       }
 
       this.showSemChamadosMessage = false;
-      $("#app").unhighlight();
+      $(".resultado-busca").unhighlight();
       this.fetchData(palavras);
 
     },

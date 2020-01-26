@@ -5,6 +5,7 @@
                 <a href="#" data-target="slide-out" class="sidenav-trigger"
                     ><i class="material-icons">menu</i></a>
                 <a href="javascript:void(0)" class="brand-logo">{{$route.meta.title || 'Click TI'}}</a>
+                
                 <ul class="right hide-on-med-and-down">
                     <li v-for="item in menuItens">
                         <a :href="item.href">{{ item.label }}</a>
@@ -23,6 +24,7 @@
                     padding: 0 32px;
                     margin-bottom: 50px;
                 "><input 
+                    @keyup="onInputBuscaKeyup"
                     class="input-busca" placeholder="Buscar..." 
                     style="/* width: calc(100% - 46px); */margin-left: 25px;margin-right: 4px;"> 
                     <i 
@@ -54,6 +56,11 @@ var menuItens = [
         label: "Abrir Chamado",
         icon: "add_circle",
         href: "/abrir"
+    },
+    {
+        label: "Buscar",
+        icon: "search",
+        href: "/resultadobusca"
     },
     {
         label: "Chamados Abertos",
@@ -91,12 +98,38 @@ export default {
         return { menuItens };
     },
     methods: {
+        collapseMenu(){
+            $(".sidenav-overlay").click();
+        },
         onBuscaSubmit(){
-            console.log("onBuscaSubmit...",$("#input-busca").val());
-            var palavras = $("#input-busca").val();
-            this.$router.push({name: 'resultadobusca', params: { palavras: palavras }})
+            console.log("onBuscaSubmit...", $(".input-busca").val());
+            var palavras = $(".input-busca").val();
+            console.log(this.$route);
+            if(this.$route.name == 'resultadobusca'){
+                var textoBuscado =  $(".input-busca").val();
+                $(".input-busca-interna").val(textoBuscado);
+                $(".btn-buscar-interno").click();
+                this.collapseMenu();
+            }
 
-        }
+            this.$router.push({name: 'resultadobusca', params: { palavras: palavras }});
+
+        },
+        onInputBuscaKeyup(e){
+            if(e.which == 27){
+                return false;
+            }
+            
+            var palavras = $(".input-busca").val();
+
+            if(e.which == 10 || e.which == 13) {
+                if(palavras == null || palavras.trim() == ''){
+                    alert('Preencha o campo de busca');
+                    return false;
+                }
+                this.onBuscaSubmit();
+            }
+        },
     },
 };
 </script>

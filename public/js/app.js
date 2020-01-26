@@ -294,10 +294,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 var menuItens = [{
   label: "Abrir Chamado",
   icon: "add_circle",
   href: "/abrir"
+}, {
+  label: "Buscar",
+  icon: "search",
+  href: "/resultadobusca"
 }, {
   label: "Chamados Abertos",
   icon: "clear_all",
@@ -331,15 +337,43 @@ function initializeMaterialize() {
     };
   },
   methods: {
+    collapseMenu: function collapseMenu() {
+      $(".sidenav-overlay").click();
+    },
     onBuscaSubmit: function onBuscaSubmit() {
-      console.log("onBuscaSubmit...", $("#input-busca").val());
-      var palavras = $("#input-busca").val();
+      console.log("onBuscaSubmit...", $(".input-busca").val());
+      var palavras = $(".input-busca").val();
+      console.log(this.$route);
+
+      if (this.$route.name == 'resultadobusca') {
+        var textoBuscado = $(".input-busca").val();
+        $(".input-busca-interna").val(textoBuscado);
+        $(".btn-buscar-interno").click();
+        this.collapseMenu();
+      }
+
       this.$router.push({
         name: 'resultadobusca',
         params: {
           palavras: palavras
         }
       });
+    },
+    onInputBuscaKeyup: function onInputBuscaKeyup(e) {
+      if (e.which == 27) {
+        return false;
+      }
+
+      var palavras = $(".input-busca").val();
+
+      if (e.which == 10 || e.which == 13) {
+        if (palavras == null || palavras.trim() == '') {
+          alert('Preencha o campo de busca');
+          return false;
+        }
+
+        this.onBuscaSubmit();
+      }
     }
   }
 });
@@ -1279,7 +1313,6 @@ var chamados = [],
   },
   methods: {
     collapseMenu: function collapseMenu() {
-      console.log("collapseMenu");
       $(".sidenav-overlay").click();
     },
     fetchData: function fetchData(palavras) {
@@ -1289,8 +1322,6 @@ var chamados = [],
         return resp.json();
       }).then(function (data) {
         _this.setData(data);
-
-        console.log("no fetch:", palavras);
 
         _this.highlight(palavras);
 
@@ -1305,16 +1336,16 @@ var chamados = [],
       var words = palavras;
       console.log('highlight words', words);
       setTimeout(function () {
-        $("#app").highlight(words);
+        $(".resultado-busca").highlight(words);
       }, 100);
       setTimeout(function () {
-        $("#app").highlight(words);
+        $(".resultado-busca").highlight(words);
       }, 200);
       setTimeout(function () {
-        $("#app").highlight(words);
+        $(".resultado-busca").highlight(words);
       }, 700);
       setTimeout(function () {
-        $("#app").highlight(words);
+        $(".resultado-busca").highlight(words);
       }, 1500);
     },
     onBuscaInternaSubmit: function onBuscaInternaSubmit() {
@@ -1327,7 +1358,7 @@ var chamados = [],
       }
 
       this.showSemChamadosMessage = false;
-      $("#app").unhighlight();
+      $(".resultado-busca").unhighlight();
       this.fetchData(palavras);
     },
     onInputBuscaInternaKeyup: function onInputBuscaInternaKeyup(e) {
@@ -3334,7 +3365,8 @@ var render = function() {
                 "*/margin-left": "25px",
                 "margin-right": "4px"
               },
-              attrs: { placeholder: "Buscar..." }
+              attrs: { placeholder: "Buscar..." },
+              on: { keyup: _vm.onInputBuscaKeyup }
             }),
             _vm._v(" "),
             _c(
@@ -4251,7 +4283,7 @@ var render = function() {
           _c(
             "i",
             {
-              staticClass: "btn-buscar material-icons sufix",
+              staticClass: "btn-buscar btn-buscar-interno material-icons sufix",
               staticStyle: {
                 padding: "0px 10px",
                 color: "rgba(0, 0, 0, 0.54)"
