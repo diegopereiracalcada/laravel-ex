@@ -45,14 +45,6 @@
             </tbody>
         </table>
 
-        <div
-            v-if="loading" 
-            class="loading-wrapper">
-            <img
-                style="width: 40%"
-                src="/images/loading.gif" />
-        </div>
-
         <div v-if="error" class="error-display">
             <div><b>Erro ao carregar: </b></div>
             <div>{{error}}</div>
@@ -65,7 +57,6 @@
 <script>
 
 var rows = {},
-    loading = false,
     error = null;
 
 
@@ -81,7 +72,6 @@ export default {
     data() {
         return {
             rows,
-            loading,
             error
         };
     },
@@ -98,7 +88,7 @@ export default {
                 alert("configure as url's e os headers do fetch da tabela");
             }
             this.error = this.post = null
-            this.loading = true
+            this.$parent.$emit("changeloadingstatus", true);
             fetch(url)
                 .then( resp => resp.json() )
                 .then( data => {
@@ -109,7 +99,7 @@ export default {
                     )
                 })
                 .catch( error => {
-                    this.loading = false
+                    this.$parent.$emit("changeloadingstatus", false);
                     this.error = error
                 })
         },
@@ -139,7 +129,7 @@ export default {
         },
         setData(rows) {
             this.rows = rows;
-            this.loading = false
+            this.$parent.$emit("changeloadingstatus", false);
         }
     },
     computed: {
@@ -148,11 +138,6 @@ export default {
 </script>
 
 <style lang="scss">
-    .loading-wrapper{
-        display: flex;
-        justify-content: center;
-    }
-
     .error-display{
         color: white;
         min-height: 60px;

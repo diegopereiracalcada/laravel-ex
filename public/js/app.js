@@ -151,23 +151,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 var rows = {},
-    loading = false,
     error = null;
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['deleteUrl', 'editRouteName', 'hasPagination', 'headers', 'url', 'showRouteName'],
   data: function data() {
     return {
       rows: rows,
-      loading: loading,
       error: error
     };
   },
@@ -188,13 +178,14 @@ var rows = {},
       }
 
       this.error = this.post = null;
-      this.loading = true;
+      this.$parent.$emit("changeloadingstatus", true);
       fetch(url).then(function (resp) {
         return resp.json();
       }).then(function (data) {
         _this.setData(_this.hasPagination ? data.data : data);
       })["catch"](function (error) {
-        _this.loading = false;
+        _this.$parent.$emit("changeloadingstatus", false);
+
         _this.error = error;
       });
     },
@@ -227,7 +218,7 @@ var rows = {},
     },
     setData: function setData(rows) {
       this.rows = rows;
-      this.loading = false;
+      this.$parent.$emit("changeloadingstatus", false);
     }
   },
   computed: {}
@@ -1617,7 +1608,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".loading-wrapper {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n}\n.error-display {\n  color: white;\n  min-height: 60px;\n  background: #a7a7a7;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}", ""]);
+exports.push([module.i, ".error-display {\n  color: white;\n  min-height: 60px;\n  background: #a7a7a7;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}", ""]);
 
 // exports
 
@@ -3261,15 +3252,6 @@ var render = function() {
         0
       )
     ]),
-    _vm._v(" "),
-    _vm.loading
-      ? _c("div", { staticClass: "loading-wrapper" }, [
-          _c("img", {
-            staticStyle: { width: "40%" },
-            attrs: { src: "/images/loading.gif" }
-          })
-        ])
-      : _vm._e(),
     _vm._v(" "),
     _vm.error
       ? _c("div", { staticClass: "error-display" }, [
