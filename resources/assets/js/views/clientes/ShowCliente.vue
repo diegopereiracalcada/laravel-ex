@@ -79,14 +79,14 @@
 </template>
 
 <script>
-let loading = true,
-  cliente = null;
+let cliente = null;
 
 const CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
 
 export default {
   mounted() {},
   created() {
+    this.$emit("changeloadingstatus", true);
     this.fetchData(this.$route.params.id);
   },
   data() {
@@ -96,7 +96,6 @@ export default {
   },
   methods: {
     fetchData(id) {
-
       this.error = null;
 
       fetch(CLIENTE_SHOW_API_URL_PREFIX + id)
@@ -105,19 +104,19 @@ export default {
           this.setData(data);
         })
         .catch(error => {
-          this.loading = false;
           this.error = error;
+          this.$emit("changeloadingstatus", false);
         });
     },
     setData(cliente) {
       this.cliente = cliente;
       this.initializeCollapsibles();
-      this.loading = false;
+      this.$emit("changeloadingstatus", false);
     },
     initializeCollapsibles() {
       setTimeout(function(){
-         var elems = document.querySelectorAll(".collapsible");
-      var instances = M.Collapsible.init(elems);
+        var elems = document.querySelectorAll(".collapsible");
+        var instances = M.Collapsible.init(elems);
       }, 500);
     }
   }

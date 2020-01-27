@@ -61,6 +61,14 @@
         </label>
       </div>
     </div>
+    <div v-if="mostrarIncluirNoItinerario && !updateMode" class="row">
+      <div class="col s12">
+        <label>
+          <input type="checkbox" name="isinclusonoitinerario"  v-model="chamado.isinclusonoitinerario"/>
+          <span>Incluir no Itinerário</span>
+        </label>
+      </div>
+    </div>
     <div class="row" v-if="!updateMode">
       <div class="col s12">
         <label>
@@ -99,18 +107,24 @@
 
 let clientes = [],
     chamado = {
-      status: "ABERTO"
+      status: "ABERTO",
+      isinclusonoitinerario: false
     };
 
 const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
       CLIENTES_INDEX_API_URL = "/api/clientes";
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("input-busca-interna").focus();
+  if(document.getElementById("input-busca-interna")){
+    document.getElementById("input-busca-interna").focus();
+  }
 });
 
 export default {
-  props: ["updateMode"],
+  props: [
+    "updateMode",
+    "mostrarIncluirNoItinerario"
+  ],
   created() {
     this.$parent.$emit("changeloadingstatus", true);
     if (this.updateMode) {

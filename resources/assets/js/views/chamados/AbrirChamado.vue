@@ -1,6 +1,7 @@
 <template>
     <FormChamado 
         :updateMode="false" 
+        :mostrarIncluirNoItinerario="true" 
         ></FormChamado>
 </template>
 

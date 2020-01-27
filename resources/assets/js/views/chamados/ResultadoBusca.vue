@@ -38,7 +38,9 @@ let chamados = [],
   palavras;
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("input-busca-interna").focus();
+  if(document.getElementById("input-busca-interna")){
+    document.getElementById("input-busca-interna").focus();
+  }
 });
 
 export default {

@@ -674,17 +674,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 var clientes = [],
     chamado = {
-  status: "ABERTO"
+  status: "ABERTO",
+  isinclusonoitinerario: false
 };
 var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
     CLIENTES_INDEX_API_URL = "/api/clientes";
 document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("input-busca-interna").focus();
+  if (document.getElementById("input-busca-interna")) {
+    document.getElementById("input-busca-interna").focus();
+  }
 });
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["updateMode"],
+  props: ["updateMode", "mostrarIncluirNoItinerario"],
   created: function created() {
     this.$parent.$emit("changeloadingstatus", true);
 
@@ -954,6 +965,7 @@ var loading = false,
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_chamados_FormChamado_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/chamados/FormChamado.vue */ "./resources/assets/js/components/chamados/FormChamado.vue");
+//
 //
 //
 //
@@ -1287,7 +1299,9 @@ var chamados = [],
     showSemChamadosMessage = false,
     palavras;
 document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("input-busca-interna").focus();
+  if (document.getElementById("input-busca-interna")) {
+    document.getElementById("input-busca-interna").focus();
+  }
 });
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -1559,12 +1573,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var loading = true,
-    cliente = null;
+var cliente = null;
 var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {},
   created: function created() {
+    this.$emit("changeloadingstatus", true);
     this.fetchData(this.$route.params.id);
   },
   data: function data() {
@@ -1582,14 +1596,15 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
       }).then(function (data) {
         _this.setData(data);
       })["catch"](function (error) {
-        _this.loading = false;
         _this.error = error;
+
+        _this.$emit("changeloadingstatus", false);
       });
     },
     setData: function setData(cliente) {
       this.cliente = cliente;
       this.initializeCollapsibles();
-      this.loading = false;
+      this.$emit("changeloadingstatus", false);
     },
     initializeCollapsibles: function initializeCollapsibles() {
       setTimeout(function () {
@@ -3833,6 +3848,66 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
+          _vm.mostrarIncluirNoItinerario && !_vm.updateMode
+            ? _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col s12" }, [
+                  _c("label", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.chamado.isinclusonoitinerario,
+                          expression: "chamado.isinclusonoitinerario"
+                        }
+                      ],
+                      attrs: {
+                        type: "checkbox",
+                        name: "isinclusonoitinerario"
+                      },
+                      domProps: {
+                        checked: Array.isArray(
+                          _vm.chamado.isinclusonoitinerario
+                        )
+                          ? _vm._i(_vm.chamado.isinclusonoitinerario, null) > -1
+                          : _vm.chamado.isinclusonoitinerario
+                      },
+                      on: {
+                        change: function($event) {
+                          var $$a = _vm.chamado.isinclusonoitinerario,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = null,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                _vm.$set(
+                                  _vm.chamado,
+                                  "isinclusonoitinerario",
+                                  $$a.concat([$$v])
+                                )
+                            } else {
+                              $$i > -1 &&
+                                _vm.$set(
+                                  _vm.chamado,
+                                  "isinclusonoitinerario",
+                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                )
+                            }
+                          } else {
+                            _vm.$set(_vm.chamado, "isinclusonoitinerario", $$c)
+                          }
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Incluir no Itinerário")])
+                  ])
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
           !_vm.updateMode
             ? _c("div", { staticClass: "row" }, [
                 _c("div", { staticClass: "col s12" }, [
@@ -4035,7 +4110,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("FormChamado", { attrs: { updateMode: false } })
+  return _c("FormChamado", {
+    attrs: { updateMode: false, mostrarIncluirNoItinerario: true }
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
