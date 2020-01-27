@@ -7,6 +7,8 @@ use App\Cliente;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\MailService;
+
 
 class ChamadosController extends Controller
 {
@@ -108,6 +110,9 @@ class ChamadosController extends Controller
             DB::table('chamados')
                 ->where('id', $id)
                 ->update(['dt_fechamento' => Carbon::now()]);
+
+            $mailService = new MailService();
+            $mailService->sendFechamento("tarapi007@gmail.com", "tarapi007@gmail.com", $chamado);
         }
         
         $chamado->cliente_shortname = Cliente::find($chamado->cliente_id)->shortname;
