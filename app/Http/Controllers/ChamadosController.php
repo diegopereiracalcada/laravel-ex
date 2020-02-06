@@ -78,12 +78,9 @@ class ChamadosController extends Controller
 
     public function store()
     {
-        $chamado = new Chamado();
-        $chamado->status = request('status');
-        $chamado->descricao = request('descricao');
-        $chamado->dt_abertura = date("Y-m-d H:i:s");
+        $chamado = new Chamado(request()->all());
         $chamado->cliente_id = request('cliente_id');
-        $chamado->isinclusonoitinerario = request('isinclusonoitinerario');
+        $chamado->dt_abertura = date("Y-m-d H:i:s");
 
         $chamado->save();
 
@@ -106,17 +103,16 @@ class ChamadosController extends Controller
 
         $chamado->update(request()->all());
 
+        $cliente = Cliente::find($chamado->cliente_id);
+        $chamado->cliente_shortname = $cliente->shortname;
+
         if($statusAnterior == 'ABERTO' && $statusNovo == 'FECHADO'){
             DB::table('chamados')
                 ->where('id', $id)
                 ->update(['dt_fechamento' => Carbon::now()]);
 
-            $mailService = new MailService();
-            $mailService->sendFechamento("tarapi007@gmail.com", "tarapi007@gmail.com", $chamado);
         }
-        
-        $chamado->cliente_shortname = Cliente::find($chamado->cliente_id)->shortname;
-
+ 
         return $chamado;
     }
 

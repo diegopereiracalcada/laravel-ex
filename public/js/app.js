@@ -1667,7 +1667,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".edit-button,\n.save-button {\n  position: fixed;\n  top: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n}\n.save-button i {\n  font-size: 30px;\n}", ""]);
+exports.push([module.i, ".edit-button,\n.save-button {\n  position: fixed;\n  top: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  cursor: pointer;\n}\n.save-button i {\n  font-size: 30px;\n}\n@media screen and (min-width: 993px) {\n.save-button {\n    padding: 14px;\n    z-index: 10;\n}\n.nav-wrapper ul {\n    margin-right: 60px;\n}\n}", ""]);
 
 // exports
 

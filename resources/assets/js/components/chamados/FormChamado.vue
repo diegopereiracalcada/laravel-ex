@@ -313,8 +313,20 @@ export default {
   right: 0;
   color: white;
   padding: 10px;
+  cursor: pointer;
 }
 .save-button i {
   font-size: 30px;
 }
+
+@media screen and (min-width: 993px){
+  .save-button {
+    padding: 14px;
+    z-index: 10;
+  }
+  .nav-wrapper ul{
+    margin-right: 60px;
+  }
+}
+
 </style>
