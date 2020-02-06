@@ -1,7 +1,10 @@
-<h2>Fechamento do Chamado #{{$id}}</h2>
+<h2>Fechamento do Chamado</h2>
 
-<p>Seu chamado foi encerrado. Foi dada a seguinte solução:</p>
+<p><b>Seu chamado de número  {{$chamado->id}} foi encerrado.</b></p>
 
-<p> "{{$solucao}}"</p>
+<p>Descrição do problema:{{$chamado->descricao}}</p>
+<p>Data de abertura: {{$chamado->dt_abertura}}</p>
+<p><b>Foi dada a seguinte solução:</b></p>
+<p> "{{$chamado->solucao}}"</p>
 
-<p>Caso a solução não lhe atenda 100% nos informe.</p>
+<p>Este é um email automático. Caso a solução não lhe atenda 100% nos informe respondendo este email.</p>

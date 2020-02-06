@@ -6,29 +6,25 @@ use Illuminate\Support\Facades\Mail;
 
 class MailService {
     public function sendAbertura($to_name, $to_email, $chamado){
-        $chamado = [];
-        
         $this->sendMail(
             "emails.abertura", 
             "tarapi007@gmail.com", //HARDCODE
             "tarapi007@gmail.com", //HARDCODE
-            "Encerramento de Chamado", 
+            "Abertura de Chamado - ClickTI Informática", 
             $chamado);
     }
 
     public function sendFechamento($to_name, $to_email, $chamado){
-        return $this->sendMail(
+        $this->sendMail(
             "emails.fechamento", 
-            $to_email,
-            $to_email, 
-            "Encerramento de Chamado", 
+            "tarapi007@gmail.com", //HARDCODE
+            "tarapi007@gmail.com", //HARDCODE
+            "Fechamento de Chamado", 
             $chamado);
     }
 
     private function sendMail($mailView, $to_name, $to_email, $subject, $chamado){
-
-        //return $data;
-        $data = [ "id" => $chamado->id, "solucao" => $chamado->solucao];
+        $data = [ "chamado" => $chamado];
 
         Mail::send($mailView, $data, function ($message) use ($to_name, $to_email, $subject) {
             $message

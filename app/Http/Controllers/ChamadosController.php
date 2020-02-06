@@ -81,10 +81,14 @@ class ChamadosController extends Controller
         $chamado = new Chamado(request()->all());
         $chamado->cliente_id = request('cliente_id');
         $chamado->dt_abertura = date("Y-m-d H:i:s");
+        
+        $persistedChamado = Chamado::create($chamado->toArray());
 
-        $chamado->save();
+        $cliente = Cliente::find($chamado->cliente_id);
 
-        return response('Chamado aberto com sucesso. Id: ' . $chamado->id, 200); 
+        (new MailService())->sendAbertura($cliente->email, $cliente->email, $persistedChamado);
+
+        return response('Chamado aberto com sucesso. Id: ' . $persistedChamado->id, 200); 
     }
 
     public function show($id)
@@ -110,6 +114,10 @@ class ChamadosController extends Controller
             DB::table('chamados')
                 ->where('id', $id)
                 ->update(['dt_fechamento' => Carbon::now()]);
+
+
+            (new MailService())->sendFechamento($cliente->email,$cliente->email, $chamado);
+
 
         }
  
