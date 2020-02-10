@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => 'envname'],
+    'from' => ['address' => null, 'name' => 'ClickTI Consultoria'],
 
     /*
     |--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ return [
     |
     */
 
-    'username' => 'atendimentochamado@gmail.com',
+    'username' => 'noreply.click@gmail.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -94,7 +94,7 @@ return [
     |
     */
 
-    'password' => '20consertar',
+    'password' => 'click0000',
 
     /*
     |--------------------------------------------------------------------------
