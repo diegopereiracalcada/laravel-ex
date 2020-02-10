@@ -2,7 +2,7 @@
 
 <p><b>Seu chamado de número  {{$chamado->id}} foi encerrado.</b></p>
 
-<p>Descrição do problema:{{$chamado->descricao}}</p>
+<p>Descrição da solicitação: {{$chamado->descricao}}</p>
 <p>Data de abertura: {{$chamado->dt_abertura}}</p>
 <p><b>Foi dada a seguinte solução:</b></p>
 <p> "{{$chamado->solucao}}"</p>

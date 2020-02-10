@@ -8,8 +8,8 @@ class MailService {
     public function sendAbertura($to_name, $to_email, $chamado){
         $this->sendMail(
             "emails.abertura", 
-            "tarapi007@gmail.com", //HARDCODE
-            "tarapi007@gmail.com", //HARDCODE
+            "atendimentochamado@gmail.com", //HARDCODE
+            "atendimentochamado@gmail.com", //HARDCODE
             "Abertura de Chamado - ClickTI Informática", 
             $chamado);
     }
@@ -17,8 +17,8 @@ class MailService {
     public function sendFechamento($to_name, $to_email, $chamado){
         $this->sendMail(
             "emails.fechamento", 
-            "tarapi007@gmail.com", //HARDCODE
-            "tarapi007@gmail.com", //HARDCODE
+            "clickticonsultoria@gmail.com", //HARDCODE
+            "clickticonsultoria@gmail.com", //HARDCODE
             "Fechamento de Chamado", 
             $chamado);
     }

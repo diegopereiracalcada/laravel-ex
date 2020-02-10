@@ -86,7 +86,9 @@ class ChamadosController extends Controller
 
         $cliente = Cliente::find($chamado->cliente_id);
 
-        (new MailService())->sendAbertura($cliente->email, $cliente->email, $persistedChamado);
+        if($chamado->enviarEmailAbertura){
+            (new MailService())->sendAbertura($cliente->email, $cliente->email, $persistedChamado);
+        }
 
         return response('Chamado aberto com sucesso. Id: ' . $persistedChamado->id, 200); 
     }
@@ -115,10 +117,9 @@ class ChamadosController extends Controller
                 ->where('id', $id)
                 ->update(['dt_fechamento' => Carbon::now()]);
 
-
-            (new MailService())->sendFechamento($cliente->email,$cliente->email, $chamado);
-
-
+            if(request('enviarEmailFechamento')){
+                (new MailService())->sendFechamento($cliente->email,$cliente->email, $chamado);
+            }
         }
  
         return $chamado;
