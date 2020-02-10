@@ -682,6 +682,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var clientes = [],
     chamado = {
   status: "ABERTO",
@@ -698,6 +707,10 @@ document.addEventListener("DOMContentLoaded", function () {
   props: ["updateMode", "mostrarIncluirNoItinerario"],
   created: function created() {
     this.$parent.$emit("changeloadingstatus", true);
+    this.chamado = {
+      status: "ABERTO",
+      isinclusonoitinerario: false
+    };
 
     if (this.updateMode) {
       this.fetchData(this.$route.params.id);
@@ -786,8 +799,10 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     onSubmit: function onSubmit(form) {
       if (this.updateMode) {
+        this.chamado.enviarEmailFechamento = document.getElementById('enviarEmail').checked;
         this.fecharChamado();
       } else {
+        this.chamado.enviarEmailAbertura = document.getElementById('enviarEmail').checked;
         this.abrirChamado();
       }
     },
@@ -1667,7 +1682,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".edit-button,\n.save-button {\n  position: fixed;\n  top: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n}\n.save-button i {\n  font-size: 30px;\n}", ""]);
+exports.push([module.i, ".edit-button,\n.save-button {\n  position: fixed;\n  top: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  cursor: pointer;\n}\n.save-button i {\n  font-size: 30px;\n}\n@media screen and (min-width: 993px) {\n.save-button {\n    padding: 14px;\n    z-index: 10;\n}\n.nav-wrapper ul {\n    margin-right: 60px;\n}\n}", ""]);
 
 // exports
 
@@ -3403,7 +3418,7 @@ var render = function() {
               "*/\n            left": "0"
             }
           },
-          [_vm._v("v0.6")]
+          [_vm._v("v0.7")]
         )
       ],
       2
@@ -3922,6 +3937,36 @@ var render = function() {
                 ])
               ])
             : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col s12" }, [
+              _c("label", [
+                _vm.updateMode
+                  ? _c("input", {
+                      attrs: {
+                        id: "enviarEmail",
+                        name: "enviarEmailFechamento",
+                        checked: "",
+                        type: "checkbox"
+                      }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.updateMode
+                  ? _c("input", {
+                      attrs: {
+                        id: "enviarEmail",
+                        name: "enviarEmailAbertura",
+                        checked: "",
+                        type: "checkbox"
+                      }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("span", [_vm._v("Enviar email")])
+              ])
+            ])
+          ]),
           _vm._v(" "),
           _c("input", {
             directives: [

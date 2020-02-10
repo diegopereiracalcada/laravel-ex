@@ -16,7 +16,10 @@ class Chamado extends Model
         'dt_ag_execucao',
         'dt_fechamento',
         'solucao',
+        'cliente_id',
         'status',
+        'enviarEmailAbertura',
+        'enviarEmailFechamento',
     ];
 
     public function cliente(){

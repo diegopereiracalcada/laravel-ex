@@ -77,6 +77,15 @@
         </label>
       </div>
     </div>
+    <div class="row" >
+      <div class="col s12">
+        <label>
+          <input v-if="updateMode" id="enviarEmail" name="enviarEmailFechamento" checked type="checkbox" />
+          <input v-if="!updateMode" id="enviarEmail" name="enviarEmailAbertura" checked type="checkbox" />
+          <span>Enviar email</span>
+        </label>
+      </div>
+    </div>
     <input type="hidden" v-model="chamado.status" />
     <div class="row" v-if="updateMode || chamado.status == 'FECHADO'">
       <div class="input-field col s12">
@@ -127,6 +136,11 @@ export default {
   ],
   created() {
     this.$parent.$emit("changeloadingstatus", true);
+    this.chamado = {
+      status: "ABERTO",
+      isinclusonoitinerario: false
+    };
+    
     if (this.updateMode) {
       this.fetchData(this.$route.params.id);
     } else {
@@ -216,8 +230,10 @@ export default {
     },
     onSubmit(form) {
       if (this.updateMode) {
+        this.chamado.enviarEmailFechamento = document.getElementById('enviarEmail').checked;
         this.fecharChamado();
       } else {
+        this.chamado.enviarEmailAbertura = document.getElementById('enviarEmail').checked;
         this.abrirChamado();
       }
     },
@@ -291,7 +307,6 @@ export default {
     },
     setClientes(clientes) {
       this.clientes = clientes;
-      
     },
     onClientesSelectChange(event){
       this.chamado.cliente_id = event.target.value;
@@ -313,8 +328,20 @@ export default {
   right: 0;
   color: white;
   padding: 10px;
+  cursor: pointer;
 }
 .save-button i {
   font-size: 30px;
 }
+
+@media screen and (min-width: 993px){
+  .save-button {
+    padding: 14px;
+    z-index: 10;
+  }
+  .nav-wrapper ul{
+    margin-right: 60px;
+  }
+}
+
 </style>

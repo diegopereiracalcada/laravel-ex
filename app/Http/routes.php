@@ -23,4 +23,6 @@ Route::get('api/itinerario', 'ChamadosController@itinerario');
 
 Route::get('api/busca', 'BuscaController@search');
 
+Route::get('api/enviar-email', 'EmailController@sendMail');
+
 Route::get('/{any}', 'VueController@index')->where('any', '.*');
