@@ -4,4 +4,4 @@
 <p>Descrição da solicitação: {{$chamado->descricao}}</p>
 <p>Data de abertura: {{$chamado->dt_abertura}}</p>
 
-<p>Este é um email automático. Caso tenha mais alguma informação para complementar a descrição pode responder este email.</p>
+<p style="font-style: italic">Este é um email automático. Caso tenha mais alguma informação para complementar a descrição pode responder este email.</p>
