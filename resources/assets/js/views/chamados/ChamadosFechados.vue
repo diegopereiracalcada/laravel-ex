@@ -13,6 +13,24 @@
       @refreshList="refreshList"
       />
 
+    <div class="qtde-chamados-abertos bg-clickti-blue" style="
+        position: fixed;
+        top: 3px;
+        right: 15px;
+        z-index: 1;
+        color: white;
+        border: 2px solid white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 1px;
+        font-weight: bold;
+    ">{{qtdeChamadosFechados}}</div>
+    
     <div v-if="error" class="messages-bar">
       <div><b>Erro: </b></div>
       <div>{{ error }}</div>
@@ -27,7 +45,8 @@ const CHAMADOS_FECHADOS_INDEX_API_URL = "/api/fechados";
 
 let chamados = [],
   error = "",
-  showSemChamadosMessage = false;
+  showSemChamadosMessage = false,
+  qtdeChamadosFechados;
 
 export default {
   components: {
@@ -64,8 +83,9 @@ export default {
     refreshList(){
       this.fetchData();
     },
-    setData(chamados) {
-      this.chamados = chamados;
+    setData(data) {
+      this.chamados = data[0].chamados;
+      this.qtdeChamadosFechados = data[0].qtdeChamados;
       if(this.chamados.length < 1){
         this.showSemChamadosMessage = true;
       }

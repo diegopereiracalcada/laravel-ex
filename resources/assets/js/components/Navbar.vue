@@ -47,7 +47,7 @@
                 text-align: center;
                 /* padding: 30px; */
                 left: 0;
-            ">v0.7</li>
+            ">v0.8</li>
         </ul>
     </div>
 </template>

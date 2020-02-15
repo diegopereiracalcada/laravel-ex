@@ -17,7 +17,11 @@ Route::resource('api/clientes', 'ClientesController');
 
 Route::resource('api/chamados', 'ChamadosController');
 
+Route::get('api/abertos', 'ChamadosController@abertos');
+
 Route::get('api/fechados', 'ChamadosController@fechados');
+
+Route::get('api/qtdechamados', 'ChamadosController@qtdeChamados');
 
 Route::get('api/itinerario', 'ChamadosController@itinerario');
 

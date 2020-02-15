@@ -9,6 +9,24 @@
       :chamado="chamado"
       :habilitarAdicionarNoItinerario="true" />
 
+    <div class="qtde-chamados-abertos bg-clickti-blue" style="
+        position: fixed;
+        top: 3px;
+        right: 15px;
+        z-index: 1;
+        color: white;
+        border: 2px solid white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 1px;
+        font-weight: bold;
+    ">{{qtdeChamadosAbertos}}</div>
+
     <div v-if="error" class="messages-bar">
       <div><b>Erro: </b></div>
       <div>{{ error }}</div>
@@ -19,11 +37,12 @@
 <script>
 import Chamado from "../../components/chamados/Chamado";
 
-const CHAMADOS_INDEX_API_URL = "/api/chamados?status=ABERTO";
+const CHAMADOS_INDEX_API_URL = "/api/abertos";
 
 let chamados = [],
   error = "",
-  showSemChamadosMessage = false;
+  showSemChamadosMessage = false,
+  qtdeChamadosAbertos;
 
 export default {
   components: {
@@ -38,14 +57,13 @@ export default {
   },
   created() {
     this.$emit("changeloadingstatus", true);
-    //this.error = null;
-    this.fetchData();
+    this.fetchChamadosAbertos();
   },
   watch: {
-    $route: "fetchData"
+    $route: "fetchChamadosAbertos"
   },
   methods: {
-    fetchData() {
+    fetchChamadosAbertos() {
       fetch(CHAMADOS_INDEX_API_URL)
         .then(resp => resp.json())
         .then(data => {
@@ -57,11 +75,14 @@ export default {
           this.error = error;
         });
     },
-    setData(chamados) {
-      this.chamados = chamados;
+    setData(data) {
+      this.chamados = data[0].chamados;
+      this.qtdeChamadosAbertos = data[0].qtdeChamados;
+
       if(this.chamados.length < 1){
         this.showSemChamadosMessage = true;
       }
+
       this.$emit("changeloadingstatus", false);
     },
     updateStatus(){
@@ -71,7 +92,6 @@ export default {
       
       var horario = horas + ':' + minutos;
       this.$emit("statusMessage", "Atualizado às " + horario);
-
     }
   }
 };

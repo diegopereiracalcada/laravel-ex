@@ -1,7 +1,7 @@
 <template>
   <div class="itinerario row">
-    <div v-if="showSemChamadosMessage" class="empty-list">
-      <h5>Sem itinerário por enquanto</h5>
+    <div v-if="showSemChamadosMessage" class="empty-list" style="text-align: center;color: #9a9a9a;">
+      <h5>Não há chamados inclusos no itinerário</h5>
     </div>
     <Chamado
       v-for="chamado in chamados"
@@ -9,6 +9,24 @@
       :chamado="chamado"      
       :habilitarAdicionarNoItinerario="true" />
 
+    <div class="qtde-chamados-abertos bg-clickti-blue" style="
+        position: fixed;
+        top: 3px;
+        right: 15px;
+        z-index: 1;
+        color: white;
+        border: 2px solid white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 1px;
+        font-weight: bold;
+    ">{{qtdeChamadosItinerario}}</div>
+    
     <div v-if="error" class="messages-bar">
       <div><b>Erro: </b></div>
       <div>{{ error }}</div>
@@ -23,7 +41,8 @@ const ITINERARIO_API_URL = "/api/itinerario";
 
 let chamados = [],
   error = "",
-  showSemChamadosMessage = false;
+  showSemChamadosMessage = false,
+  qtdeChamadosItinerario;
 
 export default {
   components: {
@@ -38,7 +57,6 @@ export default {
   },
   created() {
     this.$emit("changeloadingstatus", true);
-    //this.error = null;
     this.fetchData();
   },
   watch: {
@@ -57,11 +75,14 @@ export default {
           this.error = error;
         });
     },
-    setData(chamados) {
-      if(chamados.length < 1){
+    setData(data) {
+      this.qtdeChamadosItinerario = data[0].qtdeChamados;
+      this.chamados = data[0].chamados;
+
+      if(this.chamados.length < 1){
         this.showSemChamadosMessage = true;
       }
-      this.chamados = chamados;
+      
       this.$emit("changeloadingstatus", false);
     },
     updateStatus(){

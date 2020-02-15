@@ -215,6 +215,7 @@ export default {
     margin-bottom: 5px;
     box-shadow: 2px 2px 3px #cecece;
     min-height: 75px !important;
+    z-index: 2;
 }
 
 .observacao{

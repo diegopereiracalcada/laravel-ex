@@ -1024,11 +1024,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-var CHAMADOS_INDEX_API_URL = "/api/chamados?status=ABERTO";
+var CHAMADOS_INDEX_API_URL = "/api/abertos";
 var chamados = [],
     error = "",
-    showSemChamadosMessage = false;
+    showSemChamadosMessage = false,
+    qtdeChamadosAbertos;
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Chamado: _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -1041,15 +1060,14 @@ var chamados = [],
     };
   },
   created: function created() {
-    this.$emit("changeloadingstatus", true); //this.error = null;
-
-    this.fetchData();
+    this.$emit("changeloadingstatus", true);
+    this.fetchChamadosAbertos();
   },
   watch: {
-    $route: "fetchData"
+    $route: "fetchChamadosAbertos"
   },
   methods: {
-    fetchData: function fetchData() {
+    fetchChamadosAbertos: function fetchChamadosAbertos() {
       var _this = this;
 
       fetch(CHAMADOS_INDEX_API_URL).then(function (resp) {
@@ -1064,8 +1082,9 @@ var chamados = [],
         _this.error = error;
       });
     },
-    setData: function setData(chamados) {
-      this.chamados = chamados;
+    setData: function setData(data) {
+      this.chamados = data[0].chamados;
+      this.qtdeChamadosAbertos = data[0].qtdeChamados;
 
       if (this.chamados.length < 1) {
         this.showSemChamadosMessage = true;
@@ -1117,11 +1136,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var CHAMADOS_FECHADOS_INDEX_API_URL = "/api/fechados";
 var chamados = [],
     error = "",
-    showSemChamadosMessage = false;
+    showSemChamadosMessage = false,
+    qtdeChamadosFechados;
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Chamado: _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -1159,8 +1197,9 @@ var chamados = [],
     refreshList: function refreshList() {
       this.fetchData();
     },
-    setData: function setData(chamados) {
-      this.chamados = chamados;
+    setData: function setData(data) {
+      this.chamados = data[0].chamados;
+      this.qtdeChamadosFechados = data[0].qtdeChamados;
 
       if (this.chamados.length < 1) {
         this.showSemChamadosMessage = true;
@@ -1208,11 +1247,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var ITINERARIO_API_URL = "/api/itinerario";
 var chamados = [],
     error = "",
-    showSemChamadosMessage = false;
+    showSemChamadosMessage = false,
+    qtdeChamadosItinerario;
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Chamado: _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -1225,8 +1283,7 @@ var chamados = [],
     };
   },
   created: function created() {
-    this.$emit("changeloadingstatus", true); //this.error = null;
-
+    this.$emit("changeloadingstatus", true);
     this.fetchData();
   },
   watch: {
@@ -1248,12 +1305,14 @@ var chamados = [],
         _this.error = error;
       });
     },
-    setData: function setData(chamados) {
-      if (chamados.length < 1) {
+    setData: function setData(data) {
+      this.qtdeChamadosItinerario = data[0].qtdeChamados;
+      this.chamados = data[0].chamados;
+
+      if (this.chamados.length < 1) {
         this.showSemChamadosMessage = true;
       }
 
-      this.chamados = chamados;
       this.$emit("changeloadingstatus", false);
     },
     updateStatus: function updateStatus() {
@@ -1796,7 +1855,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.chamado {\n    position: relative;\n    border-radius: 10px;\n    background: #eaeaea;\n    padding: 6px !important;\n    margin-bottom: 5px;\n    box-shadow: 2px 2px 3px #cecece;\n    min-height: 75px !important;\n}\n.observacao{\n    max-width: 80%;\n}\n.data-abertura {\n    position: absolute;\n    bottom: 5px;\n    right: 5px;\n}\nh6 {\n    font-size: 1.5rem;\n    margin-bottom: 3px;\n    color: #095979;\n    font-weight: bold;\n}\np {\n    color: #808080;\n}\nh6, p{\n    margin: 0\n}\n.details-arrow {\n    position: absolute;\n    top: 8px;\n    right: 20px;\n}\n.btn-clickti-blue,\n.btn-clickti-blue:hover,\n.btn-clickti-blue:focus,\n.btn-clickti-blue:active {\n    float: right;\n    background: #053244;\n    padding: 10px;\n    color: white;\n    font-weight: bold;\n    cursor: pointer;\n}\n.btn-remover-do-itinerario{\n    background: transparent !important;\n    color: #545454;\n    cursor: pointer;\n}\n.btn-remover-do-itinerario:focus,\n.btn-remover-do-itinerario:hover,\n.btn-remover-do-itinerario:active{\n        color: #545454;\n}\n", ""]);
+exports.push([module.i, "\n.chamado {\n    position: relative;\n    border-radius: 10px;\n    background: #eaeaea;\n    padding: 6px !important;\n    margin-bottom: 5px;\n    box-shadow: 2px 2px 3px #cecece;\n    min-height: 75px !important;\n    z-index: 2;\n}\n.observacao{\n    max-width: 80%;\n}\n.data-abertura {\n    position: absolute;\n    bottom: 5px;\n    right: 5px;\n}\nh6 {\n    font-size: 1.5rem;\n    margin-bottom: 3px;\n    color: #095979;\n    font-weight: bold;\n}\np {\n    color: #808080;\n}\nh6, p{\n    margin: 0\n}\n.details-arrow {\n    position: absolute;\n    top: 8px;\n    right: 20px;\n}\n.btn-clickti-blue,\n.btn-clickti-blue:hover,\n.btn-clickti-blue:focus,\n.btn-clickti-blue:active {\n    float: right;\n    background: #053244;\n    padding: 10px;\n    color: white;\n    font-weight: bold;\n    cursor: pointer;\n}\n.btn-remover-do-itinerario{\n    background: transparent !important;\n    color: #545454;\n    cursor: pointer;\n}\n.btn-remover-do-itinerario:focus,\n.btn-remover-do-itinerario:hover,\n.btn-remover-do-itinerario:active{\n        color: #545454;\n}\n", ""]);
 
 // exports
 
@@ -3418,7 +3477,7 @@ var render = function() {
               "*/\n            left": "0"
             }
           },
-          [_vm._v("v0.7")]
+          [_vm._v("v0.8")]
         )
       ],
       2
@@ -4198,6 +4257,31 @@ var render = function() {
         })
       }),
       _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "qtde-chamados-abertos bg-clickti-blue",
+          staticStyle: {
+            position: "fixed",
+            top: "3px",
+            right: "15px",
+            "z-index": "1",
+            color: "white",
+            border: "2px solid white",
+            "border-radius": "50%",
+            width: "30px",
+            height: "30px",
+            "margin-top": "10px",
+            display: "flex",
+            "justify-content": "center",
+            "align-items": "center",
+            "padding-top": "1px",
+            "font-weight": "bold"
+          }
+        },
+        [_vm._v(_vm._s(_vm.qtdeChamadosAbertos))]
+      ),
+      _vm._v(" "),
       _vm.error
         ? _c("div", { staticClass: "messages-bar" }, [
             _vm._m(0),
@@ -4261,6 +4345,31 @@ var render = function() {
         })
       }),
       _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "qtde-chamados-abertos bg-clickti-blue",
+          staticStyle: {
+            position: "fixed",
+            top: "3px",
+            right: "15px",
+            "z-index": "1",
+            color: "white",
+            border: "2px solid white",
+            "border-radius": "50%",
+            width: "30px",
+            height: "30px",
+            "margin-top": "10px",
+            display: "flex",
+            "justify-content": "center",
+            "align-items": "center",
+            "padding-top": "1px",
+            "font-weight": "bold"
+          }
+        },
+        [_vm._v(_vm._s(_vm.qtdeChamadosFechados))]
+      ),
+      _vm._v(" "),
       _vm.error
         ? _c("div", { staticClass: "messages-bar" }, [
             _vm._m(0),
@@ -4306,9 +4415,14 @@ var render = function() {
     { staticClass: "itinerario row" },
     [
       _vm.showSemChamadosMessage
-        ? _c("div", { staticClass: "empty-list" }, [
-            _c("h5", [_vm._v("Sem itinerário por enquanto")])
-          ])
+        ? _c(
+            "div",
+            {
+              staticClass: "empty-list",
+              staticStyle: { "text-align": "center", color: "#9a9a9a" }
+            },
+            [_c("h5", [_vm._v("Não há chamados inclusos no itinerário")])]
+          )
         : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.chamados, function(chamado) {
@@ -4317,6 +4431,31 @@ var render = function() {
           attrs: { chamado: chamado, habilitarAdicionarNoItinerario: true }
         })
       }),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "qtde-chamados-abertos bg-clickti-blue",
+          staticStyle: {
+            position: "fixed",
+            top: "3px",
+            right: "15px",
+            "z-index": "1",
+            color: "white",
+            border: "2px solid white",
+            "border-radius": "50%",
+            width: "30px",
+            height: "30px",
+            "margin-top": "10px",
+            display: "flex",
+            "justify-content": "center",
+            "align-items": "center",
+            "padding-top": "1px",
+            "font-weight": "bold"
+          }
+        },
+        [_vm._v(_vm._s(_vm.qtdeChamadosItinerario))]
+      ),
       _vm._v(" "),
       _vm.error
         ? _c("div", { staticClass: "messages-bar" }, [

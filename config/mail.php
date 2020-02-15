@@ -81,7 +81,7 @@ return [
     |
     */
 
-    'username' => 'noreply.click@gmail.com',
+    'username' => 'noreply.clickti@gmail.com',
 
     /*
     |--------------------------------------------------------------------------

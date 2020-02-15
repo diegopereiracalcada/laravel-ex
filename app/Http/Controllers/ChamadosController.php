@@ -14,24 +14,6 @@ class ChamadosController extends Controller
 {
     public function index(Request $request)
     {
-        if($request->has('status')){
-            return Chamado::select(
-                                'chamados.id',
-                                'clientes.shortname as cliente_shortname',
-                                'status',
-                                'descricao',
-                                'observacao',
-                                'isinclusonoitinerario',
-                                'preventiva',
-                                'dt_abertura',
-                                'dt_ag_execucao',
-                                'dt_fechamento',
-                                'solucao'
-                            )->where('status', $request->input('status'))
-                            ->join('clientes','clientes.id','=','chamados.cliente_id')
-                            ->orderBy('dt_abertura', 'asc')
-                            ->get() ;
-        }
         return Chamado::select(
                             'chamados.id',
                             'clientes.shortname as cliente_shortname',
@@ -50,30 +32,60 @@ class ChamadosController extends Controller
     }
 
     public function itinerario(){
-        return Chamado::select(
-                            'chamados.id',
-                            'clientes.shortname as cliente_shortname',
-                            'status',
-                            'descricao',
-                            'observacao',
-                            'isinclusonoitinerario',
-                            'preventiva',
-                            'dt_abertura',
-                            'dt_ag_execucao',
-                            'dt_fechamento',
-                            'solucao'
-                        )->where('status', 'ABERTO')
+        $qtde = Chamado::where('status', 'ABERTO')
                         ->where('isinclusonoitinerario', 'true')
-                        ->join('clientes','clientes.id','=','chamados.cliente_id')
-                        ->orderBy('dt_abertura', 'asc')
-                        ->get() ;
+                        ->count();
+
+        $listaDeChamados = Chamado::select(
+                                        'chamados.id',
+                                        'clientes.shortname as cliente_shortname',
+                                        'status',
+                                        'descricao',
+                                        'observacao',
+                                        'isinclusonoitinerario',
+                                        'preventiva',
+                                        'dt_abertura',
+                                        'dt_ag_execucao',
+                                        'dt_fechamento',
+                                        'solucao'
+                                    )->where('status', 'ABERTO')
+                                    ->where('isinclusonoitinerario', 'true')
+                                    ->join('clientes','clientes.id','=','chamados.cliente_id')
+                                    ->orderBy('dt_abertura', 'asc')
+                                    ->get() ;
+
+        return array([
+            'qtdeChamados' => $qtde,
+            'chamados' => $listaDeChamados
+        ]);
+    }
+
+    public function abertos(){
+        $qtde = Chamado::where('status', 'ABERTO')
+                        ->count();
+        $listaDeChamados = Chamado::where('status', 'ABERTO')
+                                    ->with('cliente')
+                                    ->orderBy('dt_abertura', 'asc')
+                                    ->get();
+
+        return array([
+            'qtdeChamados' => $qtde,
+            'chamados' => $listaDeChamados
+        ]);
     }
 
     public function fechados(){
-        return Chamado::where('status', 'FECHADO')
-                        ->with('cliente')
-                        ->orderBy('dt_fechamento', 'desc')
-                        ->get() ;
+        $qtde = Chamado::where('status', 'FECHADO')
+                            ->count();
+        $listaDeChamados = Chamado::where('status', 'FECHADO')
+                                    ->with('cliente')
+                                    ->orderBy('dt_fechamento', 'desc')
+                                    ->get() ;
+
+        return array([
+                    'qtdeChamados' => $qtde,
+                    'chamados' => $listaDeChamados
+        ]);
     }
 
     public function store()
