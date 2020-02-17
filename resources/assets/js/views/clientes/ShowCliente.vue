@@ -75,20 +75,38 @@
             >keyboard_arrow_down</i>
         </div>
         <div class="collapsible-body">
-          <div class="sub-collapsible-item">
+          <div class="sub-collapsible-item sub-collapsed">
             <div class="sub-collapsible-item-header" >
               <i
                 @click="onKeepItemExpTriggerClick($event)" 
                 class="material-icons sub-collapsible-item-trigger">add</i>
               <span>Teste</span>
+              <i
+                @click="onKeepItemEditClick($event)"
+                style="display: none;" 
+                class="material-icons sub-collapsible-item-edit">edit</i>
             </div> 
             <div class="sub-collapsible-item-content">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-              ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-              laboris nisi ut aliquip ex ea commodo consequat.</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-              ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-              laboris nisi ut aliquip ex ea commodo consequat.</p>
+              <textarea 
+                class="no-border"
+                disabled="disabled">Teste dasijdsaj dai daoj dosij oidsjo iasjidsajidsajiod jasoij jijjidjdisj iijij saj iasdsaj idjoj saj</textarea>
+            </div>
+          </div>
+          <div class="sub-collapsible-item sub-collapsed">
+            <div class="sub-collapsible-item-header" >
+              <i
+                @click="onKeepItemExpTriggerClick($event)" 
+                class="material-icons sub-collapsible-item-trigger">add</i>
+              <span>Teste</span>
+              <i
+                @click="onKeepItemEditClick($event)"
+                style="display: none;" 
+                class="material-icons sub-collapsible-item-edit">edit</i>
+            </div> 
+            <div class="sub-collapsible-item-content">
+              <textarea 
+                class="no-border"
+                disabled="disabled">Teste dasijdsaj dai daoj dosij oidsjo iasjidsajidsajiod jasoij jijjidjdisj iijij saj iasdsaj idjoj saj</textarea>
             </div>
           </div>
         </div>
@@ -129,24 +147,43 @@ export default {
           this.$emit("changeloadingstatus", false);
         });
     },
-    onKeepItemExpTriggerClick(event){
+    onKeepItemEditClick(event){
       var targetElement = event.target;
-      console.log("triggou2", targetElement.innerText);
-
-      if(targetElement.innerText == "add"){
-          targetElement.innerText = "remove";
-      } else {
-          targetElement.innerText = "add";
-      }
-
-      var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
-      var jItemToExpand = jParentWrapper.find(".sub-collapsible-item-content");
+      console.log("triggou3", targetElement.innerText);
+    },
+    onKeepItemExpTriggerClick(event){
       
-      if(jItemToExpand.css("max-height") == "4000px"){
-        jItemToExpand.css("max-height", "0px");
+      var targetElement = event.target;
+      var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
+      var jExpandableContent = jParentWrapper.find(".sub-collapsible-item-content");
+      var isExpanded = !jParentWrapper.hasClass("sub-collapsed");
+
+      if(isExpanded){
+          targetElement.innerText = "add";
       } else {
-        jItemToExpand.css("max-height", "4000px");
+          targetElement.innerText = "remove";
       }
+
+      if(isExpanded){
+        jExpandableContent.css("max-height", "0px");
+      } else {
+        jExpandableContent.css("max-height", "4000px");
+      }
+
+      if(isExpanded){
+        jParentWrapper.find(".sub-collapsible-item-edit").hide();
+      } else {
+        jParentWrapper.find(".sub-collapsible-item-edit").show();
+      }
+
+      if(isExpanded){
+        jParentWrapper.addClass("sub-collapsed");
+      } else {
+        jParentWrapper.removeClass("sub-collapsed");
+      }
+
+
+      
     },
     setData(cliente) {
       this.cliente = cliente;
@@ -195,13 +232,18 @@ export default {
     margin-right: 1rem;
     background: #053244;
     color: white;
+    cursor: pointer;
+  }
+
+  .sub-collapsible-item{
+    margin-bottom: 0.2rem;
+
   }
 
   .sub-collapsible-item-header span{
     color: white;
     font-weight: bold;
   } 
-
 
   .sub-collapsible-item-content {
     padding: 0 18px;
@@ -210,4 +252,10 @@ export default {
     transition: max-height 0.2s ease-out;
     background-color: #f1f1f1;
   } 
+
+  .sub-collapsible-item-edit {
+      color: white;
+      margin-left: auto;
+      margin-right: 0.5rem;
+  }
 </style>

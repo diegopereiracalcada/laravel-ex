@@ -1666,6 +1666,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var cliente = null;
 var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1696,23 +1714,38 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
         _this.$emit("changeloadingstatus", false);
       });
     },
+    onKeepItemEditClick: function onKeepItemEditClick(event) {
+      var targetElement = event.target;
+      console.log("triggou3", targetElement.innerText);
+    },
     onKeepItemExpTriggerClick: function onKeepItemExpTriggerClick(event) {
       var targetElement = event.target;
-      console.log("triggou2", targetElement.innerText);
+      var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
+      var jExpandableContent = jParentWrapper.find(".sub-collapsible-item-content");
+      var isExpanded = !jParentWrapper.hasClass("sub-collapsed");
 
-      if (targetElement.innerText == "add") {
-        targetElement.innerText = "remove";
-      } else {
+      if (isExpanded) {
         targetElement.innerText = "add";
+      } else {
+        targetElement.innerText = "remove";
       }
 
-      var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
-      var jItemToExpand = jParentWrapper.find(".sub-collapsible-item-content");
-
-      if (jItemToExpand.css("max-height") == "4000px") {
-        jItemToExpand.css("max-height", "0px");
+      if (isExpanded) {
+        jExpandableContent.css("max-height", "0px");
       } else {
-        jItemToExpand.css("max-height", "4000px");
+        jExpandableContent.css("max-height", "4000px");
+      }
+
+      if (isExpanded) {
+        jParentWrapper.find(".sub-collapsible-item-edit").hide();
+      } else {
+        jParentWrapper.find(".sub-collapsible-item-edit").show();
+      }
+
+      if (isExpanded) {
+        jParentWrapper.addClass("sub-collapsed");
+      } else {
+        jParentWrapper.removeClass("sub-collapsed");
       }
     },
     setData: function setData(cliente) {
@@ -1876,7 +1909,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".show-cliente-component label {\n  color: black !important;\n}\n.collapsible-body {\n  padding: 1.3rem;\n}\nli.active .expandable-trigger {\n  -webkit-transform: rotate(180deg);\n          transform: rotate(180deg);\n}\n.expandable-trigger {\n  margin-left: auto;\n  margin-right: 0;\n  -webkit-transition: 0.6s;\n  transition: 0.6s;\n}\n.sub-collapsible-item-header {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-align: center;\n          align-items: center;\n  background: #3b5473;\n}\n.sub-collapsible-item-trigger {\n  padding: 0.3rem;\n  margin-right: 1rem;\n  background: #053244;\n  color: white;\n}\n.sub-collapsible-item-header span {\n  color: white;\n  font-weight: bold;\n}\n.sub-collapsible-item-content {\n  padding: 0 18px;\n  max-height: 0;\n  overflow: hidden;\n  -webkit-transition: max-height 0.2s ease-out;\n  transition: max-height 0.2s ease-out;\n  background-color: #f1f1f1;\n}", ""]);
+exports.push([module.i, ".show-cliente-component label {\n  color: black !important;\n}\n.collapsible-body {\n  padding: 1.3rem;\n}\nli.active .expandable-trigger {\n  -webkit-transform: rotate(180deg);\n          transform: rotate(180deg);\n}\n.expandable-trigger {\n  margin-left: auto;\n  margin-right: 0;\n  -webkit-transition: 0.6s;\n  transition: 0.6s;\n}\n.sub-collapsible-item-header {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-align: center;\n          align-items: center;\n  background: #3b5473;\n}\n.sub-collapsible-item-trigger {\n  padding: 0.3rem;\n  margin-right: 1rem;\n  background: #053244;\n  color: white;\n  cursor: pointer;\n}\n.sub-collapsible-item {\n  margin-bottom: 0.2rem;\n}\n.sub-collapsible-item-header span {\n  color: white;\n  font-weight: bold;\n}\n.sub-collapsible-item-content {\n  padding: 0 18px;\n  max-height: 0;\n  overflow: hidden;\n  -webkit-transition: max-height 0.2s ease-out;\n  transition: max-height 0.2s ease-out;\n  background-color: #f1f1f1;\n}\n.sub-collapsible-item-edit {\n  color: white;\n  margin-left: auto;\n  margin-right: 0.5rem;\n}", ""]);
 
 // exports
 
@@ -5000,7 +5033,7 @@ var render = function() {
             _vm._m(1),
             _vm._v(" "),
             _c("div", { staticClass: "collapsible-body" }, [
-              _c("div", { staticClass: "sub-collapsible-item" }, [
+              _c("div", { staticClass: "sub-collapsible-item sub-collapsed" }, [
                 _c("div", { staticClass: "sub-collapsible-item-header" }, [
                   _c(
                     "i",
@@ -5016,10 +5049,60 @@ var render = function() {
                     [_vm._v("add")]
                   ),
                   _vm._v(" "),
-                  _c("span", [_vm._v("Teste")])
+                  _c("span", [_vm._v("Teste")]),
+                  _vm._v(" "),
+                  _c(
+                    "i",
+                    {
+                      staticClass: "material-icons sub-collapsible-item-edit",
+                      staticStyle: { display: "none" },
+                      on: {
+                        click: function($event) {
+                          return _vm.onKeepItemEditClick($event)
+                        }
+                      }
+                    },
+                    [_vm._v("edit")]
+                  )
                 ]),
                 _vm._v(" "),
                 _vm._m(2)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "sub-collapsible-item sub-collapsed" }, [
+                _c("div", { staticClass: "sub-collapsible-item-header" }, [
+                  _c(
+                    "i",
+                    {
+                      staticClass:
+                        "material-icons sub-collapsible-item-trigger",
+                      on: {
+                        click: function($event) {
+                          return _vm.onKeepItemExpTriggerClick($event)
+                        }
+                      }
+                    },
+                    [_vm._v("add")]
+                  ),
+                  _vm._v(" "),
+                  _c("span", [_vm._v("Teste")]),
+                  _vm._v(" "),
+                  _c(
+                    "i",
+                    {
+                      staticClass: "material-icons sub-collapsible-item-edit",
+                      staticStyle: { display: "none" },
+                      on: {
+                        click: function($event) {
+                          return _vm.onKeepItemEditClick($event)
+                        }
+                      }
+                    },
+                    [_vm._v("edit")]
+                  )
+                ]),
+                _vm._v(" "),
+                _vm._m(3)
               ])
             ])
           ])
@@ -5056,17 +5139,31 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "sub-collapsible-item-content" }, [
-      _c("p", [
-        _vm._v(
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt\n            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco \n            laboris nisi ut aliquip ex ea commodo consequat."
-        )
-      ]),
-      _vm._v(" "),
-      _c("p", [
-        _vm._v(
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt\n            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco \n            laboris nisi ut aliquip ex ea commodo consequat."
-        )
-      ])
+      _c(
+        "textarea",
+        { staticClass: "no-border", attrs: { disabled: "disabled" } },
+        [
+          _vm._v(
+            "Teste dasijdsaj dai daoj dosij oidsjo iasjidsajidsajiod jasoij jijjidjdisj iijij saj iasdsaj idjoj saj"
+          )
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "sub-collapsible-item-content" }, [
+      _c(
+        "textarea",
+        { staticClass: "no-border", attrs: { disabled: "disabled" } },
+        [
+          _vm._v(
+            "Teste dasijdsaj dai daoj dosij oidsjo iasjidsajidsajiod jasoij jijjidjdisj iijij saj iasdsaj idjoj saj"
+          )
+        ]
+      )
     ])
   }
 ]

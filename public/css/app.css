@@ -87,6 +87,10 @@
   color: white !important;
 }
 
+.no-border {
+  border: none !important;
+}
+
 .footer-status {
   position: fixed;
   bottom: 0;
