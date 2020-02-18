@@ -79,7 +79,6 @@ export default {
     },
     highlight(palavras){
       var words = palavras;
-      console.log('words.length', words.length);
       setTimeout(function(){$(".resultado-busca").highlight(words)}, 100);
       setTimeout(function(){$(".resultado-busca").highlight(words)}, 200);
       setTimeout(function(){$(".resultado-busca").highlight(words)}, 700);
@@ -123,7 +122,6 @@ export default {
     },
     setData(chamados) {
       this.chamados = chamados;
-      console.log("setdata---", this.palavras);
       if(this.palavras && this.chamados.length < 1){
         this.showSemChamadosMessage = true;
       }

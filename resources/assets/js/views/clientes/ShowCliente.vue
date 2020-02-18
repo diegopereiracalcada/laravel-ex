@@ -66,7 +66,7 @@
           </div>
         </div>
       </li>
-      <li>
+      <li class="active">
         <div class="collapsible-header">
           <i class="material-icons">event_note</i>
           <span>Keep (não implementado)</span>
@@ -75,38 +75,33 @@
             >keyboard_arrow_down</i>
         </div>
         <div class="collapsible-body">
-          <div class="sub-collapsible-item sub-collapsed">
+          <div 
+            v-for="categoria in categorias"
+            class="sub-collapsible-item sub-collapsed">
             <div class="sub-collapsible-item-header" >
+              <input name="nota_id" type="hidden" :value="getNotas(categoria.categoria)[0].id" />
               <i
                 @click="onKeepItemExpTriggerClick($event)" 
                 class="material-icons sub-collapsible-item-trigger">add</i>
-              <span>Teste</span>
-              <i
-                @click="onKeepItemEditClick($event)"
-                style="display: none;" 
-                class="material-icons sub-collapsible-item-edit">edit</i>
+              <span>{{categoria.categoria | capitalize}}</span>
+              <div class="action-buttons-wrapper" style="margin-left: auto;">
+                <i
+                  @click="onKeepItemEditClick($event)"
+                  class="material-icons sub-collapsible-item-edit">edit</i>
+                <i
+                  @click="onKeepItemConfirmClick($event)"
+                  class="material-icons sub-collapsible-item-confirm">check</i>
+                <i
+                  @click="onKeepItemCancelClick($event)"
+                  class="material-icons sub-collapsible-item-cancel">close</i>
+              </div>
             </div> 
-            <div class="sub-collapsible-item-content">
+            <div 
+              v-for="nota in getNotas(categoria.categoria)"
+              class="sub-collapsible-item-content">
               <textarea 
-                class="no-border"
-                disabled="disabled">Teste dasijdsaj dai daoj dosij oidsjo iasjidsajidsajiod jasoij jijjidjdisj iijij saj iasdsaj idjoj saj</textarea>
-            </div>
-          </div>
-          <div class="sub-collapsible-item sub-collapsed">
-            <div class="sub-collapsible-item-header" >
-              <i
-                @click="onKeepItemExpTriggerClick($event)" 
-                class="material-icons sub-collapsible-item-trigger">add</i>
-              <span>Teste</span>
-              <i
-                @click="onKeepItemEditClick($event)"
-                style="display: none;" 
-                class="material-icons sub-collapsible-item-edit">edit</i>
-            </div> 
-            <div class="sub-collapsible-item-content">
-              <textarea 
-                class="no-border"
-                disabled="disabled">Teste dasijdsaj dai daoj dosij oidsjo iasjidsajidsajiod jasoij jijjidjdisj iijij saj iasdsaj idjoj saj</textarea>
+                class="no-border-when-disabled"
+                disabled="disabled">{{nota.nota}}</textarea>
             </div>
           </div>
         </div>
@@ -117,7 +112,9 @@
 
 <script>
 
-let cliente = null;
+let cliente = null,
+  categorias,
+  notas;
 
 const CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
 
@@ -132,7 +129,19 @@ export default {
       cliente
     };
   },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
+    }
+  },
   methods: {
+    getNotas(categoria){
+      return this.notas.filter(function(nota){
+        return nota.categoria == categoria;
+      })
+    },
     fetchData(id) {
       this.error = null;
 
@@ -149,19 +158,41 @@ export default {
     },
     onKeepItemEditClick(event){
       var targetElement = event.target;
-      console.log("triggou3", targetElement.innerText);
+      this.toggleEditMode(targetElement);
+    },
+    toggleTextArea(elem){
+      var textareaElem = $(elem).parents(".sub-collapsible-item").find("textarea");
+      var isDisabled = textareaElem.attr("disabled");
+      textareaElem.attr("disabled", !isDisabled);
+    },
+    toggleEditMode(elem){
+      this.toggleTextArea(elem);
+
+      var jHeader = $(elem).parents(".sub-collapsible-item-header");
+      jHeader.toggleClass("edit-mode");
+    },
+    onKeepItemConfirmClick(event){
+      console.log("onKeepItemConfirmClick", event.target);
+
+    },
+    onKeepItemCancelClick(event){
+      if(confirm("Confirma?")){
+
+        var targetElement = event.target;
+        this.toggleEditMode(targetElement);
+      }
+
     },
     onKeepItemExpTriggerClick(event){
-      
       var targetElement = event.target;
       var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
       var jExpandableContent = jParentWrapper.find(".sub-collapsible-item-content");
       var isExpanded = !jParentWrapper.hasClass("sub-collapsed");
 
       if(isExpanded){
-          targetElement.innerText = "add";
+        targetElement.innerText = "add";
       } else {
-          targetElement.innerText = "remove";
+        targetElement.innerText = "remove";
       }
 
       if(isExpanded){
@@ -178,19 +209,20 @@ export default {
 
       if(isExpanded){
         jParentWrapper.addClass("sub-collapsed");
+        jParentWrapper.removeClass("sub-expanded");
       } else {
+        jParentWrapper.addClass("sub-expanded");
         jParentWrapper.removeClass("sub-collapsed");
       }
-
-
-      
     },
     setData(cliente) {
       this.cliente = cliente;
-      this.initializeCollapsibles();
+      this.categorias = cliente.categorias;
+      this.notas = cliente.notas;
+      this.initializeMaterializeCollapsibles();
       this.$emit("changeloadingstatus", false);
     },
-    initializeCollapsibles() {
+    initializeMaterializeCollapsibles() {
       setTimeout(function(){
         var elems = document.querySelectorAll(".collapsible");
         var instances = M.Collapsible.init(elems);
@@ -201,12 +233,32 @@ export default {
 </script>
 
 <style lang="scss">
+
+  .action-buttons-wrapper{
+    margin-right: 0.8rem;
+  }
+
+  .sub-collapsed .action-buttons-wrapper{
+    display: none;
+  }
+  .sub-collapsible-item-header.edit-mode .sub-collapsible-item-edit,
+  .sub-collapsible-item-header:not(.edit-mode) .sub-collapsible-item-confirm,
+  .sub-collapsible-item-header:not(.edit-mode) .sub-collapsible-item-cancel{
+    display: none;
+  }
+
+  i.material-icons.sub-collapsible-item-confirm,
+  i.material-icons.sub-collapsible-item-cancel {
+    color: white;
+    cursor: pointer;
+}
+
   .show-cliente-component label {
     color: black !important ;
   }
 
   .collapsible-body{
-    padding: 1.3rem;
+    padding: 0.5rem;
 
   }
   
@@ -257,5 +309,6 @@ export default {
       color: white;
       margin-left: auto;
       margin-right: 0.5rem;
+      cursor: pointer;
   }
 </style>

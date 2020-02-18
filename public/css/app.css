@@ -91,6 +91,10 @@
   border: none !important;
 }
 
+.no-border-when-disabled:disabled {
+  border: none !important;
+}
+
 .footer-status {
   position: fixed;
   bottom: 0;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Cliente;
 use App\Nota;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ClientesController extends Controller
 {
@@ -47,13 +48,24 @@ class ClientesController extends Controller
      */
     public function show($id)
     {
-        $cliente = Nota::join('categorias','notas.categoria_id','=','categorias.id')
-                        ->where('cliente_id', 2)
-                        ->orderBy('categoria')
-                        ->orderBy('nota')
-                        ->select(['notas.id', 'notas.nota', 'categorias.categoria'])
-                        ->get();
+        $cliente = Cliente::findOrFail($id);
+        $cliente->notas = Nota::join('categorias','notas.categoria_id','=','categorias.id')
+                                ->where('cliente_id', $id)
+                                ->orderBy('categoria')
+                                ->orderBy('nota')
+                                ->select(['notas.id', 'notas.nota', 'categorias.categoria'])
+                                ->get();
 
+        $cliente->categorias = DB::select('select 
+                                                distinct(c.categoria) 
+                                            from 
+                                                categorias c
+                                            join 
+                                                notas n on c.id = n.categoria_id
+                                            where 
+                                                n.cliente_id = ?
+                                            order by 
+                                                c.categoria', [$id]);
         return $cliente;
     }
 
