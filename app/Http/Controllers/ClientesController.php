@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cliente;
+use App\Nota;
 use Illuminate\Http\Request;
 
 class ClientesController extends Controller
@@ -46,7 +47,14 @@ class ClientesController extends Controller
      */
     public function show($id)
     {
-        return Cliente::findOrFail($id);
+        $cliente = Nota::join('categorias','notas.categoria_id','=','categorias.id')
+                        ->where('cliente_id', 2)
+                        ->orderBy('categoria')
+                        ->orderBy('nota')
+                        ->select(['notas.id', 'notas.nota', 'categorias.categoria'])
+                        ->get();
+
+        return $cliente;
     }
 
     /**
