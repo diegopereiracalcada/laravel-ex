@@ -3550,7 +3550,7 @@ var render = function() {
               "*/\n            left": "0"
             }
           },
-          [_vm._v("v0.8")]
+          [_vm._v("v0.9")]
         )
       ],
       2
