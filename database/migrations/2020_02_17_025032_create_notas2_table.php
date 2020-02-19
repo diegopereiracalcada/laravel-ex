@@ -15,7 +15,7 @@ class CreateNotas2Table extends Migration
     {
         Schema::create('notas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nota');
+            $table->text('nota');
             $table->unsignedBigInteger('cliente_id');
             $table->unsignedBigInteger('categoria_id');
              
@@ -28,6 +28,8 @@ class CreateNotas2Table extends Migration
                     ->references('id')
                     ->on('categorias')
                     ->onDelete('cascade');;
+
+            $table->timestamps();
         });
     }
 

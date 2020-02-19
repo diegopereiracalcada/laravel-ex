@@ -1677,6 +1677,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var cliente = null,
     categorias,
     notas;
@@ -1714,14 +1715,22 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
       }).then(function (data) {
         _this.setData(data);
 
-        _this.registerCollapsibles();
+        _this.fixTextAreaHeight();
       })["catch"](function (error) {
         _this.error = error;
 
         _this.$emit("changeloadingstatus", false);
       });
     },
+    fixTextAreaHeight: function fixTextAreaHeight() {
+      setTimeout(function () {
+        $('textarea').each(function () {
+          $(this).height($(this).prop('scrollHeight'));
+        });
+      }, 500);
+    },
     onKeepItemEditClick: function onKeepItemEditClick(event) {
+      event.stopPropagation();
       var targetElement = event.target;
       this.toggleEditMode(targetElement);
     },
@@ -1736,45 +1745,81 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
       jHeader.toggleClass("edit-mode");
     },
     onKeepItemConfirmClick: function onKeepItemConfirmClick(event) {
-      console.log("onKeepItemConfirmClick", event.target);
+      event.stopPropagation();
+      var jElemNota = $(event.target).parents(".sub-collapsible-item");
+      var idNota = jElemNota.find("[name='nota_id']").val();
+      var newNotaText = jElemNota.find(".sub-collapsible-item-content textarea").val();
+      var nota = {
+        "id": idNota,
+        "nota": newNotaText
+      };
+
+      if (confirm("Salvar alterações?")) {
+        this.sendUpdateNota(nota, event.target);
+      }
     },
     onKeepItemCancelClick: function onKeepItemCancelClick(event) {
+      event.stopPropagation();
+
       if (confirm("Confirma?")) {
         var targetElement = event.target;
         this.toggleEditMode(targetElement);
       }
     },
-    onKeepItemExpTriggerClick: function onKeepItemExpTriggerClick(event) {
+    onKeepItemHeaderClick: function onKeepItemHeaderClick() {
       var targetElement = event.target;
       var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
       var jExpandableContent = jParentWrapper.find(".sub-collapsible-item-content");
       var isExpanded = !jParentWrapper.hasClass("sub-collapsed");
 
-      if (isExpanded) {
-        targetElement.innerText = "add";
-      } else {
-        targetElement.innerText = "remove";
+      if (jParentWrapper.find(".sub-collapsible-item-header").hasClass("edit-mode")) {
+        return;
       }
 
       if (isExpanded) {
+        $(targetElement).find(".sub-collapsible-item-trigger")[0].innerText = "add";
         jExpandableContent.css("max-height", "0px");
-      } else {
-        jExpandableContent.css("max-height", "4000px");
-      }
-
-      if (isExpanded) {
         jParentWrapper.find(".sub-collapsible-item-edit").hide();
-      } else {
-        jParentWrapper.find(".sub-collapsible-item-edit").show();
-      }
-
-      if (isExpanded) {
         jParentWrapper.addClass("sub-collapsed");
         jParentWrapper.removeClass("sub-expanded");
       } else {
+        $(targetElement).find(".sub-collapsible-item-trigger")[0].innerText = "remove";
+        jExpandableContent.css("max-height", "4000px");
+        jParentWrapper.find(".sub-collapsible-item-edit").show();
         jParentWrapper.addClass("sub-expanded");
         jParentWrapper.removeClass("sub-collapsed");
       }
+    },
+    sendUpdateNota: function sendUpdateNota(nota, targetElement) {
+      var _this2 = this;
+
+      this.$emit("changeloadingstatus", true);
+      var url = "/api/notas/" + nota.id;
+      fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text-plain, */*",
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        },
+        method: "put",
+        credentials: "same-origin",
+        body: JSON.stringify(nota)
+      }).then(function (response) {
+        _this2.$emit("changeloadingstatus", false);
+
+        if (response.ok) {
+          _this2.$emit("sendsuccess", "Nota salva com sucesso");
+
+          _this2.toggleEditMode(targetElement);
+
+          _this2.fixTextAreaHeight();
+        } else {
+          alert(response.statusText);
+
+          _this2.$emit("senderror", response.statusText);
+        }
+      });
     },
     setData: function setData(cliente) {
       this.cliente = cliente;
@@ -5070,85 +5115,91 @@ var render = function() {
                   "div",
                   { staticClass: "sub-collapsible-item sub-collapsed" },
                   [
-                    _c("div", { staticClass: "sub-collapsible-item-header" }, [
-                      _c("input", {
-                        attrs: { name: "nota_id", type: "hidden" },
-                        domProps: {
-                          value: _vm.getNotas(categoria.categoria)[0].id
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "i",
-                        {
-                          staticClass:
-                            "material-icons sub-collapsible-item-trigger",
-                          on: {
-                            click: function($event) {
-                              return _vm.onKeepItemExpTriggerClick($event)
-                            }
+                    _c(
+                      "div",
+                      {
+                        staticClass: "sub-collapsible-item-header",
+                        on: {
+                          click: function($event) {
+                            return _vm.onKeepItemHeaderClick($event)
                           }
-                        },
-                        [_vm._v("add")]
-                      ),
-                      _vm._v(" "),
-                      _c("span", [
-                        _vm._v(
-                          _vm._s(_vm._f("capitalize")(categoria.categoria))
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass: "action-buttons-wrapper",
-                          staticStyle: { "margin-left": "auto" }
-                        },
-                        [
-                          _c(
-                            "i",
-                            {
-                              staticClass:
-                                "material-icons sub-collapsible-item-edit",
-                              on: {
-                                click: function($event) {
-                                  return _vm.onKeepItemEditClick($event)
-                                }
-                              }
-                            },
-                            [_vm._v("edit")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "i",
-                            {
-                              staticClass:
-                                "material-icons sub-collapsible-item-confirm",
-                              on: {
-                                click: function($event) {
-                                  return _vm.onKeepItemConfirmClick($event)
-                                }
-                              }
-                            },
-                            [_vm._v("check")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "i",
-                            {
-                              staticClass:
-                                "material-icons sub-collapsible-item-cancel",
-                              on: {
-                                click: function($event) {
-                                  return _vm.onKeepItemCancelClick($event)
-                                }
-                              }
-                            },
-                            [_vm._v("close")]
+                        }
+                      },
+                      [
+                        _c("input", {
+                          attrs: { name: "nota_id", type: "hidden" },
+                          domProps: {
+                            value: _vm.getNotas(categoria.categoria)[0].id
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "i",
+                          {
+                            staticClass:
+                              "material-icons sub-collapsible-item-trigger"
+                          },
+                          [_vm._v("add")]
+                        ),
+                        _vm._v(" "),
+                        _c("span", [
+                          _vm._v(
+                            _vm._s(_vm._f("capitalize")(categoria.categoria))
                           )
-                        ]
-                      )
-                    ]),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "action-buttons-wrapper",
+                            staticStyle: { "margin-left": "auto" }
+                          },
+                          [
+                            _c(
+                              "i",
+                              {
+                                staticClass:
+                                  "material-icons sub-collapsible-item-edit",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onKeepItemEditClick($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("edit")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "i",
+                              {
+                                staticClass:
+                                  "material-icons sub-collapsible-item-confirm",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onKeepItemConfirmClick($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("check")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "i",
+                              {
+                                staticClass:
+                                  "material-icons sub-collapsible-item-cancel",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onKeepItemCancelClick($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("close")]
+                            )
+                          ]
+                        )
+                      ]
+                    ),
                     _vm._v(" "),
                     _vm._l(_vm.getNotas(categoria.categoria), function(nota) {
                       return _c(
@@ -5194,7 +5245,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "collapsible-header" }, [
       _c("i", { staticClass: "material-icons" }, [_vm._v("event_note")]),
       _vm._v(" "),
-      _c("span", [_vm._v("Keep (não implementado)")]),
+      _c("span", [_vm._v("Keep (base de conhecimento)")]),
       _vm._v(" "),
       _c("i", { staticClass: "material-icons expandable-trigger" }, [
         _vm._v("keyboard_arrow_down")

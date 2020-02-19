@@ -69,7 +69,7 @@
       <li class="active">
         <div class="collapsible-header">
           <i class="material-icons">event_note</i>
-          <span>Keep (não implementado)</span>
+          <span>Keep (base de conhecimento)</span>
           <i 
             class="material-icons expandable-trigger"
             >keyboard_arrow_down</i>
@@ -78,10 +78,11 @@
           <div 
             v-for="categoria in categorias"
             class="sub-collapsible-item sub-collapsed">
-            <div class="sub-collapsible-item-header" >
+            <div 
+              class="sub-collapsible-item-header"
+              @click="onKeepItemHeaderClick($event)"   >
               <input name="nota_id" type="hidden" :value="getNotas(categoria.categoria)[0].id" />
               <i
-                @click="onKeepItemExpTriggerClick($event)" 
                 class="material-icons sub-collapsible-item-trigger">add</i>
               <span>{{categoria.categoria | capitalize}}</span>
               <div class="action-buttons-wrapper" style="margin-left: auto;">
@@ -149,14 +150,20 @@ export default {
         .then(resp => resp.json())
         .then(data => {
           this.setData(data);
-          this.registerCollapsibles();
+          this.fixTextAreaHeight();
         })
         .catch(error => {
           this.error = error;
           this.$emit("changeloadingstatus", false);
         });
     },
+    fixTextAreaHeight() {
+      setTimeout(function(){$('textarea').each(function () {
+          $(this).height($(this).prop('scrollHeight'));
+      })}, 500);
+    },
     onKeepItemEditClick(event){
+      event.stopPropagation();
       var targetElement = event.target;
       this.toggleEditMode(targetElement);
     },
@@ -172,48 +179,82 @@ export default {
       jHeader.toggleClass("edit-mode");
     },
     onKeepItemConfirmClick(event){
-      console.log("onKeepItemConfirmClick", event.target);
+      event.stopPropagation();
+      
+      var jElemNota = $(event.target).parents(".sub-collapsible-item");
+      var idNota = jElemNota.find("[name='nota_id']").val() ;
+      var newNotaText = jElemNota.find(".sub-collapsible-item-content textarea").val();
 
+      var nota = { "id": idNota, "nota": newNotaText };
+
+      if(confirm("Salvar alterações?")){
+        this.sendUpdateNota(nota, event.target);
+      }
     },
     onKeepItemCancelClick(event){
+      event.stopPropagation();
       if(confirm("Confirma?")){
-
         var targetElement = event.target;
         this.toggleEditMode(targetElement);
       }
 
     },
-    onKeepItemExpTriggerClick(event){
+    onKeepItemHeaderClick(){
       var targetElement = event.target;
       var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
       var jExpandableContent = jParentWrapper.find(".sub-collapsible-item-content");
       var isExpanded = !jParentWrapper.hasClass("sub-collapsed");
 
-      if(isExpanded){
-        targetElement.innerText = "add";
-      } else {
-        targetElement.innerText = "remove";
+      if(jParentWrapper.find(".sub-collapsible-item-header").hasClass("edit-mode")){
+        return;
       }
 
       if(isExpanded){
+        $(targetElement).find(".sub-collapsible-item-trigger")[0].innerText = "add";
         jExpandableContent.css("max-height", "0px");
-      } else {
-        jExpandableContent.css("max-height", "4000px");
-      }
-
-      if(isExpanded){
         jParentWrapper.find(".sub-collapsible-item-edit").hide();
-      } else {
-        jParentWrapper.find(".sub-collapsible-item-edit").show();
-      }
-
-      if(isExpanded){
         jParentWrapper.addClass("sub-collapsed");
         jParentWrapper.removeClass("sub-expanded");
       } else {
+        $(targetElement).find(".sub-collapsible-item-trigger")[0].innerText = "remove";
+        jExpandableContent.css("max-height", "4000px");
+        jParentWrapper.find(".sub-collapsible-item-edit").show();
         jParentWrapper.addClass("sub-expanded");
         jParentWrapper.removeClass("sub-collapsed");
       }
+
+    },
+    sendUpdateNota(nota, targetElement) {
+      this.$emit("changeloadingstatus", true);
+
+      var url = "/api/notas/" + nota.id;
+
+      fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text-plain, */*",
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content")
+        },
+        method: "put",
+        credentials: "same-origin",
+        body: JSON.stringify(nota)
+      })
+        .then(response => {
+            this.$emit("changeloadingstatus", false);
+
+          if (response.ok) {
+            this.$emit("sendsuccess", "Nota salva com sucesso");
+            this.toggleEditMode(targetElement);
+            this.fixTextAreaHeight();
+          } else {
+            alert(response.statusText);
+            this.$emit("senderror", response.statusText);
+
+          }
+        })
     },
     setData(cliente) {
       this.cliente = cliente;
