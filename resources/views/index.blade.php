@@ -22,6 +22,7 @@
     </div>
     
     <script src="js/app.js"></script>
+    <script src="js/0.1-commons.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
     <script

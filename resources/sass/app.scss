@@ -59,8 +59,16 @@
   }
   
   .bg-clickti-blue {
-      background: #053244;
-      color: white;
+      background: #053244 !important;
+      color: white !important;
+  }
+
+  .no-border{
+    border: none !important;
+  }
+
+  .no-border-when-disabled:disabled{
+    border: none !important;
   }
   
   .footer-status {

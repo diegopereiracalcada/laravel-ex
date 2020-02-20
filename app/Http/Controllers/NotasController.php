@@ -7,7 +7,7 @@ use App\Nota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ClientesController extends Controller
+class NotasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        return Cliente::orderBy('shortname')->get();
+        //
     }
 
     /**
@@ -48,25 +48,7 @@ class ClientesController extends Controller
      */
     public function show($id)
     {
-        $cliente = Cliente::findOrFail($id);
-        $cliente->notas = Nota::join('categorias','notas.categoria_id','=','categorias.id')
-                                ->where('cliente_id', $id)
-                                ->orderBy('categoria')
-                                ->orderBy('nota')
-                                ->select(['notas.id', 'notas.nota', 'categorias.categoria'])
-                                ->get();
-
-        $cliente->categorias = DB::select('select 
-                                                distinct(c.categoria) 
-                                            from 
-                                                categorias c
-                                            join 
-                                                notas n on c.id = n.categoria_id
-                                            where 
-                                                n.cliente_id = ?
-                                            order by 
-                                                c.categoria', [$id]);
-        return $cliente;
+       
     }
 
     /**
@@ -89,7 +71,11 @@ class ClientesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $nota = Nota::findOrFail($id);
+
+        $nota->update(request()->all());
+
+        return $nota;
     }
 
     /**

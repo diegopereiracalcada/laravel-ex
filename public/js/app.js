@@ -1417,7 +1417,6 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     highlight: function highlight(palavras) {
       var words = palavras;
-      console.log('words.length', words.length);
       setTimeout(function () {
         $(".resultado-busca").highlight(words);
       }, 100);
@@ -1467,7 +1466,6 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     setData: function setData(chamados) {
       this.chamados = chamados;
-      console.log("setdata---", this.palavras);
 
       if (this.palavras && this.chamados.length < 1) {
         this.showSemChamadosMessage = true;
@@ -1647,7 +1645,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var cliente = null;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var cliente = null,
+    categorias,
+    notas;
 var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {},
@@ -1660,7 +1694,19 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
       cliente: cliente
     };
   },
+  filters: {
+    capitalize: function capitalize(value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+  },
   methods: {
+    getNotas: function getNotas(categoria) {
+      return this.notas.filter(function (nota) {
+        return nota.categoria == categoria;
+      });
+    },
     fetchData: function fetchData(id) {
       var _this = this;
 
@@ -1669,18 +1715,125 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
         return resp.json();
       }).then(function (data) {
         _this.setData(data);
+
+        _this.fixTextAreaHeight();
       })["catch"](function (error) {
         _this.error = error;
 
         _this.$emit("changeloadingstatus", false);
       });
     },
+    fixTextAreaHeight: function fixTextAreaHeight() {
+      setTimeout(function () {
+        $('textarea').each(function () {
+          $(this).height($(this).prop('scrollHeight'));
+        });
+      }, 500);
+    },
+    onKeepItemEditClick: function onKeepItemEditClick(event) {
+      event.stopPropagation();
+      var targetElement = event.target;
+      this.toggleEditMode(targetElement);
+    },
+    toggleTextArea: function toggleTextArea(elem) {
+      var textareaElem = $(elem).parents(".sub-collapsible-item").find("textarea");
+      var isDisabled = textareaElem.attr("disabled");
+      textareaElem.attr("disabled", !isDisabled);
+    },
+    toggleEditMode: function toggleEditMode(elem) {
+      this.toggleTextArea(elem);
+      var jHeader = $(elem).parents(".sub-collapsible-item-header");
+      jHeader.toggleClass("edit-mode");
+    },
+    onKeepItemConfirmClick: function onKeepItemConfirmClick(event) {
+      event.stopPropagation();
+      var jElemNota = $(event.target).parents(".sub-collapsible-item");
+      var idNota = jElemNota.find("[name='nota_id']").val();
+      var newNotaText = jElemNota.find(".sub-collapsible-item-content textarea").val();
+      var nota = {
+        "id": idNota,
+        "nota": newNotaText
+      };
+
+      if (confirm("Salvar alterações?")) {
+        this.sendUpdateNota(nota, event.target);
+      }
+    },
+    onKeepItemCancelClick: function onKeepItemCancelClick(event) {
+      event.stopPropagation();
+
+      if (confirm("Suas alterações serão desprezadas. Continuar?")) {
+        var targetElement = event.target;
+        this.toggleEditMode(targetElement);
+        var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
+        var jVisibleTextAreaElem = jParentWrapper.find("[name='nota']");
+        var originalTextAreaValue = jParentWrapper.find(".original-nota-content").val();
+        $(jVisibleTextAreaElem).val(originalTextAreaValue);
+      }
+    },
+    onKeepItemHeaderClick: function onKeepItemHeaderClick() {
+      var targetElement = event.target;
+      var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
+      var jExpandableContent = jParentWrapper.find(".sub-collapsible-item-content");
+      var isExpanded = !jParentWrapper.hasClass("sub-collapsed");
+
+      if (jParentWrapper.find(".sub-collapsible-item-header").hasClass("edit-mode")) {
+        return;
+      }
+
+      if (isExpanded) {
+        jParentWrapper.find(".sub-collapsible-item-trigger")[0].innerText = "add";
+        jExpandableContent.css("max-height", "0px");
+        jParentWrapper.find(".sub-collapsible-item-edit").hide();
+        jParentWrapper.addClass("sub-collapsed");
+        jParentWrapper.removeClass("sub-expanded");
+      } else {
+        jParentWrapper.find(".sub-collapsible-item-trigger")[0].innerText = "remove";
+        jExpandableContent.css("max-height", "4000px");
+        jParentWrapper.find(".sub-collapsible-item-edit").show();
+        jParentWrapper.addClass("sub-expanded");
+        jParentWrapper.removeClass("sub-collapsed");
+      }
+    },
+    sendUpdateNota: function sendUpdateNota(nota, targetElement) {
+      var _this2 = this;
+
+      this.$emit("changeloadingstatus", true);
+      var url = "/api/notas/" + nota.id;
+      fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text-plain, */*",
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        },
+        method: "put",
+        credentials: "same-origin",
+        body: JSON.stringify(nota)
+      }).then(function (response) {
+        _this2.$emit("changeloadingstatus", false);
+
+        if (response.ok) {
+          _this2.$emit("sendsuccess", "Nota salva com sucesso");
+
+          _this2.toggleEditMode(targetElement);
+
+          _this2.fixTextAreaHeight();
+        } else {
+          alert(response.statusText);
+
+          _this2.$emit("senderror", response.statusText);
+        }
+      });
+    },
     setData: function setData(cliente) {
       this.cliente = cliente;
-      this.initializeCollapsibles();
+      this.categorias = cliente.categorias;
+      this.notas = cliente.notas;
+      this.initializeMaterializeCollapsibles();
       this.$emit("changeloadingstatus", false);
     },
-    initializeCollapsibles: function initializeCollapsibles() {
+    initializeMaterializeCollapsibles: function initializeMaterializeCollapsibles() {
       setTimeout(function () {
         var elems = document.querySelectorAll(".collapsible");
         var instances = M.Collapsible.init(elems);
@@ -1836,7 +1989,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".show-cliente-component label {\n  color: black !important;\n}", ""]);
+exports.push([module.i, ".action-buttons-wrapper {\n  margin-right: 0.8rem;\n}\n.sub-collapsed .action-buttons-wrapper {\n  display: none;\n}\n.sub-collapsible-item-header.edit-mode .sub-collapsible-item-edit,\n.sub-collapsible-item-header:not(.edit-mode) .sub-collapsible-item-confirm,\n.sub-collapsible-item-header:not(.edit-mode) .sub-collapsible-item-cancel {\n  display: none;\n}\ni.material-icons.sub-collapsible-item-confirm,\ni.material-icons.sub-collapsible-item-cancel {\n  color: white;\n  cursor: pointer;\n}\n.show-cliente-component label {\n  color: black !important;\n}\n.collapsible-body {\n  padding: 0.5rem;\n}\nli.active .expandable-trigger {\n  -webkit-transform: rotate(180deg);\n          transform: rotate(180deg);\n}\n.expandable-trigger {\n  margin-left: auto;\n  margin-right: 0;\n  -webkit-transition: 0.6s;\n  transition: 0.6s;\n}\n.sub-collapsible-item-header {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-align: center;\n          align-items: center;\n  background: #3b5473;\n}\n.sub-collapsible-item-trigger {\n  padding: 0.3rem;\n  margin-right: 1rem;\n  background: #053244;\n  color: white;\n  cursor: pointer;\n}\n.sub-collapsible-item {\n  margin-bottom: 0.2rem;\n}\n.sub-collapsible-item-header span {\n  color: white;\n  font-weight: bold;\n}\n.sub-collapsible-item-content {\n  padding: 0 18px;\n  max-height: 0;\n  overflow: hidden;\n  -webkit-transition: max-height 0.2s ease-out;\n  transition: max-height 0.2s ease-out;\n  background-color: #f1f1f1;\n}\n.sub-collapsible-item-edit {\n  color: white;\n  margin-left: auto;\n  margin-right: 0.5rem;\n  cursor: pointer;\n}", ""]);
 
 // exports
 
@@ -3477,7 +3630,7 @@ var render = function() {
               "*/\n            left": "0"
             }
           },
-          [_vm._v("v0.8")]
+          [_vm._v("v0.9")]
         )
       ],
       2
@@ -4666,7 +4819,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "collapsible-body" }, [
               _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col s6" }, [
+                _c("div", { staticClass: "col s12" }, [
                   _c("label", [_vm._v("shortname")]),
                   _vm._v(" "),
                   _c("input", {
@@ -4686,31 +4839,6 @@ var render = function() {
                           return
                         }
                         _vm.$set(_vm.cliente, "shortname", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col s6" }, [
-                  _c("label", [_vm._v("status")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.cliente.status,
-                        expression: "cliente.status"
-                      }
-                    ],
-                    attrs: { disabled: "" },
-                    domProps: { value: _vm.cliente.status },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.cliente, "status", $event.target.value)
                       }
                     }
                   })
@@ -4956,7 +5084,136 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _vm._m(1)
+          _c("li", { staticClass: "active" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "collapsible-body" },
+              _vm._l(_vm.categorias, function(categoria) {
+                return _c(
+                  "div",
+                  { staticClass: "sub-collapsible-item sub-collapsed" },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "sub-collapsible-item-header",
+                        on: {
+                          click: function($event) {
+                            return _vm.onKeepItemHeaderClick($event)
+                          }
+                        }
+                      },
+                      [
+                        _c("input", {
+                          attrs: { name: "nota_id", type: "hidden" },
+                          domProps: {
+                            value: _vm.getNotas(categoria.categoria)[0].id
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "i",
+                          {
+                            staticClass:
+                              "material-icons sub-collapsible-item-trigger"
+                          },
+                          [_vm._v("add")]
+                        ),
+                        _vm._v(" "),
+                        _c("span", [
+                          _vm._v(
+                            _vm._s(_vm._f("capitalize")(categoria.categoria))
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "action-buttons-wrapper",
+                            staticStyle: { "margin-left": "auto" }
+                          },
+                          [
+                            _c(
+                              "i",
+                              {
+                                staticClass:
+                                  "material-icons sub-collapsible-item-edit",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onKeepItemEditClick($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("edit")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "i",
+                              {
+                                staticClass:
+                                  "material-icons sub-collapsible-item-confirm",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onKeepItemConfirmClick($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("check")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "i",
+                              {
+                                staticClass:
+                                  "material-icons sub-collapsible-item-cancel",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onKeepItemCancelClick($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("close")]
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._l(_vm.getNotas(categoria.categoria), function(nota) {
+                      return _c(
+                        "div",
+                        { staticClass: "sub-collapsible-item-content" },
+                        [
+                          _c(
+                            "textarea",
+                            {
+                              staticClass: "no-border-when-disabled",
+                              attrs: { name: "nota", disabled: "disabled" }
+                            },
+                            [_vm._v(_vm._s(nota.nota))]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "textarea",
+                            {
+                              staticClass: "original-nota-content",
+                              staticStyle: { display: "none" },
+                              attrs: { disabled: "disabled" }
+                            },
+                            [_vm._v(_vm._s(nota.nota))]
+                          )
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              }),
+              0
+            )
+          ])
         ])
       : _vm._e()
   ])
@@ -4975,14 +5232,13 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("div", { staticClass: "collapsible-header" }, [
-        _c("i", { staticClass: "material-icons" }, [_vm._v("event_note")]),
-        _vm._v("Keep (não implementado)\n      ")
-      ]),
+    return _c("div", { staticClass: "collapsible-header" }, [
+      _c("i", { staticClass: "material-icons" }, [_vm._v("event_note")]),
       _vm._v(" "),
-      _c("div", { staticClass: "collapsible-body" }, [
-        _c("span", [_vm._v("Lorem ipsum dolor sit amet.")])
+      _c("span", [_vm._v("Keep / Base de Conhecimento")]),
+      _vm._v(" "),
+      _c("i", { staticClass: "material-icons expandable-trigger" }, [
+        _vm._v("keyboard_arrow_down")
       ])
     ])
   }

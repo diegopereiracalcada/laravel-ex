@@ -10,7 +10,7 @@ class MailService {
             "emails.abertura", 
             "atendimentochamado@gmail.com", //HARDCODE
             "atendimentochamado@gmail.com", //HARDCODE
-            "Abertura de Chamado - ClickTI Informática", 
+            "Abertura de Chamado #" . $chamado->id . " - ClickTI Informática", 
             $chamado);
     }
 
@@ -19,12 +19,13 @@ class MailService {
             "emails.fechamento", 
             "clickticonsultoria@gmail.com", //HARDCODE
             "clickticonsultoria@gmail.com", //HARDCODE
-            "Fechamento de Chamado", 
+            "Fechamento de Chamado #" . $chamado->id . " - ClickTI Informática", 
             $chamado);
     }
 
     private function sendMail($mailView, $to_name, $to_email, $subject, $chamado){
-        $data = [ "chamado" => $chamado];
+        $cliente = Cliente::find( $chamado->cliente_id);
+        $data = [ "chamado" => $chamado, "cliente" => $cliente];
 
         Mail::send($mailView, $data, function ($message) use ($to_name, $to_email, $subject) {
             $message

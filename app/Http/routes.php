@@ -21,6 +21,8 @@ Route::get('api/abertos', 'ChamadosController@abertos');
 
 Route::get('api/fechados', 'ChamadosController@fechados');
 
+Route::resource('api/notas', 'NotasController');
+
 Route::get('api/qtdechamados', 'ChamadosController@qtdeChamados');
 
 Route::get('api/itinerario', 'ChamadosController@itinerario');
