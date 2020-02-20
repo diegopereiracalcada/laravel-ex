@@ -107,6 +107,9 @@
             </div>
           </div>
         </div>
+        <div class="to-remove" style="display: block;text-align: center; padding-bottom:10px;">
+          <h5>Carregando...</h5>
+        </div>
       </li>
     </ul>
   </div>
@@ -273,6 +276,7 @@ export default {
       setTimeout(function(){
         var elems = document.querySelectorAll(".collapsible");
         var instances = M.Collapsible.init(elems);
+        $(".to-remove").remove();
       }, 500);
     }
   }

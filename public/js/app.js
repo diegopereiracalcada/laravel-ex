@@ -1679,6 +1679,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 var cliente = null,
     categorias,
     notas;
@@ -1837,6 +1840,7 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
       setTimeout(function () {
         var elems = document.querySelectorAll(".collapsible");
         var instances = M.Collapsible.init(elems);
+        $(".to-remove").remove();
       }, 500);
     }
   }
@@ -5212,7 +5216,9 @@ var render = function() {
                 )
               }),
               0
-            )
+            ),
+            _vm._v(" "),
+            _vm._m(2)
           ])
         ])
       : _vm._e()
@@ -5241,6 +5247,23 @@ var staticRenderFns = [
         _vm._v("keyboard_arrow_down")
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "to-remove",
+        staticStyle: {
+          display: "block",
+          "text-align": "center",
+          "padding-bottom": "10px"
+        }
+      },
+      [_c("h5", [_vm._v("Carregando...")])]
+    )
   }
 ]
 render._withStripped = true
