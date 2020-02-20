@@ -12,16 +12,20 @@ class NotasTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('notas')->insert([
-            'nota' => 'Nota de exemplo de nuvem 1',
-            'cliente_id' => 2,
-            'categoria_id' => 1,
-        ]);
-        
-        DB::table('notas')->insert([
-            'nota' => 'Nota de exemplo de anbydesk 1',
-            'cliente_id' => 2,
-            'categoria_id' => 2,
-        ]);
+
+        $ids = \DB::select("select id from clientes");
+
+        foreach($ids as $id){   
+            
+            $categorias = \DB::select("select id from categorias");
+
+            foreach($categorias as $categoria){ 
+                DB::table('notas')->insert([
+                    'nota' => '.',
+                    'cliente_id' => $id->id,
+                    'categoria_id' => $categoria->id
+                ]);
+            }  
+        }
     }
 }
