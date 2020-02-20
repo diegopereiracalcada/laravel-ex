@@ -7,13 +7,9 @@
         </div>
         <div class="collapsible-body">
           <div class="row">
-            <div class="col s6">
+            <div class="col s12">
               <label>shortname</label>
               <input v-model="cliente.shortname" disabled />
-            </div>
-            <div class="col s6">
-              <label>status</label>
-              <input v-model="cliente.status" disabled />
             </div>
           </div>
           <div class="row">
@@ -69,7 +65,7 @@
       <li class="active">
         <div class="collapsible-header">
           <i class="material-icons">event_note</i>
-          <span>Keep (base de conhecimento)</span>
+          <span>Keep / Base de Conhecimento</span>
           <i 
             class="material-icons expandable-trigger"
             >keyboard_arrow_down</i>
@@ -100,8 +96,13 @@
             <div 
               v-for="nota in getNotas(categoria.categoria)"
               class="sub-collapsible-item-content">
-              <textarea 
+              <textarea
+                name="nota" 
                 class="no-border-when-disabled"
+                disabled="disabled">{{nota.nota}}</textarea>
+              <textarea 
+                style="display:none"
+                class="original-nota-content"
                 disabled="disabled">{{nota.nota}}</textarea>
             </div>
           </div>
@@ -193,11 +194,16 @@ export default {
     },
     onKeepItemCancelClick(event){
       event.stopPropagation();
-      if(confirm("Confirma?")){
+      if(confirm("Suas alterações serão desprezadas. Continuar?")){
         var targetElement = event.target;
         this.toggleEditMode(targetElement);
-      }
 
+        var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
+        var jVisibleTextAreaElem = jParentWrapper.find("[name='nota']");
+        var originalTextAreaValue = jParentWrapper.find(".original-nota-content").val();
+
+        $(jVisibleTextAreaElem).val(originalTextAreaValue);
+      }
     },
     onKeepItemHeaderClick(){
       var targetElement = event.target;
@@ -210,13 +216,13 @@ export default {
       }
 
       if(isExpanded){
-        $(targetElement).find(".sub-collapsible-item-trigger")[0].innerText = "add";
+        jParentWrapper.find(".sub-collapsible-item-trigger")[0].innerText = "add";
         jExpandableContent.css("max-height", "0px");
         jParentWrapper.find(".sub-collapsible-item-edit").hide();
         jParentWrapper.addClass("sub-collapsed");
         jParentWrapper.removeClass("sub-expanded");
       } else {
-        $(targetElement).find(".sub-collapsible-item-trigger")[0].innerText = "remove";
+        jParentWrapper.find(".sub-collapsible-item-trigger")[0].innerText = "remove";
         jExpandableContent.css("max-height", "4000px");
         jParentWrapper.find(".sub-collapsible-item-edit").show();
         jParentWrapper.addClass("sub-expanded");

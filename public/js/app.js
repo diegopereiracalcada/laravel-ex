@@ -1678,6 +1678,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var cliente = null,
     categorias,
     notas;
@@ -1761,9 +1762,13 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
     onKeepItemCancelClick: function onKeepItemCancelClick(event) {
       event.stopPropagation();
 
-      if (confirm("Confirma?")) {
+      if (confirm("Suas alterações serão desprezadas. Continuar?")) {
         var targetElement = event.target;
         this.toggleEditMode(targetElement);
+        var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
+        var jVisibleTextAreaElem = jParentWrapper.find("[name='nota']");
+        var originalTextAreaValue = jParentWrapper.find(".original-nota-content").val();
+        $(jVisibleTextAreaElem).val(originalTextAreaValue);
       }
     },
     onKeepItemHeaderClick: function onKeepItemHeaderClick() {
@@ -1777,13 +1782,13 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
       }
 
       if (isExpanded) {
-        $(targetElement).find(".sub-collapsible-item-trigger")[0].innerText = "add";
+        jParentWrapper.find(".sub-collapsible-item-trigger")[0].innerText = "add";
         jExpandableContent.css("max-height", "0px");
         jParentWrapper.find(".sub-collapsible-item-edit").hide();
         jParentWrapper.addClass("sub-collapsed");
         jParentWrapper.removeClass("sub-expanded");
       } else {
-        $(targetElement).find(".sub-collapsible-item-trigger")[0].innerText = "remove";
+        jParentWrapper.find(".sub-collapsible-item-trigger")[0].innerText = "remove";
         jExpandableContent.css("max-height", "4000px");
         jParentWrapper.find(".sub-collapsible-item-edit").show();
         jParentWrapper.addClass("sub-expanded");
@@ -4814,7 +4819,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "collapsible-body" }, [
               _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col s6" }, [
+                _c("div", { staticClass: "col s12" }, [
                   _c("label", [_vm._v("shortname")]),
                   _vm._v(" "),
                   _c("input", {
@@ -4834,31 +4839,6 @@ var render = function() {
                           return
                         }
                         _vm.$set(_vm.cliente, "shortname", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col s6" }, [
-                  _c("label", [_vm._v("status")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.cliente.status,
-                        expression: "cliente.status"
-                      }
-                    ],
-                    attrs: { disabled: "" },
-                    domProps: { value: _vm.cliente.status },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.cliente, "status", $event.target.value)
                       }
                     }
                   })
@@ -5210,6 +5190,16 @@ var render = function() {
                             "textarea",
                             {
                               staticClass: "no-border-when-disabled",
+                              attrs: { name: "nota", disabled: "disabled" }
+                            },
+                            [_vm._v(_vm._s(nota.nota))]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "textarea",
+                            {
+                              staticClass: "original-nota-content",
+                              staticStyle: { display: "none" },
                               attrs: { disabled: "disabled" }
                             },
                             [_vm._v(_vm._s(nota.nota))]
@@ -5245,7 +5235,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "collapsible-header" }, [
       _c("i", { staticClass: "material-icons" }, [_vm._v("event_note")]),
       _vm._v(" "),
-      _c("span", [_vm._v("Keep (base de conhecimento)")]),
+      _c("span", [_vm._v("Keep / Base de Conhecimento")]),
       _vm._v(" "),
       _c("i", { staticClass: "material-icons expandable-trigger" }, [
         _vm._v("keyboard_arrow_down")
