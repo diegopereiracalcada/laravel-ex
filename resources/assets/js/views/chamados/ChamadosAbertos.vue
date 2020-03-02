@@ -9,23 +9,7 @@
       :chamado="chamado"
       :habilitarAdicionarNoItinerario="true" />
 
-    <div class="qtde-chamados-abertos bg-clickti-blue" style="
-        position: fixed;
-        top: 3px;
-        right: 15px;
-        z-index: 1;
-        color: white;
-        border: 2px solid white;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        margin-top: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding-top: 1px;
-        font-weight: bold;
-    ">{{qtdeChamadosAbertos}}</div>
+    <div class="qtde-chamados-abertos bg-clickti-blue">{{qtdeChamadosAbertos}}</div>
 
     <div v-if="error" class="messages-bar">
       <div><b>Erro: </b></div>
@@ -36,8 +20,6 @@
 
 <script>
 import Chamado from "../../components/chamados/Chamado";
-
-const CHAMADOS_INDEX_API_URL = "/api/abertos";
 
 let chamados = [],
   error = "",
@@ -52,7 +34,8 @@ export default {
     return {
       chamados,
       error,
-      showSemChamadosMessage
+      showSemChamadosMessage,
+      qtdeChamadosAbertos
     };
   },
   created() {
@@ -64,22 +47,28 @@ export default {
   },
   methods: {
     fetchChamadosAbertos() {
-      fetch(CHAMADOS_INDEX_API_URL)
-        .then(resp => resp.json())
-        .then(data => {
-          this.setData(data);
-          this.updateStatus();
-        })
-        .catch(error => {
-          this.$emit("changeloadingstatus", false);
-          this.error = error;
+      const db = this.$firebase.firestore();
+      console.log("fetching fstore...");
+      db
+        .collection('chamados')
+        .get()
+        .then(snap => {
+          const chamadosCollection = [];
+          snap.forEach(doc => {
+            console.log("chamado:", doc.data());
+            let chamado = doc.data();
+            chamado.id = doc.id;
+            chamadosCollection.push(chamado);
+          });
+          console.log("chamadosCollection: ", chamadosCollection);
+          this.chamados = chamadosCollection;
         });
     },
-    setData(data) {
-      this.chamados = data[0].chamados;
-      this.qtdeChamadosAbertos = data[0].qtdeChamados;
+    setData(chamados) {
+      this.chamados = chamados;
+      this.qtdeChamadosAbertos = chamados.length;
 
-      if(this.chamados.length < 1){
+      if(this.qtdeChamadosAbertos < 1){
         this.showSemChamadosMessage = true;
       }
 
@@ -150,6 +139,25 @@ export default {
   left: 56px;
   animation-delay: 0;
 }
+
+.qtde-chamados-abertos{
+  position: fixed;
+  top: 3px;
+  right: 15px;
+  z-index: 1;
+  color: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1px;
+  font-weight: bold;
+}
+
 @keyframes lds-facebook {
   0% {
     top: 8px;

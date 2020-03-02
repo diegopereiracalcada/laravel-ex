@@ -30,5 +30,31 @@
         integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
         crossorigin="anonymous"></script>
     <script src="/js/highlight/jquery.highlight.js"></script>
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-app.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries 
+    -->
+    <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyB3d8IM889bnq5U44G9RYMrmvzT9WSai_Q",
+            authDomain: "firestoreclickti.firebaseapp.com",
+            databaseURL: "https://firestoreclickti.firebaseio.com",
+            projectId: "firestoreclickti",
+            storageBucket: "firestoreclickti.appspot.com",
+            messagingSenderId: "794095953996",
+            appId: "1:794095953996:web:682cbb1f023e714908ace9"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
+    
 </body>
 </html>

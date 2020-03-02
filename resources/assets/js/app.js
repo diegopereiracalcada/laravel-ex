@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+/* Import the firebase SDK and extend with firestore */
+import firebase from 'firebase';
+require('firebase/firestore');
+
+
+
 Vue.use(VueRouter)
 
 import App from './views/App'
@@ -14,6 +20,24 @@ import ShowChamado from './views/chamados/ShowChamado'
 
 import ShowCliente from './views/clientes/ShowCliente'
 import IndexClientes from './views/clientes/IndexClientes'
+
+/* Paste your firebase configuration below */
+const config = {
+    apiKey: "AIzaSyB3d8IM889bnq5U44G9RYMrmvzT9WSai_Q",
+    authDomain: "firestoreclickti.firebaseapp.com",
+    databaseURL: "https://firestoreclickti.firebaseio.com",
+    projectId: "firestoreclickti",
+    storageBucket: "firestoreclickti.appspot.com",
+    messagingSenderId: "794095953996",
+    appId: "1:794095953996:web:682cbb1f023e714908ace9"
+};
+
+/* Initialize firebase with your configuration */
+firebase.initializeApp(config);
+
+/* Bind firebase to your Vue instance */
+Vue.prototype.$firebase = firebase;
+
 
 const router = new VueRouter({
     mode: 'history',
