@@ -9,6 +9,7 @@ import AbrirChamado from './views/chamados/AbrirChamado'
 import ChamadosAbertos from './views/chamados/ChamadosAbertos'
 import ChamadosFechados from './views/chamados/ChamadosFechados'
 import Itinerario from './views/chamados/Itinerario'
+import ImportarExportar from './views/chamados/ImportarExportar'
 import ResultadoBusca from './views/chamados/ResultadoBusca'
 import ShowChamado from './views/chamados/ShowChamado'
 
@@ -86,6 +87,14 @@ const router = new VueRouter({
                 title: "Cliente"
             }
         },
+        {
+            path: '/importarexportar',
+            name: 'importarexportar',
+            component: ImportarExportar,
+            meta: {
+                title: "Importar/Exportar"
+            }
+        }
 
         // {
         //     // 404

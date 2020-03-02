@@ -19,6 +19,8 @@ Route::resource('api/chamados', 'ChamadosController');
 
 Route::get('api/abertos', 'ChamadosController@abertos');
 
+Route::get('api/downloadExcel', 'ChamadosController@downloadExcel');
+
 Route::get('api/fechados', 'ChamadosController@fechados');
 
 Route::resource('api/notas', 'NotasController');
