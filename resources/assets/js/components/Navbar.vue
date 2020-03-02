@@ -45,9 +45,8 @@
                 color: rgb(142, 141, 141);
                 width: 100%;
                 text-align: center;
-                /* padding: 30px; */
                 left: 0;
-            ">v0.9</li>
+            ">v1.0</li>
         </ul>
     </div>
 </template>
@@ -79,6 +78,11 @@ var menuItens = [
         label: "Clientes",
         icon: "contacts",
         href: "/clientes"
+    },
+    {
+        label: "Importar/Exportar",
+        icon: "import_export",
+        href: "/importexport"
     },
     {
         label: "Itinerário",

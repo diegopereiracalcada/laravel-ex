@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\MailService;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class ChamadosController extends Controller
 {
@@ -142,6 +142,18 @@ class ChamadosController extends Controller
         //$chamado->delete();
         return 'not implemented';
     }
+
+    public function downloadExcel()
+	{
+        $data = Chamado::get()->toArray();
+        
+		return Excel::create('Chamados', function($excel) use ($data) {
+			$excel->sheet('planilha1', function($sheet) use ($data)
+	        {
+				$sheet->fromArray($data);
+	        });
+		})->download("xlsx");
+	}
 
     public function validateChamado(){
         return request()->validate([
