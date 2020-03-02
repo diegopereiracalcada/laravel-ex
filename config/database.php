@@ -53,7 +53,7 @@ return [
         ],
 
         'mysql' => [
-	'driver' => 'mysql',
+	        'driver' => 'mysql',
             'host' => 'mysql',
             'port' => '3306',
             'database' => 'homestead',
@@ -68,14 +68,14 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => 'postgresql',
+            'host' => 'database-1.czagzbx6yus5.us-east-2.rds.amazonaws.com',
             'port' => '5432',
             'database' => 'postgres',
             'username' => 'postgres',
-            'password' => 'postgres',
+            'password' => 'Postgres2019!',
             'charset' => 'utf8',
             'prefix' => '',
-            'schema' => 'public',
+            'schema' => 'clickti',
         ],
 
     ],
