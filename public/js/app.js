@@ -312,7 +312,7 @@ var menuItens = [{
 }, {
   label: "Importar/Exportar",
   icon: "import_export",
-  href: "/importexport"
+  href: "/importarexportar"
 }, {
   label: "Itinerário",
   icon: "directions",
