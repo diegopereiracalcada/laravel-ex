@@ -160,27 +160,13 @@ class ChamadosController extends Controller
 	{
 			if(Input::hasFile('import_file')){
                 $path = Input::file('import_file')->getRealPath();
-                $data = Excel::load($path, function($reader) {
-                })->toArray();
+                $data = Excel::load($path, function($reader) {})->toArray();
 
-                //dd(count($data));
                 if(count($data) > 0){
-                    // insert
                     DB::table('chamados')->insert($data);
                 }
             }
-			// if(!empty($data) && $data->count()){
-            //     // dd($data);
-            //     foreach ($data as $key => $value) {
-            //         $insert[] = $value;
-            //     }
-            //     dd($insert);
-                
-			// 	// if(!empty($insert)){
-			// 	// 	DB::table('items')->insert($insert);
-			// 	// 	dd('Insert Record successfully.');
-			// 	// }
-			// }
+            
         return back();
 	}
 
