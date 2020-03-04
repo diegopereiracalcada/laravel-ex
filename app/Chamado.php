@@ -18,8 +18,8 @@ class Chamado extends Model
         'solucao',
         'cliente_id',
         'status',
-        'enviarEmailAbertura',
-        'enviarEmailFechamento',
+        'enviaremailabertura',
+        'enviaremailfechamento',
     ];
 
     public function cliente(){

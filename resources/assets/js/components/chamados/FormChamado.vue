@@ -80,8 +80,8 @@
     <div class="row" >
       <div class="col s12">
         <label>
-          <input v-if="updateMode" id="enviarEmail" name="enviarEmailFechamento" checked type="checkbox" />
-          <input v-if="!updateMode" id="enviarEmail" name="enviarEmailAbertura" checked type="checkbox" />
+          <input v-if="updateMode" id="enviarEmail" name="enviaremailfechamento" checked type="checkbox" />
+          <input v-if="!updateMode" id="enviarEmail" name="enviaremailabertura" checked type="checkbox" />
           <span>Enviar email</span>
         </label>
       </div>
@@ -230,10 +230,10 @@ export default {
     },
     onSubmit(form) {
       if (this.updateMode) {
-        this.chamado.enviarEmailFechamento = document.getElementById('enviarEmail').checked;
+        this.chamado.enviaremailfechamento = document.getElementById('enviarEmail').checked;
         this.fecharChamado();
       } else {
-        this.chamado.enviarEmailAbertura = document.getElementById('enviarEmail').checked;
+        this.chamado.enviaremailabertura = document.getElementById('enviarEmail').checked;
         this.abrirChamado();
       }
     },

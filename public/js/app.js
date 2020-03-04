@@ -802,10 +802,10 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     onSubmit: function onSubmit(form) {
       if (this.updateMode) {
-        this.chamado.enviarEmailFechamento = document.getElementById('enviarEmail').checked;
+        this.chamado.enviaremailfechamento = document.getElementById('enviarEmail').checked;
         this.fecharChamado();
       } else {
-        this.chamado.enviarEmailAbertura = document.getElementById('enviarEmail').checked;
+        this.chamado.enviaremailabertura = document.getElementById('enviarEmail').checked;
         this.abrirChamado();
       }
     },
@@ -1231,6 +1231,20 @@ var chamados = [],
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1987,7 +2001,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".importar-exportar-container {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  padding-top: 2rem;\n}", ""]);
+exports.push([module.i, ".importar-exportar-container {\n  padding-top: 2rem;\n}\n.importar-wrapper {\n  margin-top: 2rem;\n}", ""]);
 
 // exports
 
@@ -4241,7 +4255,7 @@ var render = function() {
                   ? _c("input", {
                       attrs: {
                         id: "enviarEmail",
-                        name: "enviarEmailFechamento",
+                        name: "enviaremailfechamento",
                         checked: "",
                         type: "checkbox"
                       }
@@ -4252,7 +4266,7 @@ var render = function() {
                   ? _c("input", {
                       attrs: {
                         id: "enviarEmail",
-                        name: "enviarEmailAbertura",
+                        name: "enviaremailabertura",
                         checked: "",
                         type: "checkbox"
                       }
@@ -4654,11 +4668,49 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row importar-exportar-container" }, [
-      _c("a", { staticClass: "btn", attrs: { href: "/api/downloadExcel" } }, [
-        _vm._v("Exportar Chamados para Excel\n  ")
-      ])
-    ])
+    return _c(
+      "div",
+      { staticClass: "row importar-exportar-container container" },
+      [
+        _c("div", { staticClass: "exportar-wrapper col s12" }, [
+          _c("h5", [_vm._v("Exportação de chamados")]),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-large bg-clickti-blue full-width",
+              attrs: { href: "/api/downloadExcel" }
+            },
+            [_vm._v("Exportar para Excel\n      ")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "importar-wrapper col s12" }, [
+          _c("h5", [_vm._v("Importação de chamados")]),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              staticClass: "form-horizontal",
+              attrs: {
+                action: "/api/importExcel",
+                method: "post",
+                enctype: "multipart/form-data"
+              }
+            },
+            [
+              _c("input", { attrs: { type: "file", name: "import_file" } }),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-large bg-clickti-blue full-width" },
+                [_vm._v("Importar planilha")]
+              )
+            ]
+          )
+        ])
+      ]
+    )
   }
 ]
 render._withStripped = true

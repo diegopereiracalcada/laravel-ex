@@ -91,6 +91,10 @@
   border: none !important;
 }
 
+.full-width {
+  width: 100% !important;
+}
+
 .no-border-when-disabled:disabled {
   border: none !important;
 }

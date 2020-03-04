@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\MailService;
+use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ChamadosController extends Controller
@@ -98,7 +99,7 @@ class ChamadosController extends Controller
 
         $cliente = Cliente::find($chamado->cliente_id);
 
-        if($chamado->enviarEmailAbertura){
+        if($chamado->enviaremailabertura){
             (new MailService())->sendAbertura($cliente->email, $cliente->email, $persistedChamado);
         }
 
@@ -129,7 +130,7 @@ class ChamadosController extends Controller
                 ->where('id', $id)
                 ->update(['dt_fechamento' => Carbon::now()]);
 
-            if(request('enviarEmailFechamento')){
+            if(request('enviaremailfechamento')){
                 (new MailService())->sendFechamento($cliente->email,$cliente->email, $chamado);
             }
         }
@@ -153,6 +154,34 @@ class ChamadosController extends Controller
 				$sheet->fromArray($data);
 	        });
 		})->download("xlsx");
+    }
+
+    public function importExcel()
+	{
+			if(Input::hasFile('import_file')){
+                $path = Input::file('import_file')->getRealPath();
+                $data = Excel::load($path, function($reader) {
+                })->toArray();
+
+                //dd(count($data));
+                if(count($data) > 0){
+                    // insert
+                    DB::table('chamados')->insert($data);
+                }
+            }
+			// if(!empty($data) && $data->count()){
+            //     // dd($data);
+            //     foreach ($data as $key => $value) {
+            //         $insert[] = $value;
+            //     }
+            //     dd($insert);
+                
+			// 	// if(!empty($insert)){
+			// 	// 	DB::table('items')->insert($insert);
+			// 	// 	dd('Insert Record successfully.');
+			// 	// }
+			// }
+        return back();
 	}
 
     public function validateChamado(){
