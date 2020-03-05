@@ -46,7 +46,7 @@
                 width: 100%;
                 text-align: center;
                 left: 0;
-            ">v1.0</li>
+            ">v1.1</li>
         </ul>
     </div>
 </template>
