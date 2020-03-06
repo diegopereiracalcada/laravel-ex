@@ -12,6 +12,7 @@ import Itinerario from './views/chamados/Itinerario'
 import ImportarExportar from './views/chamados/ImportarExportar'
 import ResultadoBusca from './views/chamados/ResultadoBusca'
 import ShowChamado from './views/chamados/ShowChamado'
+import StatusCliente from './views/chamados/StatusCliente'
 
 import ShowCliente from './views/clientes/ShowCliente'
 import IndexClientes from './views/clientes/IndexClientes'
@@ -93,6 +94,14 @@ const router = new VueRouter({
             component: ImportarExportar,
             meta: {
                 title: "Importar/Exportar"
+            }
+        },
+        {
+            path: '/statuscliente',
+            name: 'statuscliente',
+            component: StatusCliente,
+            meta: {
+                title: "Status de Chamados"
             }
         }
 

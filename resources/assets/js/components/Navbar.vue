@@ -6,7 +6,7 @@
                     ><i class="material-icons">menu</i></a>
                 <a href="javascript:void(0)" class="brand-logo">{{$route.meta.title || 'Click TI'}}</a>
                 
-                <ul class="right hide-on-med-and-down">
+                <ul class="nav-items right hide-on-med-and-down">
                     <li v-for="item in menuItens">
                         <a :href="item.href">{{ item.label }}</a>
                     </li>

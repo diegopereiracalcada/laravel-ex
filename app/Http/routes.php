@@ -35,4 +35,6 @@ Route::get('api/busca', 'BuscaController@search');
 
 Route::get('api/enviar-email', 'EmailController@sendMail');
 
+Route::get('api/statuscliente', 'ChamadosController@statusCliente');
+
 Route::get('/{any}', 'VueController@index')->where('any', '.*');

@@ -114,6 +114,16 @@ class ChamadosController extends Controller
         return $chamado;
     }
 
+    public function statusCliente(){
+        $listaDeChamados = Chamado::where('clientes.shortname', 'MMCONTADORES')
+                                    ->join('clientes', 'clientes.id', '=', 'chamados.cliente_id')
+                                    ->get();
+
+        return array([
+            'chamados' => $listaDeChamados
+        ]);
+    }
+
     public function update(Request $request, $id)
     {
         $chamado = Chamado::findOrFail($id);
