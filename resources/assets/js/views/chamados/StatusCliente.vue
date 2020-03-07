@@ -1,7 +1,7 @@
 <template>
   <div class="status-cliente-list row">
     <div class="nome-cliente">
-      <span>{{chamados[0].name}}</span>
+      <span>{{"chamados[0].name"}}</span>
     </div>
     <div class="status-abertos">
       <h4>Chamados Abertos <span class="title-extension">(em ordem de prioridade)</span></h4>
@@ -50,14 +50,7 @@
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function(){
-  console.log('DOMContentLoaded...');
-  document.querySelector('.nav-items').remove()
-  document.querySelector('.fixed-action-btn').remove()
-});
-
 const STATUS_CLIENTE_API_URL = "/api/statuscliente";
-
 
 let chamados = [],
   showSemChamadosMessage = false,
@@ -78,12 +71,18 @@ export default {
     },
     chamadosFechados(){
       return this.chamados.filter(chamado => chamado.status == 'FECHADO');
+    },
+    currentRouteName() {
+        return this.$route;
     }
   },
   created() {
     this.$emit("changeloadingstatus", true);
-    //LIMPAR MENU
     this.fetchStatusCliente();
+  },
+  mounted() {
+    document.querySelector('.nav-items').remove();
+    document.querySelector('.fixed-action-btn').remove();
   },
   watch: {
     $route: "fetchStatusCliente"

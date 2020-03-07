@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ChamadosController extends Controller
 {
+    
     public function index(Request $request)
     {
         return Chamado::select(
@@ -61,12 +62,29 @@ class ChamadosController extends Controller
         ]);
     }
 
-    public function abertos(){
+    public function abertos(Request $request){
+        $orderBy = strtolower('DT_ABERTURA');
+        $orderOrientation = 'ASC';
+
+        switch($request->input('orderBy')){
+            case('DTABERTURA_ASC'):
+                $orderBy = strtolower('DT_ABERTURA');
+                $orderOrientation = 'asc';
+                break;
+            case('DTABERTURA_DESC'):
+                $orderBy = strtolower('DT_ABERTURA');
+                $orderOrientation = 'desc';
+                break;
+            default:
+                $orderBy = strtolower('DT_ABERTURA');
+                $orderOrientation = 'asc';
+        }
+
         $qtde = Chamado::where('status', 'ABERTO')
                         ->count();
         $listaDeChamados = Chamado::where('status', 'ABERTO')
                                     ->with('cliente')
-                                    ->orderBy('dt_abertura', 'asc')
+                                    ->orderBy($orderBy, $orderOrientation)
                                     ->get();
 
         return array([

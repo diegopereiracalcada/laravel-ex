@@ -1045,12 +1045,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+document.addEventListener("DOMContentLoaded", function () {
+  var elems = document.querySelectorAll('select');
+  var instances = M.FormSelect.init(elems);
+});
 
 var CHAMADOS_INDEX_API_URL = "/api/abertos";
 var chamados = [],
     error = "",
     showSemChamadosMessage = false,
     qtdeChamadosAbertos;
+var orderByTypes = {
+  DTABERTURA_ASC: 'DTABERTURA_ASC',
+  DTABERTURA_DESC: 'DTABERTURA_DESC'
+};
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Chamado: _components_chamados_Chamado__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -1059,31 +1077,41 @@ var chamados = [],
     return {
       chamados: chamados,
       error: error,
-      showSemChamadosMessage: showSemChamadosMessage
+      showSemChamadosMessage: showSemChamadosMessage,
+      qtdeChamadosAbertos: qtdeChamadosAbertos
     };
   },
   created: function created() {
-    this.$emit("changeloadingstatus", true);
     this.fetchChamadosAbertos();
   },
-  watch: {
-    $route: "fetchChamadosAbertos"
-  },
   methods: {
-    fetchChamadosAbertos: function fetchChamadosAbertos() {
+    fetchChamadosAbertos: function fetchChamadosAbertos(orderBy) {
       var _this = this;
 
-      fetch(CHAMADOS_INDEX_API_URL).then(function (resp) {
+      this.$emit("changeloadingstatus", true);
+
+      if (orderBy == null) {
+        orderBy = orderByTypes.DTABERTURA_ASC;
+      }
+
+      fetch(CHAMADOS_INDEX_API_URL + "?orderBy=" + orderBy).then(function (resp) {
         return resp.json();
       }).then(function (data) {
         _this.setData(data);
 
         _this.updateStatus();
+
+        _this.$emit("changeloadingstatus", false);
       })["catch"](function (error) {
         _this.$emit("changeloadingstatus", false);
 
         _this.error = error;
       });
+    },
+    onOrdenationTypeChange: function onOrdenationTypeChange(event) {
+      var value = event.target.value;
+      console.log("value", value);
+      this.fetchChamadosAbertos(value);
     },
     setData: function setData(data) {
       this.chamados = data[0].chamados;
@@ -1092,8 +1120,6 @@ var chamados = [],
       if (this.chamados.length < 1) {
         this.showSemChamadosMessage = true;
       }
-
-      this.$emit("changeloadingstatus", false);
     },
     updateStatus: function updateStatus() {
       var data = new Date();
@@ -1102,6 +1128,9 @@ var chamados = [],
       var horario = horas + ':' + minutos;
       this.$emit("statusMessage", "Atualizado às " + horario);
     }
+  },
+  watch: {
+    $route: "fetchChamadosAbertos"
   }
 });
 
@@ -1614,11 +1643,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-document.addEventListener("DOMContentLoaded", function () {
-  console.log('DOMContentLoaded...');
-  document.querySelector('.nav-items').remove();
-  document.querySelector('.fixed-action-btn').remove();
-});
 var STATUS_CLIENTE_API_URL = "/api/statuscliente";
 var chamados = [],
     showSemChamadosMessage = false,
@@ -1641,12 +1665,18 @@ var chamados = [],
       return this.chamados.filter(function (chamado) {
         return chamado.status == 'FECHADO';
       });
+    },
+    currentRouteName: function currentRouteName() {
+      return this.$route;
     }
   },
   created: function created() {
-    this.$emit("changeloadingstatus", true); //LIMPAR MENU
-
+    this.$emit("changeloadingstatus", true);
     this.fetchStatusCliente();
+  },
+  mounted: function mounted() {
+    document.querySelector('.nav-items').remove();
+    document.querySelector('.fixed-action-btn').remove();
   },
   watch: {
     $route: "fetchStatusCliente"
@@ -4669,6 +4699,30 @@ var render = function() {
     "div",
     { staticClass: "chamados-abertos-list row" },
     [
+      _c("div", { staticClass: "input-field col s12" }, [
+        _c(
+          "select",
+          {
+            on: {
+              change: function($event) {
+                return _vm.onOrdenationTypeChange($event)
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "DTABERTURA_ASC", selected: "" } }, [
+              _vm._v("Data Abertura Asc")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "DTABERTURA_DESC" } }, [
+              _vm._v("Data Abertura Desc")
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("label", [_vm._v("Ordenado por:")])
+      ]),
+      _vm._v(" "),
       _vm.showSemChamadosMessage
         ? _c("div", { staticClass: "empty-list" }, [
             _c("h4", [_vm._v("Sem chamados abertos")])
@@ -5103,7 +5157,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "status-cliente-list row" }, [
     _c("div", { staticClass: "nome-cliente" }, [
-      _c("span", [_vm._v(_vm._s(_vm.chamados[0].name))])
+      _c("span", [_vm._v(_vm._s("chamados[0].name"))])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "status-abertos" }, [

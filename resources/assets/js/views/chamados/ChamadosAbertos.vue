@@ -1,8 +1,18 @@
 <template>
   <div class="chamados-abertos-list row">
+    <div class="input-field col s12">
+      <select
+        @change="onOrdenationTypeChange($event)">
+        <option value="DTABERTURA_ASC" selected>Data Abertura Asc</option>
+        <option value="DTABERTURA_DESC">Data Abertura Desc</option>
+      </select>
+      <label>Ordenado por:</label>
+    </div>
+
     <div v-if="showSemChamadosMessage" class="empty-list">
       <h4>Sem chamados abertos</h4>
     </div>
+
     <Chamado
       v-for="chamado in chamados"
       v-bind:key="chamado.id"
@@ -35,6 +45,13 @@
 </template>
 
 <script>
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+});
+
 import Chamado from "../../components/chamados/Chamado";
 
 const CHAMADOS_INDEX_API_URL = "/api/abertos";
@@ -44,6 +61,11 @@ let chamados = [],
   showSemChamadosMessage = false,
   qtdeChamadosAbertos;
 
+const orderByTypes = {
+    DTABERTURA_ASC: 'DTABERTURA_ASC',
+    DTABERTURA_DESC: 'DTABERTURA_DESC'
+}
+
 export default {
   components: {
     Chamado
@@ -52,28 +74,39 @@ export default {
     return {
       chamados,
       error,
-      showSemChamadosMessage
+      showSemChamadosMessage,
+      qtdeChamadosAbertos
     };
   },
   created() {
-    this.$emit("changeloadingstatus", true);
     this.fetchChamadosAbertos();
   },
-  watch: {
-    $route: "fetchChamadosAbertos"
-  },
   methods: {
-    fetchChamadosAbertos() {
-      fetch(CHAMADOS_INDEX_API_URL)
+    fetchChamadosAbertos(orderBy) {
+      this.$emit("changeloadingstatus", true);
+
+      if(orderBy == null){
+        orderBy = orderByTypes.DTABERTURA_ASC;
+      }
+
+      fetch(CHAMADOS_INDEX_API_URL + "?orderBy=" + orderBy)
         .then(resp => resp.json())
         .then(data => {
           this.setData(data);
           this.updateStatus();
+          this.$emit("changeloadingstatus", false);
+
         })
         .catch(error => {
           this.$emit("changeloadingstatus", false);
           this.error = error;
         });
+    },
+    onOrdenationTypeChange(event){
+      let value = event.target.value;
+      console.log("value", value);
+      this.fetchChamadosAbertos(value);
+
     },
     setData(data) {
       this.chamados = data[0].chamados;
@@ -82,8 +115,6 @@ export default {
       if(this.chamados.length < 1){
         this.showSemChamadosMessage = true;
       }
-
-      this.$emit("changeloadingstatus", false);
     },
     updateStatus(){
       var data = new Date();
@@ -93,7 +124,10 @@ export default {
       var horario = horas + ':' + minutos;
       this.$emit("statusMessage", "Atualizado às " + horario);
     }
-  }
+  },
+  watch: {
+    $route: "fetchChamadosAbertos"
+  },
 };
 </script>
 
