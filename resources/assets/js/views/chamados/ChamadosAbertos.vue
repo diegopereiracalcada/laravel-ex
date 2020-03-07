@@ -103,10 +103,8 @@ export default {
         });
     },
     onOrdenationTypeChange(event){
-      let value = event.target.value;
-      console.log("value", value);
-      this.fetchChamadosAbertos(value);
-
+      let choosedOption = event.target.value;
+      this.fetchChamadosAbertos(choosedOption);
     },
     setData(data) {
       this.chamados = data[0].chamados;

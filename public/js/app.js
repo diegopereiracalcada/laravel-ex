@@ -1109,9 +1109,8 @@ var orderByTypes = {
       });
     },
     onOrdenationTypeChange: function onOrdenationTypeChange(event) {
-      var value = event.target.value;
-      console.log("value", value);
-      this.fetchChamadosAbertos(value);
+      var choosedOption = event.target.value;
+      this.fetchChamadosAbertos(choosedOption);
     },
     setData: function setData(data) {
       this.chamados = data[0].chamados;
@@ -1186,8 +1185,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var CHAMADOS_FECHADOS_INDEX_API_URL = "/api/fechados";
+var orderByTypes = {
+  DTFECHAMENTO_ASC: 'DTFECHAMENTO_ASC',
+  DTFECHAMENTO_DESC: 'DTFECHAMENTO_DESC',
+  DTABERTURA_ASC: 'DTABERTURA_ASC',
+  DTABERTURA_DESC: 'DTABERTURA_DESC'
+};
 var chamados = [],
     error = "",
     showSemChamadosMessage = false,
@@ -1204,17 +1220,22 @@ var chamados = [],
     };
   },
   created: function created() {
-    this.fetchData();
+    this.fetchChamadosFechados();
   },
   watch: {
-    $route: "fetchData"
+    $route: "fetchChamadosFechados"
   },
   methods: {
-    fetchData: function fetchData() {
+    fetchChamadosFechados: function fetchChamadosFechados(orderBy) {
       var _this = this;
 
       this.$emit("changeloadingstatus", true);
-      fetch(CHAMADOS_FECHADOS_INDEX_API_URL).then(function (resp) {
+
+      if (orderBy == null) {
+        orderBy = orderByTypes.DTABERTURA_ASC;
+      }
+
+      fetch(CHAMADOS_FECHADOS_INDEX_API_URL + "?orderBy=" + orderBy).then(function (resp) {
         return resp.json();
       }).then(function (data) {
         _this.updateStatus();
@@ -1227,7 +1248,11 @@ var chamados = [],
       });
     },
     refreshList: function refreshList() {
-      this.fetchData();
+      this.fetchChamadosFechados();
+    },
+    onOrdenationTypeChange: function onOrdenationTypeChange(event) {
+      var choosedOption = event.target.value;
+      this.fetchChamadosFechados(choosedOption);
     },
     setData: function setData(data) {
       this.chamados = data[0].chamados;
@@ -4805,6 +4830,40 @@ var render = function() {
     "div",
     { staticClass: "chamados-fechados-list row" },
     [
+      _c("div", { staticClass: "input-field col s12" }, [
+        _c(
+          "select",
+          {
+            on: {
+              change: function($event) {
+                return _vm.onOrdenationTypeChange($event)
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "DTFECHAMENTO_ASC" } }, [
+              _vm._v("Data Fechamento Asc")
+            ]),
+            _vm._v(" "),
+            _c(
+              "option",
+              { attrs: { value: "DTFECHAMENTO_DESC", selected: "" } },
+              [_vm._v("Data Fechamento Desc")]
+            ),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "DTABERTURA_ASC" } }, [
+              _vm._v("Data Abertura Asc")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "DTABERTURA_DESC" } }, [
+              _vm._v("Data Abertura Desc")
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("label", [_vm._v("Ordenado por:")])
+      ]),
+      _vm._v(" "),
       _vm.showSemChamadosMessage
         ? _c("div", { staticClass: "empty-list" }, [
             _c("h4", [_vm._v("Sem chamados fechados")])

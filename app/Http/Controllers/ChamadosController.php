@@ -63,20 +63,20 @@ class ChamadosController extends Controller
     }
 
     public function abertos(Request $request){
-        $orderBy = strtolower('DT_ABERTURA');
+        $orderBy = 'dt_abertura';
         $orderOrientation = 'ASC';
 
         switch($request->input('orderBy')){
             case('DTABERTURA_ASC'):
-                $orderBy = strtolower('DT_ABERTURA');
+                $orderBy = 'dt_abertura';
                 $orderOrientation = 'asc';
                 break;
             case('DTABERTURA_DESC'):
-                $orderBy = strtolower('DT_ABERTURA');
+                $orderBy = 'dt_abertura';
                 $orderOrientation = 'desc';
                 break;
             default:
-                $orderBy = strtolower('DT_ABERTURA');
+                $orderBy = 'dt_abertura';
                 $orderOrientation = 'asc';
         }
 
@@ -93,12 +93,37 @@ class ChamadosController extends Controller
         ]);
     }
 
-    public function fechados(){
+    public function fechados(Request $request){
+        $orderBy = 'dt_abertura';
+        $orderOrientation = 'ASC';
+
+        switch($request->input('orderBy')){
+            case('DTFECHAMENTO_ASC'):
+                $orderBy = 'dt_fechamento';
+                $orderOrientation = 'asc';
+                break;
+            case('DTFECHAMENTO_DESC'):
+                $orderBy = 'dt_fechamento';
+                $orderOrientation = 'desc';
+                break;
+            case('DTABERTURA_ASC'):
+                $orderBy = 'dt_abertura';
+                $orderOrientation = 'asc';
+                break;
+            case('DTABERTURA_DESC'):
+                $orderBy = 'dt_abertura';
+                $orderOrientation = 'desc';
+                break;
+            default:
+                $orderBy = 'dt_abertura';
+                $orderOrientation = 'asc';
+        }
+
         $qtde = Chamado::where('status', 'FECHADO')
                             ->count();
         $listaDeChamados = Chamado::where('status', 'FECHADO')
                                     ->with('cliente')
-                                    ->orderBy('dt_fechamento', 'desc')
+                                    ->orderBy($orderBy, $orderOrientation)
                                     ->get() ;
 
         return array([

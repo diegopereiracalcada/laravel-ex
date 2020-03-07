@@ -1,5 +1,16 @@
 <template>
   <div class="chamados-fechados-list row">
+    <div class="input-field col s12">
+      <select
+        @change="onOrdenationTypeChange($event)">
+        <option value="DTFECHAMENTO_ASC">Data Fechamento Asc</option>
+        <option value="DTFECHAMENTO_DESC" selected>Data Fechamento Desc</option>
+        <option value="DTABERTURA_ASC">Data Abertura Asc</option>
+        <option value="DTABERTURA_DESC">Data Abertura Desc</option>
+      </select>
+      <label>Ordenado por:</label>
+    </div>
+
     <div v-if="showSemChamadosMessage" class="empty-list">
       <h4>Sem chamados fechados</h4>
     </div>
@@ -43,6 +54,13 @@ import Chamado from "../../components/chamados/Chamado";
 
 const CHAMADOS_FECHADOS_INDEX_API_URL = "/api/fechados";
 
+const orderByTypes = {
+    DTFECHAMENTO_ASC: 'DTFECHAMENTO_ASC',
+    DTFECHAMENTO_DESC: 'DTFECHAMENTO_DESC',
+    DTABERTURA_ASC: 'DTABERTURA_ASC',
+    DTABERTURA_DESC: 'DTABERTURA_DESC'
+}
+
 let chamados = [],
   error = "",
   showSemChamadosMessage = false,
@@ -60,16 +78,20 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    this.fetchChamadosFechados();
   },
   watch: {
-    $route: "fetchData"
+    $route: "fetchChamadosFechados"
   },
   methods: {
-    fetchData() {
+    fetchChamadosFechados(orderBy) {
       this.$emit("changeloadingstatus", true);
 
-      fetch(CHAMADOS_FECHADOS_INDEX_API_URL)
+      if(orderBy == null){
+        orderBy = orderByTypes.DTABERTURA_ASC;
+      }
+
+      fetch(CHAMADOS_FECHADOS_INDEX_API_URL + "?orderBy=" + orderBy)
         .then(resp => resp.json())
         .then(data => {
           this.updateStatus();
@@ -81,7 +103,12 @@ export default {
         });
     },
     refreshList(){
-      this.fetchData();
+      this.fetchChamadosFechados();
+    },
+    onOrdenationTypeChange(event){
+      let choosedOption = event.target.value;
+      this.fetchChamadosFechados(choosedOption);
+
     },
     setData(data) {
       this.chamados = data[0].chamados;
