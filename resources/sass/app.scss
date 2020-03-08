@@ -1,3 +1,17 @@
+/*
+Materialize override
+*/
+$primaryColor : #053244;
+
+.btn, .btn-large, .btn-small {
+  background-color: $primaryColor  !important;
+}
+/*
+  End - Materialize override
+*/
+
+
+
 .hidden-elem {
   display: none !important;
 }

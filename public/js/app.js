@@ -1521,8 +1521,7 @@ var SEARCH_API_URL = "/api/busca";
 var chamados = [],
     error = "",
     alreadySearched = false,
-    noResults = false,
-    palavras;
+    noResults = false;
 document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("input-busca-interna")) {
     document.getElementById("input-busca-interna").focus();
@@ -1543,7 +1542,8 @@ document.addEventListener("DOMContentLoaded", function () {
     return {
       chamados: chamados,
       error: error,
-      noResults: noResults
+      noResults: noResults,
+      alreadySearched: alreadySearched
     };
   },
   created: function created() {// this.palavras = this.$route.params.palavras;
@@ -1563,7 +1563,7 @@ document.addEventListener("DOMContentLoaded", function () {
       formData.forEach(function (obj) {
         if (obj.value != null && obj.value.trim() != '') {
           if (obj.name == 'palavras') {
-            this.palavras = '';
+            _this.palavras = obj.value;
           }
 
           queryString += obj.name + "=" + obj.value + "&";
@@ -1574,12 +1574,20 @@ document.addEventListener("DOMContentLoaded", function () {
       }).then(function (data) {
         console.log("data", data);
 
-        _this.setData(data);
-
-        _this.highlight(palavras); //this.collapseMenu();
+        _this.setData(data); //this.highlight(this.palavras);
+        //this.collapseMenu();
 
 
         _this.setIsLoading(false);
+
+        console.log("winow", window);
+        setTimeout(function () {
+          window.scroll({
+            top: document.getElementById("results-title").offsetTop,
+            left: 0,
+            behavior: 'smooth'
+          });
+        }, 100);
       })["catch"](function (error) {
         _this.setIsLoading(false);
 
@@ -2283,7 +2291,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".resultado-busca {\n  padding-top: 6px;\n  padding: 6px 2px 0 2px;\n}\n.messages-bar {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: red;\n  height: 50px;\n  color: white;\n  text-align: center;\n}\n.empty-list {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}\n.empty-list h4 {\n  color: #7d7d7d;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n.resultado-busca .empty-list {\n  display: inline-block;\n}\n.btn-buscar {\n  cursor: pointer;\n}\nlabel.big-label {\n  font-size: 1.4rem;\n  margin-bottom: 2.3rem;\n}", ""]);
+exports.push([module.i, ".resultado-busca {\n  padding-top: 6px;\n  padding: 6px 2px 0 2px;\n}\n.messages-bar {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: red;\n  height: 50px;\n  color: white;\n  text-align: center;\n}\n.empty-list {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}\n.empty-list h4 {\n  color: #7d7d7d;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n.resultado-busca .empty-list {\n  display: inline-block;\n}\n.btn-buscar {\n  cursor: pointer;\n}\nlabel.big-label {\n  font-size: 1.4rem;\n  margin-bottom: 2.3rem;\n}\n.filters-wrapper .highlight {\n  background: unset !important;\n}", ""]);
 
 // exports
 
@@ -5223,10 +5231,7 @@ var render = function() {
                 {
                   staticClass:
                     "btn-buscar btn-buscar-interno material-icons sufix",
-                  staticStyle: {
-                    padding: "0px 10px",
-                    color: "rgba(0, 0, 0, 0.54)"
-                  }
+                  staticStyle: { padding: "0px 10px" }
                 },
                 [_vm._v("search")]
               )
@@ -5252,12 +5257,19 @@ var render = function() {
         _vm._v(" "),
         _vm.alreadySearched
           ? _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col s12" }, [
-                _c("label", { staticClass: "big-label" }, [
-                  _c("span", {}, [_vm._v(_vm._s(_vm.chamados.length))]),
-                  _vm._v(" resultados encontrados:\n        ")
-                ])
-              ])
+              _c(
+                "div",
+                {
+                  staticClass: "col s12 results-title",
+                  attrs: { id: "results-title" }
+                },
+                [
+                  _c("label", { staticClass: "big-label" }, [
+                    _c("span", {}, [_vm._v(_vm._s(_vm.chamados.length))]),
+                    _vm._v(" resultados encontrados:\n        ")
+                  ])
+                ]
+              )
             ])
           : _vm._e()
       ]),

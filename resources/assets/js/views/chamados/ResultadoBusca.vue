@@ -43,7 +43,7 @@
           >Buscar
             <i 
             class="btn-buscar btn-buscar-interno material-icons sufix" 
-            style="padding: 0px 10px; color: rgba(0, 0, 0, 0.54);"
+            style="padding: 0px 10px;"
             >search</i>
         </button>
         </div>
@@ -60,7 +60,7 @@
       </div>
       
       <div v-if="alreadySearched" class="row">
-        <div class="col s12">
+        <div id="results-title" class="col s12 results-title">
           <label class="big-label">
             <span class="">{{chamados.length}}</span> resultados encontrados:
           </label>
@@ -85,8 +85,7 @@ const SEARCH_API_URL = "/api/busca";
 let chamados = [],
   error = "",
   alreadySearched = false,
-  noResults = false,
-  palavras;
+  noResults = false;
 
 document.addEventListener("DOMContentLoaded", function() {
   if(document.getElementById("input-busca-interna")){
@@ -109,7 +108,8 @@ export default {
     return {
       chamados,
       error,
-      noResults
+      noResults,
+      alreadySearched
     };
   },
   created() {
@@ -125,10 +125,10 @@ export default {
     fetchData(formData) {
       let queryString = "?";
       let palavras;
-      formData.forEach(function(obj){
+      formData.forEach((obj) => {
         if(obj.value != null && obj.value.trim() != ''){
           if(obj.name == 'palavras'){
-            this.palavras = ''
+            this.palavras = obj.value;
           }
           queryString += obj.name + "=" + obj.value + "&";
         }
@@ -139,9 +139,18 @@ export default {
         .then(data => {
           console.log("data", data)
           this.setData(data);
-          this.highlight(palavras);
+          //this.highlight(this.palavras);
           //this.collapseMenu();
           this.setIsLoading(false);
+          console.log("winow", window);
+          setTimeout(function(){
+            window.scroll({
+              top: document.getElementById("results-title").offsetTop, 
+              left: 0, 
+              behavior: 'smooth'
+            });
+          }, 100)
+
         })
         .catch(error => {
           this.setIsLoading(false);
@@ -285,5 +294,9 @@ export default {
 label.big-label {
     font-size: 1.4rem;
     margin-bottom: 2.3rem;
+}
+
+.filters-wrapper .highlight {
+    background: unset !important;
 }
 </style>
