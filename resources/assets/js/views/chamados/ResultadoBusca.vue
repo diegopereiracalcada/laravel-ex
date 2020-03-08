@@ -1,6 +1,6 @@
 <template>
   <div class="resultado-busca row" style="padding-top: 1rem;">
-    <div>
+    <div class="filters-wrapper">
       <form id="search-form">
         <div class="input-field col s12">
           <input 
@@ -49,17 +49,31 @@
         </div>
     </div>
 
-    <div v-if="showSemChamadosMessage" class="empty-list row">
-      <div class="col s12">
-        <h4>Não foram encontrados resultados com as palavras: </h4>
-        <h6>{{this.palavras}}</h6>
+    <hr v-if="alreadySearched" class="float-hr">
+    
+    <div class="results-wrapper">
+      <div v-if="noResults" class="empty-list row">
+        <div class="col s12">
+          <h4>Não foram encontrados resultados com as palavras: </h4>
+          <h6>{{this.palavras}}</h6>
+        </div>
       </div>
-    </div>
-    <Chamado 
-      v-for="chamado in chamados"
-      :chamado="chamado"
-      v-bind:key="chamado.id" 
-      />
+      
+      <div v-if="alreadySearched" class="row">
+        <div class="col s12">
+          <label class="big-label">
+            <span class="">{{chamados.length}}</span> resultados encontrados:
+          </label>
+        </div>
+      </div>
+
+      </div>
+      <Chamado 
+        v-for="chamado in chamados"
+        :chamado="chamado"
+        v-bind:key="chamado.id" 
+        />
+      </div>
   </div>
 </template>
 
@@ -70,7 +84,8 @@ const SEARCH_API_URL = "/api/busca";
 
 let chamados = [],
   error = "",
-  showSemChamadosMessage = false,
+  alreadySearched = false,
+  noResults = false,
   palavras;
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -94,7 +109,7 @@ export default {
     return {
       chamados,
       error,
-      showSemChamadosMessage
+      noResults
     };
   },
   created() {
@@ -140,7 +155,7 @@ export default {
     },
     onBuscaInternaSubmit(){
       //this.setIsLoading(true);
-      this.showSemChamadosMessage = false;
+      this.noResults = false;
       $(".resultado-busca").unhighlight();
 
      
@@ -162,8 +177,8 @@ export default {
         return false;
       }
       
-      if(this.showSemChamadosMessage){
-        this.showSemChamadosMessage = false;
+      if(this.noResults){
+        this.noResults = false;
       }
 
       var palavras = $(".input-busca-interna").val();
@@ -177,10 +192,11 @@ export default {
       }
     },
     setData(chamados) {
+      this.alreadySearched = true;
       this.chamados = chamados;
 
       if(this.palavras && this.chamados.length < 1){
-        this.showSemChamadosMessage = true;
+        this.noResults = true;
       }
     },
     setIsLoading(status){
@@ -264,5 +280,10 @@ export default {
 
 .btn-buscar{
   cursor: pointer;
+}
+
+label.big-label {
+    font-size: 1.4rem;
+    margin-bottom: 2.3rem;
 }
 </style>
