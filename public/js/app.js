@@ -1502,11 +1502,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var SEARCH_API_URL = "/api/busca";
 var chamados = [],
     error = "",
-    showSemChamadosMessage = false,
+    alreadySearched = false,
+    noResults = false,
     palavras;
 document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("input-busca-interna")) {
@@ -1528,7 +1543,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return {
       chamados: chamados,
       error: error,
-      showSemChamadosMessage: showSemChamadosMessage
+      noResults: noResults
     };
   },
   created: function created() {// this.palavras = this.$route.params.palavras;
@@ -1584,7 +1599,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     onBuscaInternaSubmit: function onBuscaInternaSubmit() {
       //this.setIsLoading(true);
-      this.showSemChamadosMessage = false;
+      this.noResults = false;
       $(".resultado-busca").unhighlight(); //this.palavras = $(".input-busca-interna").val();
       // if(this.palavras == null || this.palavras.trim() == ''){
       //   alert('Preencha o campo de busca');
@@ -1599,8 +1614,8 @@ document.addEventListener("DOMContentLoaded", function () {
         return false;
       }
 
-      if (this.showSemChamadosMessage) {
-        this.showSemChamadosMessage = false;
+      if (this.noResults) {
+        this.noResults = false;
       }
 
       var palavras = $(".input-busca-interna").val();
@@ -1615,10 +1630,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
     setData: function setData(chamados) {
+      this.alreadySearched = true;
       this.chamados = chamados;
 
       if (this.palavras && this.chamados.length < 1) {
-        this.showSemChamadosMessage = true;
+        this.noResults = true;
       }
     },
     setIsLoading: function setIsLoading(status) {
@@ -2267,7 +2283,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".resultado-busca {\n  padding-top: 6px;\n  padding: 6px 2px 0 2px;\n}\n.messages-bar {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: red;\n  height: 50px;\n  color: white;\n  text-align: center;\n}\n.empty-list {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}\n.empty-list h4 {\n  color: #7d7d7d;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n.resultado-busca .empty-list {\n  display: inline-block;\n}\n.btn-buscar {\n  cursor: pointer;\n}", ""]);
+exports.push([module.i, ".resultado-busca {\n  padding-top: 6px;\n  padding: 6px 2px 0 2px;\n}\n.messages-bar {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: red;\n  height: 50px;\n  color: white;\n  text-align: center;\n}\n.empty-list {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n}\n.empty-list h4 {\n  color: #7d7d7d;\n}\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: #fff;\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%, 100% {\n    top: 24px;\n    height: 32px;\n}\n}\n.resultado-busca .empty-list {\n  display: inline-block;\n}\n.btn-buscar {\n  cursor: pointer;\n}\nlabel.big-label {\n  font-size: 1.4rem;\n  margin-bottom: 2.3rem;\n}", ""]);
 
 // exports
 
@@ -5163,7 +5179,7 @@ var render = function() {
       staticStyle: { "padding-top": "1rem" }
     },
     [
-      _c("div", [
+      _c("div", { staticClass: "filters-wrapper" }, [
         _c("form", { attrs: { id: "search-form" } }, [
           _c("div", { staticClass: "input-field col s12" }, [
             _c("input", {
@@ -5219,17 +5235,32 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm.showSemChamadosMessage
-        ? _c("div", { staticClass: "empty-list row" }, [
-            _c("div", { staticClass: "col s12" }, [
-              _c("h4", [
-                _vm._v("Não foram encontrados resultados com as palavras: ")
-              ]),
-              _vm._v(" "),
-              _c("h6", [_vm._v(_vm._s(this.palavras))])
+      _vm.alreadySearched ? _c("hr", { staticClass: "float-hr" }) : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "results-wrapper" }, [
+        _vm.noResults
+          ? _c("div", { staticClass: "empty-list row" }, [
+              _c("div", { staticClass: "col s12" }, [
+                _c("h4", [
+                  _vm._v("Não foram encontrados resultados com as palavras: ")
+                ]),
+                _vm._v(" "),
+                _c("h6", [_vm._v(_vm._s(this.palavras))])
+              ])
             ])
-          ])
-        : _vm._e(),
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.alreadySearched
+          ? _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col s12" }, [
+                _c("label", { staticClass: "big-label" }, [
+                  _c("span", {}, [_vm._v(_vm._s(_vm.chamados.length))]),
+                  _vm._v(" resultados encontrados:\n        ")
+                ])
+              ])
+            ])
+          : _vm._e()
+      ]),
       _vm._v(" "),
       _vm._l(_vm.chamados, function(chamado) {
         return _c("Chamado", { key: chamado.id, attrs: { chamado: chamado } })

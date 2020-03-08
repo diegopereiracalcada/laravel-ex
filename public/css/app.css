@@ -105,6 +105,9 @@
 
 .float-hr {
   float: left;
+  width: 100%;
+  border: 1px solid #d8d8d8;
+  margin: 1rem 0;
 }
 
 .no-border-when-disabled:disabled {
