@@ -95,6 +95,18 @@
   width: 100% !important;
 }
 
+.btn-full-width {
+  width: 100% !important;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+}
+
+.float-hr {
+  float: left;
+}
+
 .no-border-when-disabled:disabled {
   border: none !important;
 }

@@ -9,14 +9,13 @@ class BuscaController extends Controller
     public function search()
     {
         $param = request('palavras');
-
-        if(!isset($param)){
-            return "sem palavras na request";
-        }
+        $dtAberturaStart = request('dt_abertura_start');
+        $dtAberturaEnd = request('dt_abertura_end');
+        $dtFechamentoStart = request('dt_fechamento_start');
+        $dtFechamentoEnd = request('dt_fechamento_end');
 
         $param = strtoupper($param);
         $palavras = explode(" ",$param);
-        $isFirstWhere = true;
 
         $sql = "SELECT
                     chamados.id,
@@ -33,50 +32,41 @@ class BuscaController extends Controller
                 FROM
                     chamados 
                 JOIN
-                    CLIENTES ON chamados.cliente_id = clientes.id";
+                    CLIENTES ON chamados.cliente_id = clientes.id
+                WHERE
+                    true=true ";
+
 
         foreach($palavras as $palavra){
-            if($isFirstWhere){
-                $sql = $sql . " WHERE ";
-                $isFirstWhere = false;
-            } else {
-                $sql = $sql . " OR ";
-            }
-            $sql = $sql . " UPPER(descricao) like '%" . $palavra . "%' ";
+            $sql .= " AND (UPPER(descricao) like '%" . $palavra . "%' ";
 
-            $sql = $sql . " OR UPPER(observacao) like '%" . $palavra . "%' ";
+            $sql .= " OR UPPER(observacao) like '%" . $palavra . "%' ";
 
-            $sql = $sql . " OR UPPER(solucao) like '%" . $palavra . "%' ";
+            $sql .= " OR UPPER(solucao) like '%" . $palavra . "%' ";
 
-            $sql = $sql . " OR UPPER(clientes.shortname) like '%" . $palavra . "%' ";
-
+            $sql .= " OR UPPER(clientes.shortname) like '%" . $palavra . "%') ";
+            
+        }
+        
+        if($dtAberturaStart){
+            $sql = $sql . " AND dt_abertura >= '" . $dtAberturaStart . "' ";
+        }
+        if($dtAberturaEnd){
+            $sql = $sql . " AND dt_abertura <= '" . $dtAberturaEnd . "' ";
+        }
+        if($dtFechamentoStart){
+            $sql = $sql . " AND dt_fechamento >= '" . $dtFechamentoStart . "' ";
+        }
+        if($dtFechamentoEnd){
+            $sql = $sql . " AND dt_abertura <= '" . $dtFechamentoEnd . "' ";
         }
 
-        //return $sql;
-
-        // print('$sql = ');
-        // print($sql);
-        // print('$palavra = ');
-        // print($palavra);
-        
         $chamados = DB::select($sql);
         
+        //dd($sql);
         return $chamados; 
 
-        // foreach ($servicos as $key => $servico) {
-        //     $servico->enderecos = Endereco::where('servico_id', $servico->id)->get();
-        //     $servico->telefones = Telefone::where('servico_id', $servico->id)->get();
-        //     $servico->emails = Email::where('servico_id', $servico->id)->get();
-        // }
-
-        // $setores = Setor::all();
-
-        //view('busca.index', compact('servicos', 'palavras', 'palavrasBuscadas', 'setores')) ;
-        return "ok"; 
     }
 
-    // private function adicionaWhere($palavra){
-    //     $this->$sql = $this->$sql . "AND titulo = " . $palavra;
-    // }
 
 }

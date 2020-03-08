@@ -1466,8 +1466,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-var SEARCH_API_URL = "/api/busca?palavras=";
+var SEARCH_API_URL = "/api/busca";
 var chamados = [],
     error = "",
     showSemChamadosMessage = false,
@@ -1476,6 +1512,13 @@ document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("input-busca-interna")) {
     document.getElementById("input-busca-interna").focus();
   }
+
+  var elems = document.querySelectorAll('.datepicker');
+  var instances = M.Datepicker.init(elems, {
+    format: 'yyyy-mm-dd',
+    autoClose: true,
+    showClearBtn: true
+  });
 });
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -1488,61 +1531,68 @@ document.addEventListener("DOMContentLoaded", function () {
       showSemChamadosMessage: showSemChamadosMessage
     };
   },
-  created: function created() {
-    this.palavras = this.$route.params.palavras;
-    this.$emit("changeloadingstatus", true); //this.error = null;
-
-    this.fetchData(this.palavras);
+  created: function created() {// this.palavras = this.$route.params.palavras;
+    // this.setIsLoading(true);
+    // this.error = null;
+    // this.fetchData(this.palavras, );
   },
   methods: {
     collapseMenu: function collapseMenu() {
       $(".sidenav-overlay").click();
     },
-    fetchData: function fetchData(palavras) {
+    fetchData: function fetchData(formData) {
       var _this = this;
 
-      fetch(SEARCH_API_URL + palavras).then(function (resp) {
+      var queryString = "?";
+      var palavras;
+      formData.forEach(function (obj) {
+        if (obj.value != null && obj.value.trim() != '') {
+          if (obj.name == 'palavras') {
+            this.palavras = '';
+          }
+
+          queryString += obj.name + "=" + obj.value + "&";
+        }
+      });
+      fetch(SEARCH_API_URL + queryString).then(function (resp) {
         return resp.json();
       }).then(function (data) {
+        console.log("data", data);
+
         _this.setData(data);
 
-        _this.highlight(palavras);
+        _this.highlight(palavras); //this.collapseMenu();
 
-        _this.collapseMenu();
+
+        _this.setIsLoading(false);
       })["catch"](function (error) {
-        _this.$emit("changeloadingstatus", false);
+        _this.setIsLoading(false);
 
         _this.error = error;
       });
     },
     highlight: function highlight(palavras) {
-      var words = palavras;
       setTimeout(function () {
-        $(".resultado-busca").highlight(words);
+        $(".resultado-busca").highlight(palavras);
       }, 100);
       setTimeout(function () {
-        $(".resultado-busca").highlight(words);
-      }, 200);
-      setTimeout(function () {
-        $(".resultado-busca").highlight(words);
+        $(".resultado-busca").highlight(palavras);
       }, 700);
       setTimeout(function () {
-        $(".resultado-busca").highlight(words);
-      }, 1500);
+        $(".resultado-busca").highlight(palavras);
+      }, 1200);
     },
     onBuscaInternaSubmit: function onBuscaInternaSubmit() {
-      this.setIsLoading(true);
-      this.palavras = $(".input-busca-interna").val();
-
-      if (this.palavras == null || this.palavras.trim() == '') {
-        alert('Preencha o campo de busca');
-        this.$emit("changeloadingstatus", false);
-        return false;
-      }
-
+      //this.setIsLoading(true);
       this.showSemChamadosMessage = false;
-      $(".resultado-busca").unhighlight();
-      this.fetchData(this.palavras);
+      $(".resultado-busca").unhighlight(); //this.palavras = $(".input-busca-interna").val();
+      // if(this.palavras == null || this.palavras.trim() == ''){
+      //   alert('Preencha o campo de busca');
+      //   this.setIsLoading(false);
+      //   return false;
+      // }
+
+      this.fetchData($("#search-form").serializeArray());
     },
     onInputBuscaInternaKeyup: function onInputBuscaInternaKeyup(e) {
       if (e.which == 27) {
@@ -1570,8 +1620,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (this.palavras && this.chamados.length < 1) {
         this.showSemChamadosMessage = true;
       }
-
-      this.$emit("changeloadingstatus", false);
     },
     setIsLoading: function setIsLoading(status) {
       this.$emit("changeloadingstatus", status);
@@ -3957,7 +4005,7 @@ var render = function() {
               left: "0"
             }
           },
-          [_vm._v("v1.1")]
+          [_vm._v("v1.2")]
         )
       ],
       2
@@ -5110,44 +5158,66 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "resultado-busca row" },
+    {
+      staticClass: "resultado-busca row",
+      staticStyle: { "padding-top": "1rem" }
+    },
     [
-      _c(
-        "div",
-        {
-          staticStyle: {
-            display: "flex",
-            "align-items": "center",
-            padding: "0px 32px",
-            "margin-bottom": "30px"
-          }
-        },
-        [
-          _c("input", {
-            staticClass: "input-busca-interna",
-            staticStyle: { "margin-right": "4px" },
-            attrs: { id: "input-busca-interna", placeholder: "Buscar..." },
-            on: { keyup: _vm.onInputBuscaInternaKeyup }
-          }),
+      _c("div", [
+        _c("form", { attrs: { id: "search-form" } }, [
+          _c("div", { staticClass: "input-field col s12" }, [
+            _c("input", {
+              staticClass: "input-busca-interna",
+              staticStyle: { "margin-right": "4px" },
+              attrs: { id: "input-busca-interna", name: "palavras" },
+              on: { keyup: _vm.onInputBuscaInternaKeyup }
+            }),
+            _vm._v(" "),
+            _c("label", { staticClass: "active" }, [
+              _vm._v("Descrição / Observação / Solução / Cliente")
+            ])
+          ]),
           _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _vm._m(2),
+          _vm._v(" "),
+          _vm._m(3),
+          _vm._v(" "),
+          _vm._m(4)
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col s12" }, [
           _c(
-            "i",
+            "button",
             {
-              staticClass: "btn-buscar btn-buscar-interno material-icons sufix",
-              staticStyle: {
-                padding: "0px 10px",
-                color: "rgba(0, 0, 0, 0.54)"
-              },
+              staticClass: "btn btn-full-width",
               on: {
                 click: function($event) {
                   return _vm.onBuscaInternaSubmit()
                 }
               }
             },
-            [_vm._v("search")]
+            [
+              _vm._v("Buscar\n          "),
+              _c(
+                "i",
+                {
+                  staticClass:
+                    "btn-buscar btn-buscar-interno material-icons sufix",
+                  staticStyle: {
+                    padding: "0px 10px",
+                    color: "rgba(0, 0, 0, 0.54)"
+                  }
+                },
+                [_vm._v("search")]
+              )
+            ]
           )
-        ]
-      ),
+        ])
+      ]),
       _vm._v(" "),
       _vm.showSemChamadosMessage
         ? _c("div", { staticClass: "empty-list row" }, [
@@ -5168,7 +5238,82 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-field col s12" }, [
+      _c("input", {
+        staticClass: "datepicker",
+        attrs: { name: "dt_abertura_start" }
+      }),
+      _vm._v(" "),
+      _c("label", { staticClass: "active" }, [_vm._v("De: (Data de Abertura)")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-field col s12" }, [
+      _c("input", {
+        staticClass: "datepicker",
+        attrs: { name: "dt_abertura_end" }
+      }),
+      _vm._v(" "),
+      _c("label", { staticClass: "active" }, [
+        _vm._v("Até: (Data de Abertura)")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-field col s12" }, [
+      _c("input", {
+        staticClass: "datepicker",
+        attrs: { name: "dt_fechamento_start" }
+      }),
+      _vm._v(" "),
+      _c("label", { staticClass: "active" }, [
+        _vm._v("De: (Data de Fechamento)")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-field col s12" }, [
+      _c("input", {
+        staticClass: "datepicker",
+        attrs: { name: "dt_fechamento_end" }
+      }),
+      _vm._v(" "),
+      _c("label", { staticClass: "active" }, [
+        _vm._v("Até: (Data de Fechamento)")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-field col s12" }, [
+      _c("select", { attrs: { name: "status" } }, [
+        _c("option", { attrs: { value: "", selected: "" } }, [_vm._v("Todos")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "ABERTO" } }, [_vm._v("Aberto")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "FECHADO" } }, [_vm._v("Fechado")])
+      ]),
+      _vm._v(" "),
+      _c("label", [_vm._v("Status")])
+    ])
+  }
+]
 render._withStripped = true
 
 

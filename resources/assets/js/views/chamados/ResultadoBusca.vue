@@ -1,18 +1,54 @@
 <template>
-  <div class="resultado-busca row">
-    <div style="display: flex; align-items: center; padding: 0px 32px; margin-bottom: 30px;">
-      <input 
-        @keyup="onInputBuscaInternaKeyup"
-        id="input-busca-interna"
-        class="input-busca-interna" 
-        placeholder="Buscar..." 
-        style="margin-right: 4px;"> 
-      <i 
-        @click="onBuscaInternaSubmit()"
-        class="btn-buscar btn-buscar-interno material-icons sufix" 
-        style="padding: 0px 10px; color: rgba(0, 0, 0, 0.54);"
-        >search</i>
+  <div class="resultado-busca row" style="padding-top: 1rem;">
+    <div>
+      <form id="search-form">
+        <div class="input-field col s12">
+          <input 
+            @keyup="onInputBuscaInternaKeyup"
+            id="input-busca-interna"
+            name="palavras" 
+            class="input-busca-interna" 
+            style="margin-right: 4px;"> 
+          <label class="active">Descrição / Observação / Solução / Cliente</label>
+        </div>
+        <div class="input-field col s12">
+          <input name="dt_abertura_start" class="datepicker">
+          <label class="active">De: (Data de Abertura)</label>
+        </div>
+        <div class="input-field col s12">
+          <input name="dt_abertura_end" class="datepicker">
+          <label class="active">Até: (Data de Abertura)</label>
+        </div>
+        <div class="input-field col s12">
+          <input name="dt_fechamento_start" class="datepicker">
+          <label class="active">De: (Data de Fechamento)</label>
+        </div>
+        <div class="input-field col s12">
+          <input name="dt_fechamento_end" class="datepicker">
+          <label class="active">Até: (Data de Fechamento)</label>
+        </div>
+          <div class="input-field col s12">
+            <select name="status">
+              <option value="" selected>Todos</option>
+              <option value="ABERTO">Aberto</option>
+              <option value="FECHADO">Fechado</option>
+            </select>
+            <label>Status</label>
+          </div>
+      </form>
+      <div class="col s12">
+        <button
+          class="btn btn-full-width"
+          @click="onBuscaInternaSubmit()"
+          >Buscar
+            <i 
+            class="btn-buscar btn-buscar-interno material-icons sufix" 
+            style="padding: 0px 10px; color: rgba(0, 0, 0, 0.54);"
+            >search</i>
+        </button>
+        </div>
     </div>
+
     <div v-if="showSemChamadosMessage" class="empty-list row">
       <div class="col s12">
         <h4>Não foram encontrados resultados com as palavras: </h4>
@@ -30,7 +66,7 @@
 <script>
 import Chamado from "../../components/chamados/Chamado";
 
-const SEARCH_API_URL = "/api/busca?palavras=";
+const SEARCH_API_URL = "/api/busca";
 
 let chamados = [],
   error = "",
@@ -41,6 +77,13 @@ document.addEventListener("DOMContentLoaded", function() {
   if(document.getElementById("input-busca-interna")){
     document.getElementById("input-busca-interna").focus();
   }
+
+  var elems = document.querySelectorAll('.datepicker');
+  var instances = M.Datepicker.init(elems, {
+    format: 'yyyy-mm-dd',
+    autoClose: true,
+    showClearBtn: true
+  });
 });
 
 export default {
@@ -55,50 +98,63 @@ export default {
     };
   },
   created() {
-    this.palavras = this.$route.params.palavras;
-    this.$emit("changeloadingstatus", true);
-    //this.error = null;
-    this.fetchData(this.palavras);
+    // this.palavras = this.$route.params.palavras;
+    // this.setIsLoading(true);
+    // this.error = null;
+    // this.fetchData(this.palavras, );
   },
   methods: {
     collapseMenu(){
       $(".sidenav-overlay").click();
     },
-    fetchData(palavras) {
-      fetch(SEARCH_API_URL + palavras)
+    fetchData(formData) {
+      let queryString = "?";
+      let palavras;
+      formData.forEach(function(obj){
+        if(obj.value != null && obj.value.trim() != ''){
+          if(obj.name == 'palavras'){
+            this.palavras = ''
+          }
+          queryString += obj.name + "=" + obj.value + "&";
+        }
+      });
+
+      fetch(SEARCH_API_URL + queryString)
         .then(resp => resp.json())
         .then(data => {
+          console.log("data", data)
           this.setData(data);
           this.highlight(palavras);
-          this.collapseMenu();
+          //this.collapseMenu();
+          this.setIsLoading(false);
         })
         .catch(error => {
-          this.$emit("changeloadingstatus", false);
+          this.setIsLoading(false);
           this.error = error;
         });
     },
     highlight(palavras){
-      var words = palavras;
-      setTimeout(function(){$(".resultado-busca").highlight(words)}, 100);
-      setTimeout(function(){$(".resultado-busca").highlight(words)}, 200);
-      setTimeout(function(){$(".resultado-busca").highlight(words)}, 700);
-      setTimeout(function(){$(".resultado-busca").highlight(words)}, 1500);
+      setTimeout(function(){$(".resultado-busca").highlight(palavras)}, 100);
+      setTimeout(function(){$(".resultado-busca").highlight(palavras)}, 700);
+      setTimeout(function(){$(".resultado-busca").highlight(palavras)}, 1200);
     },
     onBuscaInternaSubmit(){
-      this.setIsLoading(true);
-
-      this.palavras = $(".input-busca-interna").val();
-
-      if(this.palavras == null || this.palavras.trim() == ''){
-        alert('Preencha o campo de busca');
-        this.$emit("changeloadingstatus", false);
-
-        return false;
-      }
-
+      //this.setIsLoading(true);
       this.showSemChamadosMessage = false;
       $(".resultado-busca").unhighlight();
-      this.fetchData(this.palavras);
+
+     
+
+      //this.palavras = $(".input-busca-interna").val();
+
+      // if(this.palavras == null || this.palavras.trim() == ''){
+      //   alert('Preencha o campo de busca');
+      //   this.setIsLoading(false);
+
+      //   return false;
+      // }
+
+      this.fetchData($( "#search-form" ).serializeArray());
 
     },
     onInputBuscaInternaKeyup(e){
@@ -122,10 +178,10 @@ export default {
     },
     setData(chamados) {
       this.chamados = chamados;
+
       if(this.palavras && this.chamados.length < 1){
         this.showSemChamadosMessage = true;
       }
-      this.$emit("changeloadingstatus", false);
     },
     setIsLoading(status){
       this.$emit("changeloadingstatus", status);
