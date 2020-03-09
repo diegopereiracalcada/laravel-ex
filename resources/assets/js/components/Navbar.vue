@@ -18,7 +18,7 @@
             <li class="user-view">
                     <img class="" src="/images/logo_60x60.jpg" />
             </li>
-            <li style="
+            <!--li style="
                     display: flex;
                     align-items: center;
                     padding: 0 32px;
@@ -31,7 +31,7 @@
                         @click="onBuscaSubmit()"
                         class="material-icons sufix" 
                         style="padding: 0 10px; color: rgba(0,0,0,0.54);">search</i>
-            </li>
+            </li-->
             <li 
                 v-for="item in menuItens"
                 :class="item.classes">
@@ -61,8 +61,7 @@ var menuItens = [
     {
         label: "Buscar",
         icon: "search",
-        href: "/resultadobusca",
-        classes: "hidden-elem"
+        href: "/resultadobusca"
     },
     {
         label: "Chamados Abertos",

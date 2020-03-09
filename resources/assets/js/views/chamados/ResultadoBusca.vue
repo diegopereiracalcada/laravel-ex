@@ -12,6 +12,14 @@
           <label class="active">Descrição / Observação / Solução / Cliente</label>
         </div>
         <div class="input-field col s12">
+          <select name="status">
+            <option value="" selected>Todos</option>
+            <option value="ABERTO">Aberto</option>
+            <option value="FECHADO">Fechado</option>
+          </select>
+          <label>Status</label>
+        </div>
+        <div class="input-field col s12">
           <input name="dt_abertura_start" class="datepicker">
           <label class="active">De: (Data de Abertura)</label>
         </div>
@@ -27,14 +35,6 @@
           <input name="dt_fechamento_end" class="datepicker">
           <label class="active">Até: (Data de Fechamento)</label>
         </div>
-          <div class="input-field col s12">
-            <select name="status">
-              <option value="" selected>Todos</option>
-              <option value="ABERTO">Aberto</option>
-              <option value="FECHADO">Fechado</option>
-            </select>
-            <label>Status</label>
-          </div>
       </form>
       <div class="col s12">
         <button

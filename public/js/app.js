@@ -295,8 +295,7 @@ var menuItens = [{
 }, {
   label: "Buscar",
   icon: "search",
-  href: "/resultadobusca",
-  classes: "hidden-elem"
+  href: "/resultadobusca"
 }, {
   label: "Chamados Abertos",
   icon: "clear_all",
@@ -3972,40 +3971,6 @@ var render = function() {
       [
         _vm._m(1),
         _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticStyle: {
-              display: "flex",
-              "align-items": "center",
-              padding: "0 32px",
-              "margin-bottom": "20px"
-            }
-          },
-          [
-            _c("input", {
-              staticClass: "input-busca",
-              staticStyle: { "margin-left": "25px", "margin-right": "4px" },
-              attrs: { placeholder: "Buscar..." },
-              on: { keyup: _vm.onInputBuscaKeyup }
-            }),
-            _vm._v(" "),
-            _c(
-              "i",
-              {
-                staticClass: "material-icons sufix",
-                staticStyle: { padding: "0 10px", color: "rgba(0,0,0,0.54)" },
-                on: {
-                  click: function($event) {
-                    return _vm.onBuscaSubmit()
-                  }
-                }
-              },
-              [_vm._v("search")]
-            )
-          ]
-        ),
-        _vm._v(" "),
         _vm._l(_vm.menuItens, function(item) {
           return _c("li", { class: item.classes }, [
             _c("a", { attrs: { href: item.href } }, [
@@ -5291,6 +5256,22 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "input-field col s12" }, [
+      _c("select", { attrs: { name: "status" } }, [
+        _c("option", { attrs: { value: "", selected: "" } }, [_vm._v("Todos")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "ABERTO" } }, [_vm._v("Aberto")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "FECHADO" } }, [_vm._v("Fechado")])
+      ]),
+      _vm._v(" "),
+      _c("label", [_vm._v("Status")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-field col s12" }, [
       _c("input", {
         staticClass: "datepicker",
         attrs: { name: "dt_abertura_start" }
@@ -5342,22 +5323,6 @@ var staticRenderFns = [
       _c("label", { staticClass: "active" }, [
         _vm._v("Até: (Data de Fechamento)")
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-field col s12" }, [
-      _c("select", { attrs: { name: "status" } }, [
-        _c("option", { attrs: { value: "", selected: "" } }, [_vm._v("Todos")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "ABERTO" } }, [_vm._v("Aberto")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "FECHADO" } }, [_vm._v("Fechado")])
-      ]),
-      _vm._v(" "),
-      _c("label", [_vm._v("Status")])
     ])
   }
 ]
@@ -21103,7 +21068,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     name: 'resultadobusca',
     component: _views_chamados_ResultadoBusca__WEBPACK_IMPORTED_MODULE_8__["default"],
     meta: {
-      title: "Busca"
+      title: "Buscar"
     }
   }, {
     path: '/chamados',
