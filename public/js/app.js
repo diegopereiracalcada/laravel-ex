@@ -1516,6 +1516,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 var SEARCH_API_URL = "/api/busca";
 var chamados = [],
@@ -5275,7 +5276,10 @@ var render = function() {
       ]),
       _vm._v(" "),
       _vm._l(_vm.chamados, function(chamado) {
-        return _c("Chamado", { key: chamado.id, attrs: { chamado: chamado } })
+        return _c("Chamado", {
+          key: chamado.id,
+          attrs: { chamado: chamado, mostrarDataFechamento: true }
+        })
       })
     ],
     2

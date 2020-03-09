@@ -71,6 +71,7 @@
       <Chamado 
         v-for="chamado in chamados"
         :chamado="chamado"
+        :mostrarDataFechamento="true"
         v-bind:key="chamado.id" 
         />
       </div>

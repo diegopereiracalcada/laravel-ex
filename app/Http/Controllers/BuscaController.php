@@ -13,6 +13,7 @@ class BuscaController extends Controller
         $dtAberturaEnd = request('dt_abertura_end');
         $dtFechamentoStart = request('dt_fechamento_start');
         $dtFechamentoEnd = request('dt_fechamento_end');
+        $status = request('status');
 
         $param = strtoupper($param);
         $palavras = explode(" ",$param);
@@ -49,16 +50,19 @@ class BuscaController extends Controller
         }
         
         if($dtAberturaStart){
-            $sql = $sql . " AND dt_abertura >= '" . $dtAberturaStart . "' ";
+            $sql .= " AND dt_abertura >= '" . $dtAberturaStart . "' ";
         }
         if($dtAberturaEnd){
-            $sql = $sql . " AND dt_abertura <= '" . $dtAberturaEnd . "' ";
+            $sql .= " AND dt_abertura <= '" . $dtAberturaEnd . "' ";
         }
         if($dtFechamentoStart){
-            $sql = $sql . " AND dt_fechamento >= '" . $dtFechamentoStart . "' ";
+            $sql .= " AND dt_fechamento >= '" . $dtFechamentoStart . "' ";
         }
         if($dtFechamentoEnd){
-            $sql = $sql . " AND dt_abertura <= '" . $dtFechamentoEnd . "' ";
+            $sql .= " AND dt_abertura <= '" . $dtFechamentoEnd . "' ";
+        }
+        if($status){
+            $sql .= " AND status = '" . strtoupper($status) . "' ";
         }
 
         $chamados = DB::select($sql);
