@@ -1606,7 +1606,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 1200);
     },
     onBuscaInternaSubmit: function onBuscaInternaSubmit() {
-      //this.setIsLoading(true);
+      this.setIsLoading(true);
       this.noResults = false;
       $(".resultado-busca").unhighlight(); //this.palavras = $(".input-busca-interna").val();
       // if(this.palavras == null || this.palavras.trim() == ''){

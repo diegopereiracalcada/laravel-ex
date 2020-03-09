@@ -164,7 +164,7 @@ export default {
       setTimeout(function(){$(".resultado-busca").highlight(palavras)}, 1200);
     },
     onBuscaInternaSubmit(){
-      //this.setIsLoading(true);
+      this.setIsLoading(true);
       this.noResults = false;
       $(".resultado-busca").unhighlight();
 
