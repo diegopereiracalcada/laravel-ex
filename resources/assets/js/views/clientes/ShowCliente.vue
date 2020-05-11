@@ -62,6 +62,41 @@
           </div>
         </div>
       </li>
+
+      <li>
+        <div class="collapsible-header">
+          <i class="material-icons">assignment_turned_in</i>Preventiva
+        </div>
+        <div class="collapsible-body">
+          <div class="row">
+            <div class="col s12">
+              <label>Preventiva</label>
+              <textarea  
+                v-model="cliente.preventiva"
+                :disabled="!editPreventivaMode"
+                ></textarea>
+            </div>
+            <div class="col s12">
+              <i 
+                v-if="!editPreventivaMode" 
+                @click="editPreventiva()"
+                class="material-icons right"
+                >edit</i>
+              <i 
+                v-if="editPreventivaMode" 
+                @click="confirmPreventivaChanges()" 
+                class="material-icons right"
+                >check</i>
+              <i 
+                v-if="editPreventivaMode" 
+                @click="cancelPreventivaChanges()" 
+                class="material-icons right"
+                >cancel</i>
+            </div>
+          </div>
+        </div>
+      </li>
+
       <li class="active">
         <div class="collapsible-header">
           <i class="material-icons">event_note</i>
@@ -123,15 +158,23 @@ let cliente = null,
 
 const CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
 
+function fixTextAreaHeights() {
+  $('textarea').each(function (idx, elem) { M.textareaAutoResize($(elem)); });
+}
+
 export default {
-  mounted() { },
+  updated() { 
+    setTimeout(fixTextAreaHeights, 1000);
+  },
   created() {
     this.$emit("changeloadingstatus", true);
     this.fetchData(this.$route.params.id);
   },
   data() {
     return {
-      cliente
+      cliente,
+      editPreventivaMode : false,
+      oldPreventivaValue: ""
     };
   },
   filters: {
@@ -142,14 +185,33 @@ export default {
     }
   },
   methods: {
+    cancelPreventivaChanges(){
+      console.log("cancelPreventivaChanges");
+      if(this.cliente.preventiva == this.oldPreventivaValue 
+          || confirm("Desprezar alterações?")){
+        this.cliente.preventiva = this.oldPreventivaValue
+        this.editPreventivaMode = false
+      }
+    },
+
+    confirmPreventivaChanges(){
+
+    },
+
+    editPreventiva(){
+      console.log("editPreventiva");
+      this.editPreventivaMode = true
+      this.oldPreventivaValue = this.cliente.preventiva
+    },
+
     getNotas(categoria){
       return this.notas.filter(function(nota){
         return nota.categoria == categoria;
       })
     },
+
     fetchData(id) {
       this.error = null;
-
       fetch(CLIENTE_SHOW_API_URL_PREFIX + id)
         .then(resp => resp.json())
         .then(data => {
@@ -161,27 +223,32 @@ export default {
           this.$emit("changeloadingstatus", false);
         });
     },
+
     fixTextAreaHeight() {
       setTimeout(function(){$('textarea').each(function () {
           $(this).height($(this).prop('scrollHeight'));
       })}, 500);
     },
+
     onKeepItemEditClick(event){
       event.stopPropagation();
       var targetElement = event.target;
       this.toggleEditMode(targetElement);
     },
+
     toggleTextArea(elem){
       var textareaElem = $(elem).parents(".sub-collapsible-item").find("textarea");
       var isDisabled = textareaElem.attr("disabled");
       textareaElem.attr("disabled", !isDisabled);
     },
+
     toggleEditMode(elem){
       this.toggleTextArea(elem);
 
       var jHeader = $(elem).parents(".sub-collapsible-item-header");
       jHeader.toggleClass("edit-mode");
     },
+
     onKeepItemConfirmClick(event){
       event.stopPropagation();
       
@@ -195,6 +262,7 @@ export default {
         this.sendUpdateNota(nota, event.target);
       }
     },
+
     onKeepItemCancelClick(event){
       event.stopPropagation();
       if(confirm("Suas alterações serão desprezadas. Continuar?")){
@@ -208,6 +276,7 @@ export default {
         $(jVisibleTextAreaElem).val(originalTextAreaValue);
       }
     },
+
     onKeepItemHeaderClick(){
       var targetElement = event.target;
       var jParentWrapper = $(targetElement).parents(".sub-collapsible-item");
@@ -231,8 +300,8 @@ export default {
         jParentWrapper.addClass("sub-expanded");
         jParentWrapper.removeClass("sub-collapsed");
       }
-
     },
+
     sendUpdateNota(nota, targetElement) {
       this.$emit("changeloadingstatus", true);
 
@@ -252,7 +321,7 @@ export default {
         body: JSON.stringify(nota)
       })
         .then(response => {
-            this.$emit("changeloadingstatus", false);
+          this.$emit("changeloadingstatus", false);
 
           if (response.ok) {
             this.$emit("sendsuccess", "Nota salva com sucesso");
@@ -265,6 +334,7 @@ export default {
           }
         })
     },
+
     setData(cliente) {
       this.cliente = cliente;
       this.categorias = cliente.categorias;
@@ -272,6 +342,7 @@ export default {
       this.initializeMaterializeCollapsibles();
       this.$emit("changeloadingstatus", false);
     },
+
     initializeMaterializeCollapsibles() {
       setTimeout(function(){
         var elems = document.querySelectorAll(".collapsible");

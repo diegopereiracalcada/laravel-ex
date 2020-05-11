@@ -1980,19 +1980,65 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var cliente = null,
     categorias,
     notas;
 var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
+
+function fixTextAreaHeights() {
+  $('textarea').each(function (idx, elem) {
+    M.textareaAutoResize($(elem));
+  });
+}
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {},
+  updated: function updated() {
+    setTimeout(fixTextAreaHeights, 1000);
+  },
   created: function created() {
     this.$emit("changeloadingstatus", true);
     this.fetchData(this.$route.params.id);
   },
   data: function data() {
     return {
-      cliente: cliente
+      cliente: cliente,
+      editPreventivaMode: false,
+      oldPreventivaValue: ""
     };
   },
   filters: {
@@ -2003,6 +2049,20 @@ var CLIENTE_SHOW_API_URL_PREFIX = "/api/clientes/";
     }
   },
   methods: {
+    cancelPreventivaChanges: function cancelPreventivaChanges() {
+      console.log("cancelPreventivaChanges");
+
+      if (this.cliente.preventiva == this.oldPreventivaValue || confirm("Desprezar alterações?")) {
+        this.cliente.preventiva = this.oldPreventivaValue;
+        this.editPreventivaMode = false;
+      }
+    },
+    confirmPreventivaChanges: function confirmPreventivaChanges() {},
+    editPreventiva: function editPreventiva() {
+      console.log("editPreventiva");
+      this.editPreventivaMode = true;
+      this.oldPreventivaValue = this.cliente.preventiva;
+    },
     getNotas: function getNotas(categoria) {
       return this.notas.filter(function (nota) {
         return nota.categoria == categoria;
@@ -5811,8 +5871,88 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c("li", { staticClass: "active" }, [
+          _c("li", [
             _vm._m(1),
+            _vm._v(" "),
+            _c("div", { staticClass: "collapsible-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col s12" }, [
+                  _c("label", [_vm._v("Preventiva")]),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.cliente.preventiva,
+                        expression: "cliente.preventiva"
+                      }
+                    ],
+                    attrs: { disabled: !_vm.editPreventivaMode },
+                    domProps: { value: _vm.cliente.preventiva },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.cliente, "preventiva", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col s12" }, [
+                  !_vm.editPreventivaMode
+                    ? _c(
+                        "i",
+                        {
+                          staticClass: "material-icons right",
+                          on: {
+                            click: function($event) {
+                              return _vm.editPreventiva()
+                            }
+                          }
+                        },
+                        [_vm._v("edit")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.editPreventivaMode
+                    ? _c(
+                        "i",
+                        {
+                          staticClass: "material-icons right",
+                          on: {
+                            click: function($event) {
+                              return _vm.confirmPreventivaChanges()
+                            }
+                          }
+                        },
+                        [_vm._v("check")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.editPreventivaMode
+                    ? _c(
+                        "i",
+                        {
+                          staticClass: "material-icons right",
+                          on: {
+                            click: function($event) {
+                              return _vm.cancelPreventivaChanges()
+                            }
+                          }
+                        },
+                        [_vm._v("cancel")]
+                      )
+                    : _vm._e()
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "active" }, [
+            _vm._m(2),
             _vm._v(" "),
             _c(
               "div",
@@ -5941,7 +6081,7 @@ var render = function() {
               0
             ),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(3)
           ])
         ])
       : _vm._e()
@@ -5955,6 +6095,17 @@ var staticRenderFns = [
     return _c("div", { staticClass: "collapsible-header" }, [
       _c("i", { staticClass: "material-icons" }, [_vm._v("details")]),
       _vm._v("Sobre\n      ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "collapsible-header" }, [
+      _c("i", { staticClass: "material-icons" }, [
+        _vm._v("assignment_turned_in")
+      ]),
+      _vm._v("Preventiva\n      ")
     ])
   },
   function() {
