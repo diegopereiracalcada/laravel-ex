@@ -13,6 +13,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::put('api/clientes/{id}/updatePreventiva', 'ClientesController@updatePreventiva');
+
 Route::resource('api/clientes', 'ClientesController');
 
 Route::resource('api/chamados', 'ChamadosController');

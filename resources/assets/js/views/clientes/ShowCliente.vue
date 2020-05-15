@@ -65,12 +65,17 @@
 
       <li>
         <div class="collapsible-header">
-          <i class="material-icons">assignment_turned_in</i>Preventiva
+          <i class="material-icons">assignment_turned_in</i>
+          Preventiva
         </div>
         <div class="collapsible-body">
-          <div class="row">
+          <div v-if="isPreventivaLoading" class="row">
+            <div class="col s12" style="text-align:center;">
+              Aguarde...
+            </div>
+          </div>
+          <div v-else class="row">
             <div class="col s12">
-              <label>Preventiva</label>
               <textarea  
                 v-model="cliente.preventiva"
                 :disabled="!editPreventivaMode"
@@ -94,6 +99,7 @@
                 >cancel</i>
             </div>
           </div>
+          
         </div>
       </li>
 
@@ -152,6 +158,8 @@
 
 <script>
 
+import ClientesService from '../../services/ClientesService.js'
+
 let cliente = null,
   categorias,
   notas;
@@ -174,7 +182,8 @@ export default {
     return {
       cliente,
       editPreventivaMode : false,
-      oldPreventivaValue: ""
+      oldPreventivaValue: "",
+      isPreventivaLoading: false
     };
   },
   filters: {
@@ -195,7 +204,17 @@ export default {
     },
 
     confirmPreventivaChanges(){
+      this.isPreventivaLoading = true;
+      ClientesService.putPreventiva(this.cliente.preventiva)
+        .then(() => {
+          console.log("preventiva atualizada...");
+          this.isPreventivaLoading = false;
+          this.editPreventivaMode = false
 
+        })
+        .catch(error => {
+          console.log("Erro ao atualizar preventiva", error);
+        });
     },
 
     editPreventiva(){

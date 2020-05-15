@@ -1863,6 +1863,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_ClientesService_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/ClientesService.js */ "./resources/assets/js/services/ClientesService.js");
 //
 //
 //
@@ -2015,6 +2016,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 var cliente = null,
     categorias,
     notas;
@@ -2038,7 +2046,8 @@ function fixTextAreaHeights() {
     return {
       cliente: cliente,
       editPreventivaMode: false,
-      oldPreventivaValue: ""
+      oldPreventivaValue: "",
+      isPreventivaLoading: false
     };
   },
   filters: {
@@ -2057,7 +2066,18 @@ function fixTextAreaHeights() {
         this.editPreventivaMode = false;
       }
     },
-    confirmPreventivaChanges: function confirmPreventivaChanges() {},
+    confirmPreventivaChanges: function confirmPreventivaChanges() {
+      var _this = this;
+
+      this.isPreventivaLoading = true;
+      _services_ClientesService_js__WEBPACK_IMPORTED_MODULE_0__["default"].putPreventiva(this.cliente.preventiva).then(function () {
+        console.log("preventiva atualizada...");
+        _this.isPreventivaLoading = false;
+        _this.editPreventivaMode = false;
+      })["catch"](function (error) {
+        console.log("Erro ao atualizar preventiva", error);
+      });
+    },
     editPreventiva: function editPreventiva() {
       console.log("editPreventiva");
       this.editPreventivaMode = true;
@@ -2069,19 +2089,19 @@ function fixTextAreaHeights() {
       });
     },
     fetchData: function fetchData(id) {
-      var _this = this;
+      var _this2 = this;
 
       this.error = null;
       fetch(CLIENTE_SHOW_API_URL_PREFIX + id).then(function (resp) {
         return resp.json();
       }).then(function (data) {
-        _this.setData(data);
+        _this2.setData(data);
 
-        _this.fixTextAreaHeight();
+        _this2.fixTextAreaHeight();
       })["catch"](function (error) {
-        _this.error = error;
+        _this2.error = error;
 
-        _this.$emit("changeloadingstatus", false);
+        _this2.$emit("changeloadingstatus", false);
       });
     },
     fixTextAreaHeight: function fixTextAreaHeight() {
@@ -2157,7 +2177,7 @@ function fixTextAreaHeights() {
       }
     },
     sendUpdateNota: function sendUpdateNota(nota, targetElement) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.$emit("changeloadingstatus", true);
       var url = "/api/notas/" + nota.id;
@@ -2172,18 +2192,18 @@ function fixTextAreaHeights() {
         credentials: "same-origin",
         body: JSON.stringify(nota)
       }).then(function (response) {
-        _this2.$emit("changeloadingstatus", false);
+        _this3.$emit("changeloadingstatus", false);
 
         if (response.ok) {
-          _this2.$emit("sendsuccess", "Nota salva com sucesso");
+          _this3.$emit("sendsuccess", "Nota salva com sucesso");
 
-          _this2.toggleEditMode(targetElement);
+          _this3.toggleEditMode(targetElement);
 
-          _this2.fixTextAreaHeight();
+          _this3.fixTextAreaHeight();
         } else {
           alert(response.statusText);
 
-          _this2.$emit("senderror", response.statusText);
+          _this3.$emit("senderror", response.statusText);
         }
       });
     },
@@ -5875,79 +5895,92 @@ var render = function() {
             _vm._m(1),
             _vm._v(" "),
             _c("div", { staticClass: "collapsible-body" }, [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col s12" }, [
-                  _c("label", [_vm._v("Preventiva")]),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
+              _vm.isPreventivaLoading
+                ? _c("div", { staticClass: "row" }, [
+                    _c(
+                      "div",
                       {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.cliente.preventiva,
-                        expression: "cliente.preventiva"
-                      }
-                    ],
-                    attrs: { disabled: !_vm.editPreventivaMode },
-                    domProps: { value: _vm.cliente.preventiva },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                        staticClass: "col s12",
+                        staticStyle: { "text-align": "center" }
+                      },
+                      [_vm._v("\n            Aguarde...\n          ")]
+                    )
+                  ])
+                : _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col s12" }, [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.cliente.preventiva,
+                            expression: "cliente.preventiva"
+                          }
+                        ],
+                        attrs: { disabled: !_vm.editPreventivaMode },
+                        domProps: { value: _vm.cliente.preventiva },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.cliente,
+                              "preventiva",
+                              $event.target.value
+                            )
+                          }
                         }
-                        _vm.$set(_vm.cliente, "preventiva", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col s12" }, [
-                  !_vm.editPreventivaMode
-                    ? _c(
-                        "i",
-                        {
-                          staticClass: "material-icons right",
-                          on: {
-                            click: function($event) {
-                              return _vm.editPreventiva()
-                            }
-                          }
-                        },
-                        [_vm._v("edit")]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.editPreventivaMode
-                    ? _c(
-                        "i",
-                        {
-                          staticClass: "material-icons right",
-                          on: {
-                            click: function($event) {
-                              return _vm.confirmPreventivaChanges()
-                            }
-                          }
-                        },
-                        [_vm._v("check")]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.editPreventivaMode
-                    ? _c(
-                        "i",
-                        {
-                          staticClass: "material-icons right",
-                          on: {
-                            click: function($event) {
-                              return _vm.cancelPreventivaChanges()
-                            }
-                          }
-                        },
-                        [_vm._v("cancel")]
-                      )
-                    : _vm._e()
-                ])
-              ])
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col s12" }, [
+                      !_vm.editPreventivaMode
+                        ? _c(
+                            "i",
+                            {
+                              staticClass: "material-icons right",
+                              on: {
+                                click: function($event) {
+                                  return _vm.editPreventiva()
+                                }
+                              }
+                            },
+                            [_vm._v("edit")]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.editPreventivaMode
+                        ? _c(
+                            "i",
+                            {
+                              staticClass: "material-icons right",
+                              on: {
+                                click: function($event) {
+                                  return _vm.confirmPreventivaChanges()
+                                }
+                              }
+                            },
+                            [_vm._v("check")]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.editPreventivaMode
+                        ? _c(
+                            "i",
+                            {
+                              staticClass: "material-icons right",
+                              on: {
+                                click: function($event) {
+                                  return _vm.cancelPreventivaChanges()
+                                }
+                              }
+                            },
+                            [_vm._v("cancel")]
+                          )
+                        : _vm._e()
+                    ])
+                  ])
             ])
           ]),
           _vm._v(" "),
@@ -6105,7 +6138,7 @@ var staticRenderFns = [
       _c("i", { staticClass: "material-icons" }, [
         _vm._v("assignment_turned_in")
       ]),
-      _vm._v("Preventiva\n      ")
+      _vm._v("\n        Preventiva\n      ")
     ])
   },
   function() {
@@ -21638,6 +21671,59 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FormChamado_vue_vue_type_template_id_702cfd57___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/assets/js/services/ClientesService.js":
+/*!*********************************************************!*\
+  !*** ./resources/assets/js/services/ClientesService.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var UPDATE_PREVENTIVA_URL = "/api/clientes/2/updatePreventiva";
+
+function sendPut(url, content) {
+  return sendRequest(url, content, "put");
+}
+
+function sendPost(url, content) {
+  return sendRequest(url, content, "post");
+}
+
+function sendRequest(url, content, method) {
+  return new Promise(function (resolve) {
+    fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json, text-plain, */*",
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+      },
+      method: method,
+      credentials: "same-origin",
+      body: JSON.stringify(content)
+    }).then(function (response) {
+      if (response.ok) {
+        console.log("Retornada resposta da requisição... ", response.text);
+        resolve();
+      } else {
+        alert(response.statusText);
+      }
+    });
+  });
+}
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  putPreventiva: function putPreventiva(preventiva) {
+    console.log("putPreventiva...", preventiva);
+    return sendPut(UPDATE_PREVENTIVA_URL, {
+      'preventiva': preventiva
+    });
+  }
+});
 
 /***/ }),
 
