@@ -8,7 +8,7 @@
     <div v-if="updateMode" @click="sendUpdateChamado" class="bg-clickti-blue save-button">
       <i class="material-icons">save</i>
     </div>
-    <div class="row" v-if="this.updateMode">
+    <div v-if="this.updateMode" class="row">
       <div class="col s2">
         <label>Id</label>
         <input v-model="chamado.id" disabled />
@@ -53,14 +53,6 @@
         <label class="active" for="observacao">Observação</label>
       </div>
     </div>
-    <div class="row">
-      <div class="col s12">
-        <label>
-          <input type="checkbox" v-model="chamado.preventiva" />
-          <span>Preventiva Inclusa</span>
-        </label>
-      </div>
-    </div>
     <div v-if="mostrarIncluirNoItinerario && !updateMode" class="row">
       <div class="col s12">
         <label>
@@ -84,6 +76,21 @@
           <input v-if="!updateMode" id="enviarEmail" name="enviaremailabertura" checked type="checkbox" />
           <span>Enviar email</span>
         </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12">
+        <label>
+          <input type="checkbox" v-model="chamado.preventiva" />
+          <span>Preventiva Inclusa</span>
+        </label>
+        <div>
+          <textarea 
+            name="" 
+            id=""
+            disabled
+            ></textarea>
+          </div>
       </div>
     </div>
     <input type="hidden" v-model="chamado.status" />
