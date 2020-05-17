@@ -2022,6 +2022,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 var cliente = null,
     categorias,
@@ -2075,7 +2076,8 @@ function fixTextAreaHeights() {
         _this.isPreventivaLoading = false;
         _this.editPreventivaMode = false;
       })["catch"](function (error) {
-        console.log("Erro ao atualizar preventiva", error);
+        _this.isPreventivaLoading = false;
+        alert("Erro ao atualizar preventiva. " + new Date());
       });
     },
     editPreventiva: function editPreventiva() {
@@ -5917,6 +5919,7 @@ var render = function() {
                             expression: "cliente.preventiva"
                           }
                         ],
+                        staticClass: "no-border-when-disabled",
                         attrs: { disabled: !_vm.editPreventivaMode },
                         domProps: { value: _vm.cliente.preventiva },
                         on: {
@@ -5939,7 +5942,7 @@ var render = function() {
                         ? _c(
                             "i",
                             {
-                              staticClass: "material-icons right",
+                              staticClass: "material-icons right cpointer",
                               on: {
                                 click: function($event) {
                                   return _vm.editPreventiva()
@@ -5954,7 +5957,7 @@ var render = function() {
                         ? _c(
                             "i",
                             {
-                              staticClass: "material-icons right",
+                              staticClass: "material-icons right cpointer",
                               on: {
                                 click: function($event) {
                                   return _vm.confirmPreventivaChanges()
@@ -5969,7 +5972,7 @@ var render = function() {
                         ? _c(
                             "i",
                             {
-                              staticClass: "material-icons right",
+                              staticClass: "material-icons right cpointer",
                               on: {
                                 click: function($event) {
                                   return _vm.cancelPreventivaChanges()
@@ -21694,7 +21697,7 @@ function sendPost(url, content) {
 }
 
 function sendRequest(url, content, method) {
-  return new Promise(function (resolve) {
+  return new Promise(function (resolve, reject) {
     fetch(url, {
       headers: {
         "Content-Type": "application/json",
@@ -21707,11 +21710,12 @@ function sendRequest(url, content, method) {
       body: JSON.stringify(content)
     }).then(function (response) {
       if (response.ok) {
-        console.log("Retornada resposta da requisição... ", response.text);
-        resolve();
+        resolve(response);
       } else {
-        alert(response.statusText);
+        reject(response.statusText);
       }
+    })["catch"](function (error) {
+      reject(error);
     });
   });
 }

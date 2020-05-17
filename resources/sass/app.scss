@@ -97,6 +97,7 @@ $primaryColor : #053244;
   border: 1px solid #d8d8d8;
   margin: 1rem 0;
 }
+
 .no-border-when-disabled:disabled{
   border: none !important;
 }
@@ -113,4 +114,9 @@ $primaryColor : #053244;
 
 .highlight {
     background: #ffbc00;
+}
+
+
+.cpointer{
+  cursor: pointer;
 }

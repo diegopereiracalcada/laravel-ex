@@ -78,6 +78,7 @@
             <div class="col s12">
               <textarea  
                 v-model="cliente.preventiva"
+                class="no-border-when-disabled"
                 :disabled="!editPreventivaMode"
                 ></textarea>
             </div>
@@ -85,17 +86,17 @@
               <i 
                 v-if="!editPreventivaMode" 
                 @click="editPreventiva()"
-                class="material-icons right"
+                class="material-icons right cpointer"
                 >edit</i>
               <i 
                 v-if="editPreventivaMode" 
                 @click="confirmPreventivaChanges()" 
-                class="material-icons right"
+                class="material-icons right cpointer"
                 >check</i>
               <i 
                 v-if="editPreventivaMode" 
                 @click="cancelPreventivaChanges()" 
-                class="material-icons right"
+                class="material-icons right cpointer"
                 >cancel</i>
             </div>
           </div>
@@ -174,10 +175,12 @@ export default {
   updated() { 
     setTimeout(fixTextAreaHeights, 1000);
   },
+
   created() {
     this.$emit("changeloadingstatus", true);
     this.fetchData(this.$route.params.id);
   },
+
   data() {
     return {
       cliente,
@@ -186,6 +189,7 @@ export default {
       isPreventivaLoading: false
     };
   },
+
   filters: {
     capitalize: function (value) {
       if (!value) return ''
@@ -193,6 +197,7 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1)
     }
   },
+
   methods: {
     cancelPreventivaChanges(){
       console.log("cancelPreventivaChanges");
@@ -213,7 +218,8 @@ export default {
 
         })
         .catch(error => {
-          console.log("Erro ao atualizar preventiva", error);
+          this.isPreventivaLoading = false;
+          alert("Erro ao atualizar preventiva. " + new Date() );
         });
     },
 

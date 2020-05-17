@@ -142,3 +142,7 @@ Materialize override
   background: #ffbc00;
 }
 
+.cpointer {
+  cursor: pointer;
+}
+

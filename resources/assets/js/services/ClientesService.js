@@ -9,7 +9,7 @@ function sendPost(url, content){
 }
 
 function sendRequest(url, content, method){
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     fetch(url, {
       headers: {
         "Content-Type": "application/json",
@@ -25,11 +25,13 @@ function sendRequest(url, content, method){
     })
       .then(response => {
         if (response.ok) {
-          console.log("Retornada resposta da requisição... ", response.text)
-          resolve();
+          resolve(response);
         } else {
-          alert(response.statusText);
+          reject(response.statusText);
         }
+      })
+      .catch(error => {
+        reject(error);
       })
   });
 
