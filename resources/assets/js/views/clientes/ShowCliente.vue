@@ -210,7 +210,7 @@ export default {
 
     confirmPreventivaChanges(){
       this.isPreventivaLoading = true;
-      ClientesService.putPreventiva(this.cliente.preventiva)
+      ClientesService.putPreventiva(this.cliente)
         .then(() => {
           console.log("preventiva atualizada...");
           this.isPreventivaLoading = false;

@@ -1,4 +1,5 @@
-const UPDATE_PREVENTIVA_URL = "/api/clientes/2/updatePreventiva";
+const UPDATE_PREVENTIVA_PREFIX_URL = "/api/clientes/";
+const UPDATE_PREVENTIVA_SUFIX_URL = "/updatePreventiva";
 
 function sendPut(url, content){
   return sendRequest(url, content, "put")
@@ -39,8 +40,7 @@ function sendRequest(url, content, method){
 }
 
 export default {
-  putPreventiva(preventiva){
-    console.log("putPreventiva...", preventiva);
-    return sendPut(UPDATE_PREVENTIVA_URL, {'preventiva':preventiva})
+  putPreventiva(cliente){
+    return sendPut(`${UPDATE_PREVENTIVA_PREFIX_URL}${cliente.id}${UPDATE_PREVENTIVA_SUFIX_URL}`, {'preventiva': cliente.preventiva})
   }
 }

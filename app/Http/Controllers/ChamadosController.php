@@ -16,21 +16,22 @@ class ChamadosController extends Controller
     
     public function index(Request $request)
     {
-        return Chamado::select(
-                            'chamados.id',
-                            'clientes.shortname as cliente_shortname',
-                            'status',
-                            'descricao',
-                            'observacao',
-                            'preventiva',
-                            'isinclusonoitinerario',
-                            'dt_abertura',
-                            'dt_ag_execucao',
-                            'dt_fechamento',
-                            'solucao'
-                        )->join('clientes','clientes.id','=','chamados.cliente_id')
-                        ->orderBy('dt_abertura', 'asc')
-                        ->get();
+        return Chamado::with('cliente')->orderBy('dt_abertura', 'asc')->get();
+        // return Chamado::select(
+        //                     'chamados.id',
+        //                     'clientes.shortname as cliente_shortname',
+        //                     'status',
+        //                     'descricao',
+        //                     'observacao',
+        //                     'preventiva',
+        //                     'isinclusonoitinerario',
+        //                     'dt_abertura',
+        //                     'dt_ag_execucao',
+        //                     'dt_fechamento',
+        //                     'solucao'
+        //                 )->join('clientes','clientes.id','=','chamados.cliente_id')
+        //                 ->orderBy('dt_abertura', 'asc')
+        //                 ->get();
     }
 
     public function itinerario(){
@@ -151,7 +152,7 @@ class ChamadosController extends Controller
 
     public function show($id)
     {
-        $chamado = Chamado::findOrFail($id);
+        $chamado = Chamado::with('cliente')->findOrFail($id);
         $chamado->cliente_shortname = $chamado->cliente->shortname;
         
         return $chamado;

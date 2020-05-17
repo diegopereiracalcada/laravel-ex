@@ -693,6 +693,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 var clientes = [],
     chamado = {
   status: "ABERTO",
@@ -2071,7 +2077,7 @@ function fixTextAreaHeights() {
       var _this = this;
 
       this.isPreventivaLoading = true;
-      _services_ClientesService_js__WEBPACK_IMPORTED_MODULE_0__["default"].putPreventiva(this.cliente.preventiva).then(function () {
+      _services_ClientesService_js__WEBPACK_IMPORTED_MODULE_0__["default"].putPreventiva(this.cliente).then(function () {
         console.log("preventiva atualizada...");
         _this.isPreventivaLoading = false;
         _this.editPreventivaMode = false;
@@ -4077,7 +4083,7 @@ var render = function() {
               left: "0"
             }
           },
-          [_vm._v("v1.2")]
+          [_vm._v("v1.3")]
         )
       ],
       2
@@ -4469,59 +4475,6 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col s12" }, [
-              _c("label", [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.chamado.preventiva,
-                      expression: "chamado.preventiva"
-                    }
-                  ],
-                  attrs: { type: "checkbox" },
-                  domProps: {
-                    checked: Array.isArray(_vm.chamado.preventiva)
-                      ? _vm._i(_vm.chamado.preventiva, null) > -1
-                      : _vm.chamado.preventiva
-                  },
-                  on: {
-                    change: function($event) {
-                      var $$a = _vm.chamado.preventiva,
-                        $$el = $event.target,
-                        $$c = $$el.checked ? true : false
-                      if (Array.isArray($$a)) {
-                        var $$v = null,
-                          $$i = _vm._i($$a, $$v)
-                        if ($$el.checked) {
-                          $$i < 0 &&
-                            _vm.$set(
-                              _vm.chamado,
-                              "preventiva",
-                              $$a.concat([$$v])
-                            )
-                        } else {
-                          $$i > -1 &&
-                            _vm.$set(
-                              _vm.chamado,
-                              "preventiva",
-                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                            )
-                        }
-                      } else {
-                        _vm.$set(_vm.chamado, "preventiva", $$c)
-                      }
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v("Preventiva Inclusa")])
-              ])
-            ])
-          ]),
-          _vm._v(" "),
           _vm.mostrarIncluirNoItinerario && !_vm.updateMode
             ? _c("div", { staticClass: "row" }, [
                 _c("div", { staticClass: "col s12" }, [
@@ -4625,6 +4578,79 @@ var render = function() {
                 _c("span", [_vm._v("Enviar email")])
               ])
             ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col s12" }, [
+              _c("label", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.chamado.preventiva,
+                      expression: "chamado.preventiva"
+                    }
+                  ],
+                  attrs: { type: "checkbox" },
+                  domProps: {
+                    checked: Array.isArray(_vm.chamado.preventiva)
+                      ? _vm._i(_vm.chamado.preventiva, null) > -1
+                      : _vm.chamado.preventiva
+                  },
+                  on: {
+                    change: function($event) {
+                      var $$a = _vm.chamado.preventiva,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 &&
+                            _vm.$set(
+                              _vm.chamado,
+                              "preventiva",
+                              $$a.concat([$$v])
+                            )
+                        } else {
+                          $$i > -1 &&
+                            _vm.$set(
+                              _vm.chamado,
+                              "preventiva",
+                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                            )
+                        }
+                      } else {
+                        _vm.$set(_vm.chamado, "preventiva", $$c)
+                      }
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", [_vm._v("Preventiva Inclusa")])
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.chamado.cliente && _vm.chamado.preventiva
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "col s12",
+                    staticStyle: { "margin-top": "0.7rem" }
+                  },
+                  [
+                    _c(
+                      "textarea",
+                      {
+                        staticStyle: { resize: "none" },
+                        attrs: { disabled: "" }
+                      },
+                      [_vm._v(_vm._s(_vm.chamado.cliente.preventiva))]
+                    )
+                  ]
+                )
+              : _vm._e()
           ]),
           _vm._v(" "),
           _c("input", {
@@ -21686,7 +21712,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var UPDATE_PREVENTIVA_URL = "/api/clientes/2/updatePreventiva";
+var UPDATE_PREVENTIVA_PREFIX_URL = "/api/clientes/";
+var UPDATE_PREVENTIVA_SUFIX_URL = "/updatePreventiva";
 
 function sendPut(url, content) {
   return sendRequest(url, content, "put");
@@ -21721,10 +21748,9 @@ function sendRequest(url, content, method) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  putPreventiva: function putPreventiva(preventiva) {
-    console.log("putPreventiva...", preventiva);
-    return sendPut(UPDATE_PREVENTIVA_URL, {
-      'preventiva': preventiva
+  putPreventiva: function putPreventiva(cliente) {
+    return sendPut("".concat(UPDATE_PREVENTIVA_PREFIX_URL).concat(cliente.id).concat(UPDATE_PREVENTIVA_SUFIX_URL), {
+      'preventiva': cliente.preventiva
     });
   }
 });

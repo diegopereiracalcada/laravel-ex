@@ -84,13 +84,12 @@
           <input type="checkbox" v-model="chamado.preventiva" />
           <span>Preventiva Inclusa</span>
         </label>
-        <div>
-          <textarea 
-            name="" 
-            id=""
-            disabled
-            ></textarea>
-          </div>
+      </div>
+      <div v-if="chamado.cliente && chamado.preventiva" class="col s12" style="margin-top: 0.7rem;">
+        <textarea 
+          style="resize: none;"
+          disabled
+          >{{ chamado.cliente.preventiva }}</textarea>
       </div>
     </div>
     <input type="hidden" v-model="chamado.status" />
