@@ -27,6 +27,6 @@ class AddPreventivaColumnToClientesTable extends Migration
     {
         Schema::table('clientes', function (Blueprint $table) {
             $table->dropIfExists('preventiva');
-        })
+        });
     }
 }
