@@ -10,7 +10,7 @@ class MailService {
             "emails.abertura", 
             "atendimentochamado@gmail.com", //HARDCODE
             "atendimentochamado@gmail.com", //HARDCODE
-            "Abertura de Chamado #" . $chamado->id . " - ClickTI Informática", 
+            "Abertura de Chamado #" . $chamado->numerochamado . " - ClickTI Informática", 
             $chamado);
     }
 
@@ -19,7 +19,7 @@ class MailService {
             "emails.fechamento", 
             "clickticonsultoria@gmail.com", //HARDCODE
             "clickticonsultoria@gmail.com", //HARDCODE
-            "Fechamento de Chamado #" . $chamado->id . " - ClickTI Informática", 
+            "Fechamento de Chamado #" . $chamado->numerochamado . " - ClickTI Informática", 
             $chamado);
     }
 

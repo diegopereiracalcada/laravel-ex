@@ -17,21 +17,7 @@ class ChamadosController extends Controller
     public function index(Request $request)
     {
         return Chamado::with('cliente')->orderBy('dt_abertura', 'asc')->get();
-        // return Chamado::select(
-        //                     'chamados.id',
-        //                     'clientes.shortname as cliente_shortname',
-        //                     'status',
-        //                     'descricao',
-        //                     'observacao',
-        //                     'preventiva',
-        //                     'isinclusonoitinerario',
-        //                     'dt_abertura',
-        //                     'dt_ag_execucao',
-        //                     'dt_fechamento',
-        //                     'solucao'
-        //                 )->join('clientes','clientes.id','=','chamados.cliente_id')
-        //                 ->orderBy('dt_abertura', 'asc')
-        //                 ->get();
+
     }
 
     public function itinerario(){
@@ -41,6 +27,7 @@ class ChamadosController extends Controller
 
         $listaDeChamados = Chamado::select(
                                         'chamados.id',
+                                        'chamados.numerochamado',
                                         'clientes.shortname as cliente_shortname',
                                         'status',
                                         'descricao',
@@ -152,7 +139,7 @@ class ChamadosController extends Controller
             (new MailService())->sendAbertura($cliente->email, $cliente->email, $persistedChamado);
         }
 
-        return response('Chamado aberto com sucesso. Id: ' . $persistedChamado->id, 200); 
+        return response('Chamado aberto com sucesso. Id: ' . $persistedChamado->numerochamado, 200); 
     }
 
     public function show($id)

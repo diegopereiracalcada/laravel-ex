@@ -20,6 +20,7 @@ class BuscaController extends Controller
 
         $sql = "SELECT
                     chamados.id,
+                    chamados.numerochamado,
                     clientes.shortname as cliente_shortname,
                     chamados.status,
                     chamados.descricao,
@@ -67,7 +68,6 @@ class BuscaController extends Controller
 
         $chamados = DB::select($sql);
         
-        //dd($sql);
         return $chamados; 
 
     }
