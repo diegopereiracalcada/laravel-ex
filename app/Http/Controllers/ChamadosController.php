@@ -135,9 +135,14 @@ class ChamadosController extends Controller
 
     public function store()
     {
+        $ultimoNumeroChamado = Chamado::max('numerochamado');
+
+        // dd($proximoNumeroChamado);
+
         $chamado = new Chamado(request()->all());
         $chamado->cliente_id = request('cliente_id');
         $chamado->dt_abertura = date("Y-m-d H:i:s");
+        $chamado->numerochamado = $ultimoNumeroChamado + 1;
         
         $persistedChamado = Chamado::create($chamado->toArray());
 

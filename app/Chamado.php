@@ -8,6 +8,7 @@ class Chamado extends Model
 {
     protected $fillable = [
         'id',
+        'numerochamado',
         'descricao',
         'observacao',
         'preventiva',

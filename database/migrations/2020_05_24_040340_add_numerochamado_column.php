@@ -14,7 +14,7 @@ class AddNumerochamadoColumn extends Migration
     public function up()
     {
         Schema::table('chamados', function (Blueprint $table) {
-            $table->bigInteger('numerochamado')->unique();
+            $table->bigInteger('numerochamado')->nullable()->unique();
             
         });
     }
