@@ -194,7 +194,7 @@ class ChamadosController extends Controller
 	{
         $data = Chamado::get()->toArray();
         
-		return Excel::create('Chamados', function($excel) use ($data) {
+		return Excel::create('Chamados-' . date("Y-m-d_H:i"), function($excel) use ($data) {
 			$excel->sheet('planilha1', function($sheet) use ($data)
 	        {
 				$sheet->fromArray($data);
