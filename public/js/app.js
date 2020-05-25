@@ -308,11 +308,12 @@ var menuItens = [{
   label: "Clientes",
   icon: "contacts",
   href: "/clientes"
-}, {
-  label: "Importar/Exportar",
-  icon: "import_export",
-  href: "/importarexportar"
-}, {
+}, // {
+//     label: "Importar/Exportar",
+//     icon: "import_export",
+//     href: "/importarexportar"
+// },
+{
   label: "Itinerário",
   icon: "directions",
   href: "/itinerario"
@@ -1290,6 +1291,39 @@ var chamados = [],
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5101,10 +5135,48 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "row importar-exportar-container container" },
-      [
+    return _c("div", [
+      _c("div", { staticClass: "row importar-exportar-container container" }, [
+        _c("div", { staticClass: "exportar-wrapper col s12" }, [
+          _c("h5", [_vm._v("Exportação de Clientes")]),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-large bg-clickti-blue full-width",
+              attrs: { href: "/api/downloadExcelClientes" }
+            },
+            [_vm._v("EXPORTAR CLIENTES\n      ")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "importar-wrapper col s12" }, [
+          _c("h5", [_vm._v("Importação de Preventivas")]),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              staticClass: "form-horizontal",
+              attrs: {
+                action: "/api/importExcelPreventivas",
+                method: "post",
+                enctype: "multipart/form-data"
+              }
+            },
+            [
+              _c("input", { attrs: { type: "file", name: "import_file" } }),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-large bg-clickti-blue full-width" },
+                [_vm._v("IMPORTAR PREVENTIVAS")]
+              )
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row importar-exportar-container container" }, [
         _c("div", { staticClass: "exportar-wrapper col s12" }, [
           _c("h5", [_vm._v("Exportação de chamados")]),
           _vm._v(" "),
@@ -5114,7 +5186,7 @@ var staticRenderFns = [
               staticClass: "btn btn-large bg-clickti-blue full-width",
               attrs: { href: "/api/downloadExcel" }
             },
-            [_vm._v("Exportar para Excel\n      ")]
+            [_vm._v("EXPORTAR CHAMADOS\n      ")]
           )
         ]),
         _vm._v(" "),
@@ -5137,13 +5209,28 @@ var staticRenderFns = [
               _c(
                 "button",
                 { staticClass: "btn btn-large bg-clickti-blue full-width" },
-                [_vm._v("Importar planilha")]
+                [_vm._v("IMPORTAR CHAMADOS")]
               )
             ]
           )
         ])
-      ]
-    )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row importar-exportar-container container" }, [
+        _c("div", { staticClass: "exportar-wrapper col s12" }, [
+          _c("h5", [_vm._v("Exportação de Notas")]),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-large bg-clickti-blue full-width",
+              attrs: { href: "/api/downloadExcelNotas" }
+            },
+            [_vm._v("EXPORTAR NOTAS\n      ")]
+          )
+        ])
+      ])
+    ])
   }
 ]
 render._withStripped = true

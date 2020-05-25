@@ -22,8 +22,11 @@ Route::resource('api/chamados', 'ChamadosController');
 Route::get('api/abertos', 'ChamadosController@abertos');
 
 Route::get('api/downloadExcel', 'ChamadosController@downloadExcel');
+Route::get('api/downloadExcelClientes', 'ImportController@downloadExcelClientes');
+Route::get('api/downloadExcelNotas', 'ImportController@downloadExcelNotas');
 
 Route::post('api/importExcel', 'ChamadosController@importExcel');
+Route::post('api/importExcelPreventivas', 'ImportController@importExcelPreventivas');
 
 Route::get('api/fechados', 'ChamadosController@fechados');
 
