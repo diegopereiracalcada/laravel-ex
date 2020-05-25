@@ -81,6 +81,11 @@ export default {
   created() {
     this.fetchChamadosAbertos();
   },
+  updated() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+  },
+
   methods: {
     fetchChamadosAbertos(orderBy) {
       this.$emit("changeloadingstatus", true);
@@ -122,9 +127,6 @@ export default {
       var horario = horas + ':' + minutos;
       this.$emit("statusMessage", "Atualizado às " + horario);
     }
-  },
-  watch: {
-    $route: "fetchChamadosAbertos"
   },
 };
 </script>

@@ -1090,6 +1090,10 @@ var orderByTypes = {
   created: function created() {
     this.fetchChamadosAbertos();
   },
+  updated: function updated() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+  },
   methods: {
     fetchChamadosAbertos: function fetchChamadosAbertos(orderBy) {
       var _this = this;
@@ -1133,9 +1137,6 @@ var orderByTypes = {
       var horario = horas + ':' + minutos;
       this.$emit("statusMessage", "Atualizado às " + horario);
     }
-  },
-  watch: {
-    $route: "fetchChamadosAbertos"
   }
 });
 
