@@ -78,11 +78,11 @@ var menuItens = [
         icon: "contacts",
         href: "/clientes"
     },
-    {
-        label: "Importar/Exportar",
-        icon: "import_export",
-        href: "/importarexportar"
-    },
+    // {
+    //     label: "Importar/Exportar",
+    //     icon: "import_export",
+    //     href: "/importarexportar"
+    // },
     {
         label: "Itinerário",
         icon: "directions",
