@@ -60,7 +60,7 @@ class ImportController extends Controller
         
         $cliente = Cliente::where('shortname', $clienteArray['shortname'])->first();
         // dd($cliente);
-        $cliente->preventiva = $clienteArray['preventiva'];
+        $cliente->preventivapadrao = $clienteArray['preventivapadrao'];
         $cliente->save();
     }
 }

@@ -89,7 +89,7 @@
         <textarea 
           style="resize: none;"
           disabled
-          >{{ chamado.cliente.preventiva }}</textarea>
+          >{{ chamado.cliente.preventivapadrao }}</textarea>
       </div>
     </div>
     <input type="hidden" v-model="chamado.status" />

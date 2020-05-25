@@ -41,6 +41,6 @@ function sendRequest(url, content, method){
 
 export default {
   putPreventiva(cliente){
-    return sendPut(`${UPDATE_PREVENTIVA_PREFIX_URL}${cliente.id}${UPDATE_PREVENTIVA_SUFIX_URL}`, {'preventiva': cliente.preventiva})
+    return sendPut(`${UPDATE_PREVENTIVA_PREFIX_URL}${cliente.id}${UPDATE_PREVENTIVA_SUFIX_URL}`, {'preventivapadrao': cliente.preventivapadrao})
   }
 }

@@ -77,7 +77,7 @@
           <div v-else class="row">
             <div class="col s12">
               <textarea  
-                v-model="cliente.preventiva"
+                v-model="cliente.preventivapadrao"
                 class="no-border-when-disabled"
                 :disabled="!editPreventivaMode"
                 ></textarea>
@@ -201,9 +201,9 @@ export default {
   methods: {
     cancelPreventivaChanges(){
       console.log("cancelPreventivaChanges");
-      if(this.cliente.preventiva == this.oldPreventivaValue 
+      if(this.cliente.preventivapadrao == this.oldPreventivaValue 
           || confirm("Desprezar alterações?")){
-        this.cliente.preventiva = this.oldPreventivaValue
+        this.cliente.preventivapadrao = this.oldPreventivaValue
         this.editPreventivaMode = false
       }
     },
@@ -226,7 +226,7 @@ export default {
     editPreventiva(){
       console.log("editPreventiva");
       this.editPreventivaMode = true
-      this.oldPreventivaValue = this.cliente.preventiva
+      this.oldPreventivaValue = this.cliente.preventivapadrao
     },
 
     getNotas(categoria){

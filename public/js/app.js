@@ -2102,8 +2102,8 @@ function fixTextAreaHeights() {
     cancelPreventivaChanges: function cancelPreventivaChanges() {
       console.log("cancelPreventivaChanges");
 
-      if (this.cliente.preventiva == this.oldPreventivaValue || confirm("Desprezar alterações?")) {
-        this.cliente.preventiva = this.oldPreventivaValue;
+      if (this.cliente.preventivapadrao == this.oldPreventivaValue || confirm("Desprezar alterações?")) {
+        this.cliente.preventivapadrao = this.oldPreventivaValue;
         this.editPreventivaMode = false;
       }
     },
@@ -2123,7 +2123,7 @@ function fixTextAreaHeights() {
     editPreventiva: function editPreventiva() {
       console.log("editPreventiva");
       this.editPreventivaMode = true;
-      this.oldPreventivaValue = this.cliente.preventiva;
+      this.oldPreventivaValue = this.cliente.preventivapadrao;
     },
     getNotas: function getNotas(categoria) {
       return this.notas.filter(function (nota) {
@@ -4680,7 +4680,7 @@ var render = function() {
                         staticStyle: { resize: "none" },
                         attrs: { disabled: "" }
                       },
-                      [_vm._v(_vm._s(_vm.chamado.cliente.preventiva))]
+                      [_vm._v(_vm._s(_vm.chamado.cliente.preventivapadrao))]
                     )
                   ]
                 )
@@ -6028,13 +6028,13 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.cliente.preventiva,
-                            expression: "cliente.preventiva"
+                            value: _vm.cliente.preventivapadrao,
+                            expression: "cliente.preventivapadrao"
                           }
                         ],
                         staticClass: "no-border-when-disabled",
                         attrs: { disabled: !_vm.editPreventivaMode },
-                        domProps: { value: _vm.cliente.preventiva },
+                        domProps: { value: _vm.cliente.preventivapadrao },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
@@ -6042,7 +6042,7 @@ var render = function() {
                             }
                             _vm.$set(
                               _vm.cliente,
-                              "preventiva",
+                              "preventivapadrao",
                               $event.target.value
                             )
                           }
@@ -21837,7 +21837,7 @@ function sendRequest(url, content, method) {
 /* harmony default export */ __webpack_exports__["default"] = ({
   putPreventiva: function putPreventiva(cliente) {
     return sendPut("".concat(UPDATE_PREVENTIVA_PREFIX_URL).concat(cliente.id).concat(UPDATE_PREVENTIVA_SUFIX_URL), {
-      'preventiva': cliente.preventiva
+      'preventivapadrao': cliente.preventivapadrao
     });
   }
 });

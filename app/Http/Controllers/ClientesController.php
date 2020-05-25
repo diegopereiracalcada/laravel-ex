@@ -61,7 +61,7 @@ class ClientesController extends Controller
     public function updatePreventiva(Request $request, $id)
     {
         $cliente = Cliente::find($id);
-        $cliente->preventiva = $request->input('preventiva');
+        $cliente->preventivapadrao = $request->input('preventivapadrao');
         $cliente->save();
     }
 
