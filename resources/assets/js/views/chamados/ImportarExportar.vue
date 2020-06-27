@@ -33,7 +33,7 @@
       <div class="importar-wrapper col s12">
         <h5>Importação de chamados</h5>
         <form 
-          action="/api/importExcel" 
+          action="/api/importExcelChamados" 
           method="post" 
           class="form-horizontal" 
           enctype="multipart/form-data"
@@ -58,9 +58,6 @@
 <script>
 export default {
   methods: {
-    exportarChamados(){
-      console.log("exportarChamados...");
-    }
   },
 };
 </script>

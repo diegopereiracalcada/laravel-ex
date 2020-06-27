@@ -1350,11 +1350,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  methods: {
-    exportarChamados: function exportarChamados() {
-      console.log("exportarChamados...");
-    }
-  }
+  methods: {}
 });
 
 /***/ }),
@@ -5199,7 +5195,7 @@ var staticRenderFns = [
             {
               staticClass: "form-horizontal",
               attrs: {
-                action: "/api/importExcel",
+                action: "/api/importExcelChamados",
                 method: "post",
                 enctype: "multipart/form-data"
               }

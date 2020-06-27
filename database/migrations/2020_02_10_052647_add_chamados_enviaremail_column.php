@@ -14,8 +14,8 @@ class AddChamadosEnviaremailColumn extends Migration
     public function up()
     {
         Schema::table('chamados', function (Blueprint $table) {
-            $table->boolean('enviaremailabertura')->default(false);
-            $table->boolean('enviaremailfechamento')->default(false);
+            $table->boolean('enviaremailabertura')->nullable()->default(1);
+            $table->boolean('enviaremailfechamento')->nullable()->default(1);
             
         });
     }

@@ -17,8 +17,8 @@ class CreateChamadosTable extends Migration
             $table->bigIncrements('id');
             $table->string('descricao', 4000);
             $table->string('observacao', 4000)->nullable();
-            $table->boolean('preventiva')->default(false);
-            $table->boolean('isinclusonoitinerario')->default(false);
+            $table->boolean('preventiva')->nullable()->default(false);
+            $table->boolean('isinclusonoitinerario')->nullable()->default(false);
             $table->timestamp('dt_abertura');
             $table->timestamp('dt_ag_execucao')->nullable();
             $table->timestamp('dt_fechamento')->nullable();

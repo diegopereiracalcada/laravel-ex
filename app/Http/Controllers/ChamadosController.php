@@ -202,20 +202,6 @@ class ChamadosController extends Controller
 		})->download("xlsx");
     }
 
-    public function importExcel()
-	{
-			if(Input::hasFile('import_file')){
-                $path = Input::file('import_file')->getRealPath();
-                $data = Excel::load($path, function($reader) {})->toArray();
-
-                if(count($data) > 0){
-                    DB::table('chamados')->insert($data);
-                }
-            }
-            
-        return back();
-	}
-
     public function validateChamado(){
         return request()->validate([
             'id' => 'required',

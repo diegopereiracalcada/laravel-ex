@@ -10,8 +10,49 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ImportController extends Controller
 {
+    public function importExcelChamados()
+	{
+			if(Input::hasFile('import_file')){
+                $path = Input::file('import_file')->getRealPath();
+                $chamados = Excel::load($path, function($reader) {})->toArray();
+
+                if(count($chamados) > 0){
+                    DB::table('chamados')->insert($chamados);
+                }
+            }
+            
+        return back();
+	}    
     
+    public function importExcelPreventivas()
+	{
+			if(Input::hasFile('import_file')){
+                $path = Input::file('import_file')->getRealPath();
+                $data = Excel::load($path, function($reader) {})->toArray();
+
+                // dd($data);
+
+                
+
+                if(count($data) > 0){
+                    foreach ($data as $key => $cliente) {
+                        // dd($cliente);
+                        $this->updatePreventiva($cliente);
+                    }                
+                }
+            }
+            
+        return back(); 
+    }
     
+    private function updatePreventiva($clienteArray){
+        
+        $cliente = Cliente::where('shortname', $clienteArray['shortname'])->first();
+        // dd($cliente);
+        $cliente->preventivapadrao = $clienteArray['preventivapadrao'];
+        $cliente->save();
+    }
+
     public function downloadExcelClientes()
 	{
         $data = Cliente::orderBy('id')->get()->toArray();
@@ -36,31 +77,4 @@ class ImportController extends Controller
 		})->download("xlsx");
     }
 
-    public function importExcelPreventivas()
-	{
-			if(Input::hasFile('import_file')){
-                $path = Input::file('import_file')->getRealPath();
-                $data = Excel::load($path, function($reader) {})->toArray();
-
-                // dd($data);
-
-                
-
-                if(count($data) > 0){
-                    foreach ($data as $key => $cliente) {
-                        // dd($cliente);
-                        $this->updatePreventiva($cliente);
-                    }                }
-            }
-            
-        return back(); 
-    }
-    
-    private function updatePreventiva($clienteArray){
-        
-        $cliente = Cliente::where('shortname', $clienteArray['shortname'])->first();
-        // dd($cliente);
-        $cliente->preventivapadrao = $clienteArray['preventivapadrao'];
-        $cliente->save();
-    }
 }
