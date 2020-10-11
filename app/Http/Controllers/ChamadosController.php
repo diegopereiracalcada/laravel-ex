@@ -124,12 +124,14 @@ class ChamadosController extends Controller
     {
         $ultimoNumeroChamado = Chamado::max('numerochamado');
 
-        // dd($proximoNumeroChamado);
-
         $chamado = new Chamado(request()->all());
         $chamado->cliente_id = request('cliente_id');
         $chamado->dt_abertura = date("Y-m-d H:i:s");
         $chamado->numerochamado = $ultimoNumeroChamado + 1;
+        
+        if(request('status') == 'FECHADO'){
+            $chamado->dt_fechamento = date("Y-m-d H:i:s");
+        }
         
         $persistedChamado = Chamado::create($chamado->toArray());
 
@@ -137,6 +139,10 @@ class ChamadosController extends Controller
 
         if($chamado->enviaremailabertura){
             (new MailService())->sendAbertura($cliente->email, $cliente->email, $persistedChamado);
+        }
+
+        if($chamado->enviaremailabertura && request('status') == 'FECHADO'){
+            (new MailService())->sendFechamento($cliente->email, $cliente->email, $persistedChamado);
         }
 
         return response('Chamado aberto com sucesso. Id: ' . $persistedChamado->numerochamado, 200); 
