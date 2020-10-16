@@ -53,7 +53,7 @@ return [
         ],
 
         'mysql' => [
-	'driver' => 'mysql',
+	        'driver' => 'mysql',
             'host' => 'mysql',
             'port' => '3306',
             'database' => 'homestead',
@@ -68,11 +68,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => 'postgresql',
+            'host' => 'tuffi.db.elephantsql.com',
             'port' => '5432',
-            'database' => 'postgres',
-            'username' => 'postgres',
-            'password' => 'postgres',
+            'database' => 'larycgeq',
+            'username' => 'larycgeq',
+            'password' => '8wMCaRrUINCBG8WaXCUWQ0jd46Qt_CuN',
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
@@ -81,6 +81,7 @@ return [
     ],
 
     /*
+
     |--------------------------------------------------------------------------
     | Migration Repository Table
     |--------------------------------------------------------------------------
