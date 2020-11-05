@@ -3,18 +3,59 @@
 namespace App\Http\Controllers;
 
 use App\Cliente;
+use App\EmailCobranca;
 use App\Nota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ClientesController extends Controller
 {
 
+    public function getNomeArquivoBoleto($cliente){
+        printf("\n getNomeArquivoBoleto: " . $cliente->shortname);
+        
+        $files = Storage::files();
+        
+        $fitlered_files = array_filter($files, function($str) use ($cliente){
+            printf("\n posicai:" . strpos($str, $cliente->shortname));
+            return strpos($str, $cliente->shortname) >= 0;
+        });
+        
+        print_r($fitlered_files);
+        // return $fitlered_files[0];
+        printf("\n TERMINOU getNomeArquivoBoleto: " . $cliente->shortname);
+        
+    }
+    
+    public function getNomeArquivoNota($cliente){
+        // printf("\n getNomeArquivoNota: " . $cliente->shortname);
+
+    }
+    
     public function index()
     {
-        return Cliente::where('status_cliente', 'ATIVO')
-                        ->orderBy('shortname')
-                        ->get();
+        $emailsCobranca = [];
+        $clientes = Cliente::where('status_cliente', 'ATIVO')
+        ->orderBy('shortname')
+        ->get();
+
+        foreach ($clientes as $cliente) {
+            if($cliente->shortname == 'CAPI-IPANEMA'
+                || $cliente->shortname == 'AVULSO')
+                continue;
+                
+            $emailCobranca = new EmailCobranca();
+            $emailCobranca->shortname = $cliente->shortname;
+            $emailCobranca->emailDestinatario = $cliente->email;
+            $emailCobranca->nomeArquivoBoleto = $this->getNomeArquivoBoleto($cliente);
+            $emailCobranca->nomeArquivoNota = $this->getNomeArquivoNota($cliente);
+
+            array_push($emailsCobranca, $emailCobranca);
+        }
+
+
+        return $emailsCobranca;
     }
 
     public function create()
