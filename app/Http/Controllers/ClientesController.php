@@ -11,26 +11,26 @@ use Illuminate\Support\Facades\Storage;
 
 class ClientesController extends Controller
 {
+    const PREFIXO_BOLETO = "BOLETO";
+    const PREFIXO_NOTA = "NFSe";
 
     public function getNomeArquivo($prefixo, $cliente){
         $files = Storage::files();
         
-        $fitlered_files = array_filter($files, function($str) use ($cliente, $prefixo){
-            return strpos($str, $cliente->shortname) !== false && strpos($str, $prefixo) !== false;
+        $fitlered_files = array_filter($files, function($str) use ($prefixo, $cliente){
+            return strpos($str, $prefixo) !== false
+                    && strpos($str, $cliente->shortname) !== false;
         });
-        // dd($fitlered_files);
-        return $fitlered_files;
-        // return !empty($fitlered_files) ?  $fitlered_files[0] : "";
+
+        return implode($fitlered_files);
     }
     
     public function getNomeArquivoBoleto($cliente){
-        // printf("\n getNomeArquivoBoleto: " . $cliente->shortname);
-        return $this->getNomeArquivo("BOLETO", $cliente);
+        return $this->getNomeArquivo(self::PREFIXO_BOLETO, $cliente);
     }
     
     public function getNomeArquivoNota($cliente){
-        // printf("\n getNomeArquivoNota: " . $cliente->shortname);
-        return $this->getNomeArquivo("NFSe", $cliente);
+        return $this->getNomeArquivo(self::PREFIXO_NOTA, $cliente);
     }
     
     public function index()
