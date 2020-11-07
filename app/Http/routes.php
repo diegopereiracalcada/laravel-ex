@@ -43,6 +43,6 @@ Route::get('api/enviar-email', 'EmailController@sendMail');
 Route::get('api/statuscliente', 'ChamadosController@statusCliente');
 
 Route::get('/cobranca', 'ClientesController@cobranca');
-Route::get('/enviar-emails', 'ClientesController@enviarEmails')->name('enviar-emails');
+Route::get('/enviar-emails', 'CobrancaController@enviarEmails')->name('enviar-emails');
 
 Route::get('/{any}', 'VueController@index')->where('any', '.*');

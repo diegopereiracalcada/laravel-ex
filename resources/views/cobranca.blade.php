@@ -23,8 +23,18 @@
             <div class="col s12 m5">
             <div class="card-panel teal">
                 <div class="white-text"><b>{{ $emailCobranca->shortname }}</b></div>
+
+                @if (!empty($emailCobranca->nomeArquivoBoleto))
                 <div class="white-text"><b>Boleto: </b>{{ $emailCobranca->nomeArquivoBoleto }}</div>
+                @else
+                <h5 style="color:red;">SEM BOLETO!</h5>
+                @endif
+
+                @if (!empty($emailCobranca->nomeArquivoNota))
                 <div class="white-text"><b>Nota: </b>{{ $emailCobranca->nomeArquivoNota }}</div>
+                @else
+                <h5 style="color:red;">SEM NOTA!</h5>
+                @endif
             </div>
             </div>
         </div>

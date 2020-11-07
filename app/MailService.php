@@ -5,6 +5,15 @@ namespace App;
 use Illuminate\Support\Facades\Mail;
 
 class MailService {
+
+    public function getActualMonth(){
+        return date('m');
+    }
+    
+    public function getActualYear(){
+        return date('Y');
+    }
+
     public function sendAbertura($to_name, $to_email, $chamado){
         $this->sendMail(
             "emails.abertura", 
@@ -32,6 +41,16 @@ class MailService {
                 ->from("atendimentochamado@gmail.com", "ClickTI Informática")
                 ->to($to_email, $to_name)
                 ->subject($subject);
+        });
+    }
+
+    public function sendCobranca(EmailCobranca $emailCobranca){
+        Mail::send('emails.cobranca', [], function ($message) use ($emailCobranca) {
+            $message
+                ->from("atendimentochamado@gmail.com", "ClickTI Informática")
+                // ->to($emailCobranca->emailDestinatario, $emailCobranca->emailDestinatario)
+                ->to("clickticonsultoria@gmail.com", "clickticonsultoria@gmail.com")
+                ->subject("BOLETO" . $this->getActualMonth() . "/" . $this->getActualYear() . " CLICKTI INFORMÁTICA");
         });
     }
 }

@@ -3,34 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Cliente;
-use App\MailService;
 use App\Nota;
-use App\Services\CobrancaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 class ClientesController extends Controller
 {
-
-    public function cobranca()
-    {
-        $emailsCobranca = (new CobrancaService())->getCobrancasDoMes();
-        
-        return view('cobranca', compact('emailsCobranca'));
-    }
-
-    public function enviarEmails(){
-        // dd("Enviando emails...");
-        // (new MailService())->sendFechamento("", "", "000");
-        Mail::send("emails.cobranca", [], function ($message) {
-            $message
-                ->from("clickticonsultoria@gmail.com", "ClickTI Informática")
-                ->to("clickticonsultoria@gmail.com", "Teste cobranca")
-                ->subject("Assunto de teste  - cobranca");
-        });
-        return "Email enviado";
-    }
 
     public function index()
     {
