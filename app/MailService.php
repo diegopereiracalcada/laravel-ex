@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class MailService {
 
@@ -50,7 +51,21 @@ class MailService {
                 ->from("atendimentochamado@gmail.com", "ClickTI Informática")
                 // ->to($emailCobranca->emailDestinatario, $emailCobranca->emailDestinatario)
                 ->to("clickticonsultoria@gmail.com", "clickticonsultoria@gmail.com")
-                ->subject("BOLETO" . $this->getActualMonth() . "/" . $this->getActualYear() . " CLICKTI INFORMÁTICA");
+                ->subject("BOLETO" . $this->getActualMonth() . "/" . $this->getActualYear() . " CLICKTI INFORMÁTICA")
+                // ->attach("sample.pdf");
+                ->attach(public_path('sample.pdf'), [
+                    'as' => 'sample.pdf',
+                    'mime' => 'application/pdf',
+                ]);
+        //    ("teste.txt");
+
+            // if(!empty($emailCobranca->nomeArquivoBoleto)){
+            //     $message->attach($emailCobranca->nomeArquivoBoleto);
+            // }
+            
+            // if(!empty($emailCobranca->nomeArquivoNota)){
+            //     $message->attach($emailCobranca->nomeArquivoNota);
+            // }
         });
     }
 }
