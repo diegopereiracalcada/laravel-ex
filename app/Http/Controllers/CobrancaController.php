@@ -14,7 +14,7 @@ class CobrancaController extends Controller
 {
     
 
-    public function cobranca()
+    public function listarCobrancas()
     {
         $emailsCobranca = (new CobrancaService())->getCobrancasDoMes();
         
@@ -22,7 +22,6 @@ class CobrancaController extends Controller
     }
 
     public function enviarEmails(){
-
 
         $cobrancaService = new CobrancaService();
         $mailService = new MailService();

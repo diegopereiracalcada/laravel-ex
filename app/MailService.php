@@ -46,26 +46,35 @@ class MailService {
     }
 
     public function sendCobranca(EmailCobranca $emailCobranca){
+        if(empty($emailCobranca->nomeArquivoNota) && empty($emailCobranca->nomeArquivoBoleto) )
+            return;
+            
         Mail::send('emails.cobranca', [], function ($message) use ($emailCobranca) {
             $message
                 ->from("atendimentochamado@gmail.com", "ClickTI Informática")
                 // ->to($emailCobranca->emailDestinatario, $emailCobranca->emailDestinatario)
                 ->to("clickticonsultoria@gmail.com", "clickticonsultoria@gmail.com")
-                ->subject("BOLETO" . $this->getActualMonth() . "/" . $this->getActualYear() . " CLICKTI INFORMÁTICA")
-                // ->attach("sample.pdf");
-                ->attach(public_path('sample.pdf'), [
-                    'as' => 'sample.pdf',
-                    'mime' => 'application/pdf',
-                ]);
-        //    ("teste.txt");
+                ->subject("BOLETO " . $emailCobranca->emailDestinatario . " " . $this->getActualMonth() . "/" . $this->getActualYear() . " CLICKTI INFORMÁTICA");
 
-            // if(!empty($emailCobranca->nomeArquivoBoleto)){
-            //     $message->attach($emailCobranca->nomeArquivoBoleto);
-            // }
+            if(!empty($emailCobranca->nomeArquivoBoleto)){
+                $message->attach(
+                        public_path($emailCobranca->nomeArquivoBoleto), 
+                        [
+                            'as' => $emailCobranca->nomeArquivoBoleto,
+                            'mime' => 'application/pdf'
+                        ]
+                );
+            }
             
-            // if(!empty($emailCobranca->nomeArquivoNota)){
-            //     $message->attach($emailCobranca->nomeArquivoNota);
-            // }
+            if(!empty($emailCobranca->nomeArquivoNota)){
+                $message->attach(
+                        public_path($emailCobranca->nomeArquivoNota), 
+                        [
+                            'as' => $emailCobranca->nomeArquivoNota,
+                            'mime' => 'application/pdf'
+                        ]
+                );
+            }
         });
     }
 }

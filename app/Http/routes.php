@@ -42,7 +42,7 @@ Route::get('api/enviar-email', 'EmailController@sendMail');
 
 Route::get('api/statuscliente', 'ChamadosController@statusCliente');
 
-Route::get('/cobranca', 'ClientesController@cobranca');
+Route::get('/listar-cobrancas', 'CobrancaController@listarCobrancas');
 Route::get('/enviar-emails', 'CobrancaController@enviarEmails')->name('enviar-emails');
 
 Route::get('/{any}', 'VueController@index')->where('any', '.*');
