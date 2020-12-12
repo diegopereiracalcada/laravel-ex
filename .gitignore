@@ -1,3 +1,6 @@
+.env
+/public/BOLETO*
+/public/NFS*
 /vendor
 /node_modules
 /public/storage

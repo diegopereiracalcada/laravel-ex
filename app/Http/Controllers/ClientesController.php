@@ -12,9 +12,9 @@ class ClientesController extends Controller
 
     public function index()
     {
-        return Cliente::where('status_cliente', 'ATIVO')
-                        ->orderBy('shortname')
-                        ->get();
+        return $clientes = Cliente::where('status_cliente', 'ATIVO')
+            ->orderBy('shortname')
+            ->get();
     }
 
     public function create()
