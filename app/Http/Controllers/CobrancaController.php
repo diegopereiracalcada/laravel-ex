@@ -31,7 +31,7 @@ class CobrancaController extends Controller
             $mailService->sendCobranca($emailCobranca);
         }
 
-        return "Email enviado";
+        return "Emails enviados";
     }
 
 }

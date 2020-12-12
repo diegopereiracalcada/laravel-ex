@@ -16,7 +16,7 @@ class MailService {
     }
 
     public function sendAbertura($to_name, $to_email, $chamado){
-        $this->sendMail(
+        $this->sendChamadoMail(
             "emails.abertura", 
             "atendimentochamado@gmail.com", //HARDCODE
             "atendimentochamado@gmail.com", //HARDCODE
@@ -25,7 +25,7 @@ class MailService {
     }
 
     public function sendFechamento($to_name, $to_email, $chamado){
-        $this->sendMail(
+        $this->sendChamadoMail(
             "emails.fechamento", 
             "clickticonsultoria@gmail.com", //HARDCODE
             "clickticonsultoria@gmail.com", //HARDCODE
@@ -33,7 +33,7 @@ class MailService {
             $chamado);
     }
 
-    private function sendMail($mailView, $to_name, $to_email, $subject, $chamado){
+    private function sendChamadoMail($mailView, $to_name, $to_email, $subject, $chamado){
         $cliente = Cliente::find( $chamado->cliente_id);
         $data = [ "chamado" => $chamado, "cliente" => $cliente];
 
@@ -51,14 +51,15 @@ class MailService {
             
         Mail::send('emails.cobranca', [], function ($message) use ($emailCobranca) {
             $message
-                ->from("atendimentochamado@gmail.com", "ClickTI Informática")
+                ->from("clickticonsultoria@gmail.com", "ClickTI Informática")
+                ->to("tarapi007@gmail.com", "tarapi007@gmail.com")
                 // ->to($emailCobranca->emailDestinatario, $emailCobranca->emailDestinatario)
-                ->to("clickticonsultoria@gmail.com", "clickticonsultoria@gmail.com")
+                ->bcc("clickticonsultoria@gmail.com", "clickticonsultoria@gmail.com")
                 ->subject("BOLETO " . $emailCobranca->emailDestinatario . " " . $this->getActualMonth() . "/" . $this->getActualYear() . " CLICKTI INFORMÁTICA");
 
             if(!empty($emailCobranca->nomeArquivoBoleto)){
                 $message->attach(
-                        public_path($emailCobranca->nomeArquivoBoleto), 
+                        storage_path('app/'.$emailCobranca->nomeArquivoBoleto), 
                         [
                             'as' => $emailCobranca->nomeArquivoBoleto,
                             'mime' => 'application/pdf'
@@ -68,7 +69,7 @@ class MailService {
             
             if(!empty($emailCobranca->nomeArquivoNota)){
                 $message->attach(
-                        public_path($emailCobranca->nomeArquivoNota), 
+                        storage_path('app/'.$emailCobranca->nomeArquivoNota), 
                         [
                             'as' => $emailCobranca->nomeArquivoNota,
                             'mime' => 'application/pdf'
