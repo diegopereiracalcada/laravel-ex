@@ -1,4 +1,5 @@
-<p>Bom dia.</p>
+{{-- <p>Bom dia.</p> --}}
+<p>Boa tarde.</p>
 
 <p>Seguem em anexo boleto e nota referentes ao contrato de acompanhamento técnico dos computadores.</p>
 

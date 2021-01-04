@@ -46,7 +46,7 @@ class MailService {
     }
 
     public function sendCobranca(EmailCobranca $emailCobranca){
-        if(empty($emailCobranca->nomeArquivoNota) && empty($emailCobranca->nomeArquivoBoleto) )
+        if(empty($emailCobranca->nomeArquivoNota) || empty($emailCobranca->nomeArquivoBoleto) )
             return;
             
         Mail::send('emails.cobranca', [], function ($message) use ($emailCobranca) {
@@ -55,7 +55,7 @@ class MailService {
                 ->to("tarapi007@gmail.com", "tarapi007@gmail.com")
                 // ->to($emailCobranca->emailDestinatario, $emailCobranca->emailDestinatario)
                 ->bcc("clickticonsultoria@gmail.com", "clickticonsultoria@gmail.com")
-                ->subject("BOLETO " . $emailCobranca->emailDestinatario . " " . $this->getActualMonth() . "/" . $this->getActualYear() . " CLICKTI INFORMÁTICA");
+                ->subject("BOLETO "  . $emailCobranca->shortname . " JAN" . "/" . "2021" . " CLICKTI INFORMÁTICA");
 
             if(!empty($emailCobranca->nomeArquivoBoleto)){
                 $message->attach(
