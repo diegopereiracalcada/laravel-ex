@@ -700,6 +700,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var clientes = [],
     chamado = {
   status: "ABERTO",
@@ -4320,6 +4332,27 @@ var render = function() {
           }
         },
         [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.chamado.status,
+                expression: "chamado.status"
+              }
+            ],
+            attrs: { type: "hidden" },
+            domProps: { value: _vm.chamado.status },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.chamado, "status", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
           _vm.updateMode
             ? _c(
                 "div",
@@ -4683,27 +4716,6 @@ var render = function() {
                 )
               : _vm._e()
           ]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.chamado.status,
-                expression: "chamado.status"
-              }
-            ],
-            attrs: { type: "hidden" },
-            domProps: { value: _vm.chamado.status },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.chamado, "status", $event.target.value)
-              }
-            }
-          }),
           _vm._v(" "),
           _vm.updateMode || _vm.chamado.status == "FECHADO"
             ? _c("div", { staticClass: "row" }, [
