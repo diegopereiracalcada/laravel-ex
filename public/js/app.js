@@ -712,13 +712,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var clientes = [],
     chamado = {
   status: "ABERTO",
   isinclusonoitinerario: false
-};
+},
+    emails = [];
 var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
-    CLIENTES_INDEX_API_URL = "/api/clientes";
+    CLIENTES_INDEX_API_URL = "/api/clientes",
+    EMAILS_BY_CLIENTE_ID_API_URL = "/api/emails";
 document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("input-busca-interna")) {
     document.getElementById("input-busca-interna").focus();
@@ -737,12 +753,14 @@ document.addEventListener("DOMContentLoaded", function () {
       this.fetchData(this.$route.params.id);
     } else {
       this.fetchClientes();
+      this.fetchEmails();
     }
   },
   data: function data() {
     return {
       chamado: chamado,
-      clientes: clientes
+      clientes: clientes,
+      emails: emails
     };
   },
   methods: {
@@ -813,6 +831,22 @@ document.addEventListener("DOMContentLoaded", function () {
         _this2.$parent.$emit("senderror", error);
       });
     },
+    fetchEmails: function fetchEmails() {
+      var _this3 = this;
+
+      fetch(EMAILS_BY_CLIENTE_ID_API_URL).then(function (resp) {
+        return resp.json();
+      }).then(function (data) {
+        _this3.setEmails(data);
+
+        console.log("Emails recebidos:", data);
+        $('select#emails').select2();
+      })["catch"](function (error) {
+        _this3.$parent.$emit("changeloadingstatus", false);
+
+        _this3.$parent.$emit("senderror", error);
+      });
+    },
     fixTextAreaHeight: function fixTextAreaHeight() {
       $('textarea').each(function () {
         $(this).height($(this).prop('scrollHeight'));
@@ -835,7 +869,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
     sendAberturaChamado: function sendAberturaChamado() {
-      var _this3 = this;
+      var _this4 = this;
 
       var url = "/api/chamados";
       fetch(url, {
@@ -850,22 +884,22 @@ document.addEventListener("DOMContentLoaded", function () {
         body: JSON.stringify(this.chamado)
       }).then(function (response) {
         if (response.ok) {
-          _this3.$parent.$emit("changeloadingstatus", false);
+          _this4.$parent.$emit("changeloadingstatus", false);
 
-          _this3.$router.push({
+          _this4.$router.push({
             name: "chamados.abertos"
           });
 
-          _this3.$parent.$emit("sendsuccess", "Chamado aberto com sucesso");
+          _this4.$parent.$emit("sendsuccess", "Chamado aberto com sucesso");
         } else {
           alert(response.statusText);
 
-          _this3.$parent.$emit("senderror", response.statusText);
+          _this4.$parent.$emit("senderror", response.statusText);
         }
       });
     },
     sendUpdateChamado: function sendUpdateChamado() {
-      var _this4 = this;
+      var _this5 = this;
 
       var url = "/api/chamados/" + this.chamado.id;
       fetch(url, {
@@ -880,28 +914,32 @@ document.addEventListener("DOMContentLoaded", function () {
         body: JSON.stringify(this.chamado)
       }).then(function (response) {
         if (response.ok) {
-          _this4.$parent.$emit("changeloadingstatus", false);
+          _this5.$parent.$emit("changeloadingstatus", false);
 
-          _this4.$router.push({
+          _this5.$router.push({
             name: "chamados.abertos"
           });
 
-          _this4.$parent.$emit("sendsuccess", _this4.chamado.status == "FECHADO" ? "Chamado fechado com sucesso" : "Informações salvas com sucesso");
+          _this5.$parent.$emit("sendsuccess", _this5.chamado.status == "FECHADO" ? "Chamado fechado com sucesso" : "Informações salvas com sucesso");
         } else {
           alert(response.statusText);
 
-          _this4.$parent.$emit("senderror", response.statusText);
+          _this5.$parent.$emit("senderror", response.statusText);
         }
       });
+    },
+    setClientes: function setClientes(clientes) {
+      this.clientes = clientes;
     },
     setData: function setData(chamado) {
       this.chamado = chamado;
       this.$parent.$emit("changeloadingstatus", false);
     },
-    setClientes: function setClientes(clientes) {
-      this.clientes = clientes;
+    setEmails: function setEmails(emails) {
+      this.emails = emails;
     },
     onClientesSelectChange: function onClientesSelectChange(event) {
+      // limpar select de emails - confirmar antes se der
       this.chamado.cliente_id = event.target.value;
     }
   },
@@ -4479,6 +4517,30 @@ var render = function() {
                 ])
               ])
             : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col s12" }, [
+              _c(
+                "select",
+                {
+                  staticClass: "browser-default",
+                  attrs: {
+                    id: "emails",
+                    name: "emails[]",
+                    multiple: "multiple"
+                  }
+                },
+                _vm._l(_vm.emails, function(email) {
+                  return _c(
+                    "option",
+                    { key: email.id, domProps: { value: email.id } },
+                    [_vm._v(_vm._s(email.email))]
+                  )
+                }),
+                0
+              )
+            ])
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col s12" }, [

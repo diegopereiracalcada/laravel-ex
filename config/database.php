@@ -77,6 +77,17 @@ return [
             'prefix' => '',
             'schema' => 'public',
         ],
+        // 'pgsql' => [
+        //     'driver' => 'pgsql',
+        //     'host' => 'postgres',
+        //     'port' => '5432',
+        //     'database' => 'postgres',
+        //     'username' => 'postgres',
+        //     'password' => 'Postgres2019!',
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        //     'schema' => 'public',
+        // ],
 
     ],
 

@@ -43,6 +43,19 @@
       </div>
     </div>
 
+
+    <div class="row">
+      <div class="col s12">
+        <select id="emails" name="emails[]" multiple="multiple" class="browser-default">
+          <option
+              v-for="email in emails"
+              :key="email.id" 
+              :value="email.id"
+              >{{email.email}}</option>
+        </select>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col s12">
         <label>Descrição</label>
@@ -128,6 +141,7 @@
     </div>
 
   </form>
+  
 </template>
 
 <script>
@@ -136,10 +150,12 @@ let clientes = [],
     chamado = {
       status: "ABERTO",
       isinclusonoitinerario: false
-    };
+    },
+    emails = [];
 
 const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
-      CLIENTES_INDEX_API_URL = "/api/clientes";
+      CLIENTES_INDEX_API_URL = "/api/clientes",
+      EMAILS_BY_CLIENTE_ID_API_URL = "/api/emails";
 
 document.addEventListener("DOMContentLoaded", function() {
   if(document.getElementById("input-busca-interna")){
@@ -163,12 +179,14 @@ export default {
       this.fetchData(this.$route.params.id);
     } else {
       this.fetchClientes();
+      this.fetchEmails();
     }
   },
   data() {
     return {
       chamado,
-      clientes
+      clientes,
+      emails
     };
   },
   methods: {
@@ -235,6 +253,19 @@ export default {
         .then(chamado => {
           this.setData(chamado);
           setTimeout(this.fixTextAreaHeight, 100);
+        })
+        .catch(error => {
+          this.$parent.$emit("changeloadingstatus", false);
+          this.$parent.$emit("senderror", error);
+        });
+    },
+    fetchEmails() {
+      fetch( EMAILS_BY_CLIENTE_ID_API_URL )
+        .then(resp => resp.json())
+        .then(data => {
+          this.setEmails(data);
+          console.log("Emails recebidos:", data);
+          $('select#emails').select2();
         })
         .catch(error => {
           this.$parent.$emit("changeloadingstatus", false);
@@ -319,14 +350,18 @@ export default {
           }
         })
     },
+    setClientes(clientes) {
+      this.clientes = clientes;
+    },
     setData(chamado) {
       this.chamado = chamado;
       this.$parent.$emit("changeloadingstatus", false);
     },
-    setClientes(clientes) {
-      this.clientes = clientes;
+    setEmails(emails) {
+      this.emails = emails;
     },
     onClientesSelectChange(event){
+      // limpar select de emails - confirmar antes se der
       this.chamado.cliente_id = event.target.value;
     }
   },

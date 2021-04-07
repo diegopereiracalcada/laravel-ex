@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Cliente;
 use App\EmailConfig;
 use App\Services\EmailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\MailService;
+use App\Models\Email;
 
 class EmailController extends Controller
 {
@@ -28,5 +30,11 @@ class EmailController extends Controller
             $data);
 
         return 'foi'; 
+    }
+
+    // public function getEmailsByClienteId($clienteId){
+    public function getEmailsByClienteId(){
+        return Cliente::find(3)->emails;
+        // return Email::all();
     }
 }

@@ -8,7 +8,8 @@ use App\Cliente;
 class Email extends Model
 {
     protected $fillable = [
-        'email'
+        'email',
+        'cliente_id'
     ];
 
     public function cliente()
