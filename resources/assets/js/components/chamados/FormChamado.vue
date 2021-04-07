@@ -43,32 +43,6 @@
       </div>
     </div>
 
-    <!-- <div class="row">
-      <div class="input-field col s12 emails-wrapper">
-        <label style="position: absolute;top: -42px;">Emails</label>
-
-        <select2-multiple-control 
-            v-model="myValue" 
-            :options="myOptions" 
-            @change="myChangeEvent($event)" 
-            @select="mySelectEvent($event)" />
-        <h4>Value: {{ myValue }}</h4>
-      </div>
-    </div> -->
-
-
-    <!-- <div class="row">
-      <div class="col s12">
-        <select id="emails" name="emails[]" multiple="multiple" class="browser-default">
-          <option
-              v-for="email in emails"
-              :key="email.id" 
-              :value="email.id"
-              >{{email.email}}</option>
-        </select>
-      </div>
-    </div> -->
-
     <div class="row">
       <div class="col s12">
         <label>Descrição</label>
