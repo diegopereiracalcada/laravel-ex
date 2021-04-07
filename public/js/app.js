@@ -759,13 +759,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 var clientes = [],
     chamado = {
+  emails: [],
   status: "ABERTO",
   isinclusonoitinerario: false
 },
-    emails = [],
     myOptions = ['Escolha um cliente antes'];
 var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
     CLIENTES_INDEX_API_URL = "/api/clientes",
@@ -794,7 +795,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return {
       chamado: chamado,
       clientes: clientes,
-      emails: emails,
       myOptions: myOptions // or [{id: key, text: value}, {id: key, text: value}]
 
     };
@@ -826,6 +826,11 @@ document.addEventListener("DOMContentLoaded", function () {
     fecharChamado: function fecharChamado() {
       if (this.chamado.solucao == null || this.chamado.solucao.trim() == "") {
         alert("Para fechar o chamado preencha a solução antes");
+        return false;
+      }
+
+      if (!this.chamado.emails || this.chamado.emails.size <= 0) {
+        alert("Preencher os destinatários do email de fechamento");
         return false;
       }
 
@@ -993,14 +998,10 @@ document.addEventListener("DOMContentLoaded", function () {
       this.$parent.$emit("changeloadingstatus", false);
     },
     setEmails: function setEmails(emails) {
-      console.log("antes do map", emails);
-      emails = emails.map(function (element, index, array) {
-        console.log("a[" + index + "] = ", element);
+      this.myOptions = emails.map(function (element, index, array) {
         element.text = element.email;
         return element;
       });
-      console.log("depois do map", emails);
-      this.myOptions = emails;
     }
   },
   computed: {
@@ -22133,7 +22134,12 @@ var render = function() {
                         staticClass:
                           "waves-effect waves-light btn modal-trigger",
                         staticStyle: { width: "100%" },
-                        attrs: { href: "#modal1" }
+                        attrs: {
+                          href: "#modal1",
+                          disabled:
+                            _vm.chamado.solucao &&
+                            _vm.chamado.solucao.length <= 0
+                        }
                       },
                       [_vm._v("Encerrar Chamado")]
                     )

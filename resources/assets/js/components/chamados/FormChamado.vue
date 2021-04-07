@@ -164,6 +164,7 @@
         class="waves-effect waves-light btn modal-trigger" 
         href="#modal1"
         style="width: 100%"
+        :disabled="chamado.solucao && chamado.solucao.length <= 0"
         >Encerrar Chamado</a>
     </div>
     <div class="row" v-else>
@@ -182,10 +183,11 @@ import Select2MultipleControl from 'v-select2-multiple-component';
 
 let clientes = [],
     chamado = {
+      emails: [],
       status: "ABERTO",
       isinclusonoitinerario: false
     },
-    emails = [],
+    
     myOptions = ['Escolha um cliente antes'];
 
 const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
@@ -220,7 +222,6 @@ export default {
     return {
       chamado,
       clientes,
-      emails,
       myOptions // or [{id: key, text: value}, {id: key, text: value}]
         
     };
@@ -261,6 +262,11 @@ export default {
     fecharChamado() {
       if (this.chamado.solucao == null || this.chamado.solucao.trim() == "") {
         alert("Para fechar o chamado preencha a solução antes");
+        return false;
+      }
+
+      if (!this.chamado.emails || this.chamado.emails.size <= 0) {
+        alert("Preencher os destinatários do email de fechamento");
         return false;
       }
 
@@ -410,14 +416,10 @@ export default {
       this.$parent.$emit("changeloadingstatus", false);
     },
     setEmails(emails) {
-      console.log("antes do map", emails);
-      emails = emails.map(function (element, index, array) {
-        console.log("a[" + index + "] = ", element);
+      this.myOptions = emails.map(function (element, index, array) {
         element.text = element.email;
         return element;
       });
-      console.log("depois do map", emails);
-      this.myOptions = emails;
     }
   },
   computed: {
