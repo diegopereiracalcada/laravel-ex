@@ -5,9 +5,13 @@
     v-on:submit.prevent="onSubmit"
     class="chamado"
   >
+
+    <input type="hidden" v-model="chamado.status" />
+
     <div v-if="updateMode" @click="sendUpdateChamado" class="bg-clickti-blue save-button">
       <i class="material-icons">save</i>
     </div>
+
     <div v-if="this.updateMode" class="row">
       <div class="col s2">
         <label>Id</label>
@@ -22,6 +26,7 @@
         <input v-model="chamado.cliente_shortname" disabled />
       </div>
     </div>
+
     <div 
       v-if="!updateMode"
       class="row">
@@ -37,12 +42,14 @@
         <label>Cliente</label>
       </div>
     </div>
+
     <div class="row">
       <div class="col s12">
         <label>Descrição</label>
         <input id="descricao"  v-model="chamado.descricao" :disabled="updateMode" />
       </div>
     </div>
+
     <div class="row">
       <div class="input-field col s12">
         <textarea
@@ -53,6 +60,7 @@
         <label class="active" for="observacao">Observação</label>
       </div>
     </div>
+
     <div v-if="mostrarIncluirNoItinerario && !updateMode" class="row">
       <div class="col s12">
         <label>
@@ -61,6 +69,7 @@
         </label>
       </div>
     </div>
+
     <div class="row" v-if="!updateMode">
       <div class="col s12">
         <label>
@@ -69,6 +78,7 @@
         </label>
       </div>
     </div>
+
     <div class="row" >
       <div class="col s12">
         <label>
@@ -78,6 +88,7 @@
         </label>
       </div>
     </div>
+
     <div class="row">
       <div class="col s12">
         <label>
@@ -92,7 +103,7 @@
           >{{ chamado.cliente.preventivapadrao }}</textarea>
       </div>
     </div>
-    <input type="hidden" v-model="chamado.status" />
+
     <div class="row" v-if="updateMode || chamado.status == 'FECHADO'">
       <div class="input-field col s12">
         <textarea
@@ -115,6 +126,7 @@
         class="btn waves-effect waves-light green col s12"
         >Abrir Chamado</button>
     </div>
+
   </form>
 </template>
 
