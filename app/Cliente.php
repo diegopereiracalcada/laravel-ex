@@ -12,7 +12,7 @@ class Cliente extends Model
     }
 
     public function emails(){
-        return $this->hasMany(Email::class);
+        return $this->hasMany(Email::class)->orderBy('email');
     }
 
     public function notas(){

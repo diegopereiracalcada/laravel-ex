@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Select2MultipleControl from 'v-select2-multiple-component';
+
 
 Vue.use(VueRouter)
+Vue.component('Select2MultipleControl', Select2MultipleControl);
 
 import App from './views/App'
 

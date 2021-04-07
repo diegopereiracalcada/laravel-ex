@@ -43,8 +43,20 @@
       </div>
     </div>
 
-
     <div class="row">
+      <div class="input-field col s12">
+        <label>Emails</label>
+        <select2-multiple-control 
+            v-model="myValue" 
+            :options="myOptions" 
+            @change="myChangeEvent($event)" 
+            @select="mySelectEvent($event)" />
+        <h4>Value: {{ myValue }}</h4>
+      </div>
+    </div>
+
+
+    <!-- <div class="row">
       <div class="col s12">
         <select id="emails" name="emails[]" multiple="multiple" class="browser-default">
           <option
@@ -54,7 +66,7 @@
               >{{email.email}}</option>
         </select>
       </div>
-    </div>
+    </div> -->
 
     <div class="row">
       <div class="col s12">
@@ -146,12 +158,15 @@
 
 <script>
 
+import Select2MultipleControl from 'v-select2-multiple-component';
+
 let clientes = [],
     chamado = {
       status: "ABERTO",
       isinclusonoitinerario: false
     },
-    emails = [];
+    emails = [],
+    myOptions = ['op1', 'op2', 'op3'];
 
 const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
       CLIENTES_INDEX_API_URL = "/api/clientes",
@@ -186,7 +201,10 @@ export default {
     return {
       chamado,
       clientes,
-      emails
+      emails,
+      myValue: '',
+      myOptions // or [{id: key, text: value}, {id: key, text: value}]
+        
     };
   },
   methods: {
@@ -265,7 +283,7 @@ export default {
         .then(data => {
           this.setEmails(data);
           console.log("Emails recebidos:", data);
-          $('select#emails').select2();
+          // $('select#emails').select2();
         })
         .catch(error => {
           this.$parent.$emit("changeloadingstatus", false);
@@ -277,6 +295,15 @@ export default {
           $(this).height($(this).prop('scrollHeight'));
       });
     },
+
+    myChangeEvent(val){
+        console.log(val);
+    },
+
+    mySelectEvent({id, text}){
+        console.log({id, text})
+    },
+
     onSubmit(form) {
       if (this.updateMode) {
         this.chamado.enviaremailfechamento = document.getElementById('enviarEmail').checked;
@@ -358,7 +385,14 @@ export default {
       this.$parent.$emit("changeloadingstatus", false);
     },
     setEmails(emails) {
-      this.emails = emails;
+      console.log("antes do map", emails);
+      emails = emails.map(function (element, index, array) {
+        console.log("a[" + index + "] = ", element);
+        element.text = element.email;
+        return element;
+      });
+      console.log("depois do map", emails);
+      this.myOptions = emails;
     },
     onClientesSelectChange(event){
       // limpar select de emails - confirmar antes se der
@@ -383,15 +417,21 @@ export default {
   padding: 10px;
   cursor: pointer;
 }
+
 .save-button i {
   font-size: 30px;
 }
+
+// span.select2.select2-container.select2-container--default {
+//     display: none;
+// }
 
 @media screen and (min-width: 993px){
   .save-button {
     padding: 14px;
     z-index: 10;
   }
+
   .nav-wrapper ul{
     margin-right: 60px;
   }
