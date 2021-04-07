@@ -57,8 +57,8 @@ class MailService {
             if($isSimulacao){
                 $message->to("tarapi007@gmail.com", "tarapi007@gmail.com");
             } else {
-                //$message->to($emailCobranca->emailDestinatario, $emailCobranca->emailDestinatario)
-                  //      ->bcc("clickticonsultoria@gmail.com", "clickticonsultoria@gmail.com");
+                $message->to($emailCobranca->emailDestinatario, $emailCobranca->emailDestinatario)
+                        ->bcc("clickticonsultoria@gmail.com", "clickticonsultoria@gmail.com");
             }
                 
 
