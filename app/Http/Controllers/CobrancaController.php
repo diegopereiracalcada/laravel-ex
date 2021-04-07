@@ -22,7 +22,16 @@ class CobrancaController extends Controller
         return view('cobranca', compact('emailsCobranca'));
     }
 
-    public function enviarEmails(){
+
+    public function simularEnvio(){
+        $this->enviarEmails(false);
+    }
+    
+    public function enviarCobrancas(){
+        $this->enviarEmails(true);
+    }
+    
+    public function enviarEmails($isSimulacao){
 
         $cobrancaService = new CobrancaService();
         $mailService = new MailService();
@@ -36,7 +45,7 @@ class CobrancaController extends Controller
                 Log::debug($emailCobranca);
             } else {
                 Log::info('Cliente ' . $emailCobranca->shortname . ' => enviando cobrança...');
-                $mailService->sendCobranca($emailCobranca);
+                $mailService->sendCobranca($emailCobranca, $isSimulacao);
 
             }
 

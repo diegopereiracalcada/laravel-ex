@@ -45,17 +45,22 @@ class MailService {
         });
     }
 
-    public function sendCobranca(EmailCobranca $emailCobranca){
+    public function sendCobranca(EmailCobranca $emailCobranca, $isSimulacao){
         if(empty($emailCobranca->nomeArquivoNota) || empty($emailCobranca->nomeArquivoBoleto) )
             return;
             
-        Mail::send('emails.cobranca', [], function ($message) use ($emailCobranca) {
+        Mail::send('emails.cobranca', [], function ($message) use ($emailCobranca, $isSimulacao) {
             $message
                 ->from("clickticonsultoria@gmail.com", "ClickTI Informática")
-                ->to("tarapi007@gmail.com", "tarapi007@gmail.com")
-                // ->to($emailCobranca->emailDestinatario, $emailCobranca->emailDestinatario)
-                ->bcc("clickticonsultoria@gmail.com", "clickticonsultoria@gmail.com")
-                ->subject("BOLETO "  . $emailCobranca->shortname . " JAN" . "/" . "2021" . " CLICKTI INFORMÁTICA");
+                ->subject("BOLETO "  . $emailCobranca->shortname . " ABR" . "/" . "2021" . " CLICKTI INFORMÁTICA");
+
+            if($isSimulacao){
+                $message->to("tarapi007@gmail.com", "tarapi007@gmail.com");
+            } else {
+                //$message->to($emailCobranca->emailDestinatario, $emailCobranca->emailDestinatario)
+                  //      ->bcc("clickticonsultoria@gmail.com", "clickticonsultoria@gmail.com");
+            }
+                
 
             if(!empty($emailCobranca->nomeArquivoBoleto)){
                 $message->attach(
