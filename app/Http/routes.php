@@ -39,7 +39,7 @@ Route::get('api/itinerario', 'ChamadosController@itinerario');
 Route::get('api/busca', 'BuscaController@search');
 
 Route::get('api/enviar-email', 'EmailController@sendMail');
-Route::get('api/emails', 'EmailController@getEmailsByClienteId');
+Route::get('api/emails/{id}', 'EmailController@getEmailsByClienteId');
 
 Route::get('api/statuscliente', 'ChamadosController@statusCliente');
 

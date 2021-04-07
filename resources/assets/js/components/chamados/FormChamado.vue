@@ -43,9 +43,10 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="input-field col s12">
-        <label>Emails</label>
+    <!-- <div class="row">
+      <div class="input-field col s12 emails-wrapper">
+        <label style="position: absolute;top: -42px;">Emails</label>
+
         <select2-multiple-control 
             v-model="myValue" 
             :options="myOptions" 
@@ -53,7 +54,7 @@
             @select="mySelectEvent($event)" />
         <h4>Value: {{ myValue }}</h4>
       </div>
-    </div>
+    </div> -->
 
 
     <!-- <div class="row">
@@ -140,11 +141,30 @@
       </div>
     </div>
 
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h5>Enviar e-mail para:</h5>
+        <select2-multiple-control 
+            v-model="chamado.emails" 
+            :options="myOptions" 
+            @change="myChangeEvent($event)" 
+            @select="mySelectEvent($event)" />
+        <h4>Value: {{ chamado.emails }}</h4>
+
+      </div>
+      <div class="modal-footer">
+        <button  
+            class="btn waves-effect waves-light red col s12"
+        >Confirmar Encerramento</button>
+      </div>
+    </div>
     <div class="row" v-if="updateMode">
-      <button 
+      <a
         v-if="chamado.status != 'FECHADO'" 
-        class="btn waves-effect waves-light red col s12"
-        >Encerrar Chamado</button>
+        class="waves-effect waves-light btn modal-trigger" 
+        href="#modal1"
+        style="width: 100%"
+        >Encerrar Chamado</a>
     </div>
     <div class="row" v-else>
       <button 
@@ -166,11 +186,11 @@ let clientes = [],
       isinclusonoitinerario: false
     },
     emails = [],
-    myOptions = ['op1', 'op2', 'op3'];
+    myOptions = ['Escolha um cliente antes'];
 
 const CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
       CLIENTES_INDEX_API_URL = "/api/clientes",
-      EMAILS_BY_CLIENTE_ID_API_URL = "/api/emails";
+      EMAILS_BY_CLIENTE_ID_API_URL = "/api/emails/";
 
 document.addEventListener("DOMContentLoaded", function() {
   if(document.getElementById("input-busca-interna")){
@@ -194,7 +214,6 @@ export default {
       this.fetchData(this.$route.params.id);
     } else {
       this.fetchClientes();
-      this.fetchEmails();
     }
   },
   data() {
@@ -202,7 +221,6 @@ export default {
       chamado,
       clientes,
       emails,
-      myValue: '',
       myOptions // or [{id: key, text: value}, {id: key, text: value}]
         
     };
@@ -271,6 +289,9 @@ export default {
         .then(chamado => {
           this.setData(chamado);
           setTimeout(this.fixTextAreaHeight, 100);
+
+          this.fetchEmails();
+          this.initializeModals();
         })
         .catch(error => {
           this.$parent.$emit("changeloadingstatus", false);
@@ -278,7 +299,7 @@ export default {
         });
     },
     fetchEmails() {
-      fetch( EMAILS_BY_CLIENTE_ID_API_URL )
+      fetch( EMAILS_BY_CLIENTE_ID_API_URL + this.chamado.cliente_id )
         .then(resp => resp.json())
         .then(data => {
           this.setEmails(data);
@@ -295,15 +316,19 @@ export default {
           $(this).height($(this).prop('scrollHeight'));
       });
     },
-
+    initializeModals(){
+      var modals = document.querySelectorAll('.modal');
+      var instances = M.Modal.init(modals, {});
+    },
     myChangeEvent(val){
         console.log(val);
     },
-
     mySelectEvent({id, text}){
         console.log({id, text})
     },
-
+    onClientesSelectChange(event){
+      this.chamado.cliente_id = event.target.value;
+    },
     onSubmit(form) {
       if (this.updateMode) {
         this.chamado.enviaremailfechamento = document.getElementById('enviarEmail').checked;
@@ -393,10 +418,6 @@ export default {
       });
       console.log("depois do map", emails);
       this.myOptions = emails;
-    },
-    onClientesSelectChange(event){
-      // limpar select de emails - confirmar antes se der
-      this.chamado.cliente_id = event.target.value;
     }
   },
   computed: {
@@ -425,6 +446,14 @@ export default {
 // span.select2.select2-container.select2-container--default {
 //     display: none;
 // }
+
+.emails-wrapper .select-dropdown.dropdown-trigger {
+    display: none;
+}
+
+.select2.select2-container.select2-container--default {
+    width: 100% !important;
+}
 
 @media screen and (min-width: 993px){
   .save-button {

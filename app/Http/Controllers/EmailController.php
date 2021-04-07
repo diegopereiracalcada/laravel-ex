@@ -32,9 +32,7 @@ class EmailController extends Controller
         return 'foi'; 
     }
 
-    // public function getEmailsByClienteId($clienteId){
-    public function getEmailsByClienteId(){
-        return Cliente::find(3)->emails;
-        // return Email::all();
+    public function getEmailsByClienteId($id){
+        return Cliente::find($id)->emails;
     }
 }

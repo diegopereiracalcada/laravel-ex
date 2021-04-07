@@ -739,6 +739,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var clientes = [],
     chamado = {
@@ -746,10 +766,10 @@ var clientes = [],
   isinclusonoitinerario: false
 },
     emails = [],
-    myOptions = ['op1', 'op2', 'op3'];
+    myOptions = ['Escolha um cliente antes'];
 var CHAMADO_SHOW_API_URL_PREFIX = "/api/chamados/",
     CLIENTES_INDEX_API_URL = "/api/clientes",
-    EMAILS_BY_CLIENTE_ID_API_URL = "/api/emails";
+    EMAILS_BY_CLIENTE_ID_API_URL = "/api/emails/";
 document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("input-busca-interna")) {
     document.getElementById("input-busca-interna").focus();
@@ -768,7 +788,6 @@ document.addEventListener("DOMContentLoaded", function () {
       this.fetchData(this.$route.params.id);
     } else {
       this.fetchClientes();
-      this.fetchEmails();
     }
   },
   data: function data() {
@@ -776,7 +795,6 @@ document.addEventListener("DOMContentLoaded", function () {
       chamado: chamado,
       clientes: clientes,
       emails: emails,
-      myValue: '',
       myOptions: myOptions // or [{id: key, text: value}, {id: key, text: value}]
 
     };
@@ -843,6 +861,10 @@ document.addEventListener("DOMContentLoaded", function () {
         _this2.setData(chamado);
 
         setTimeout(_this2.fixTextAreaHeight, 100);
+
+        _this2.fetchEmails();
+
+        _this2.initializeModals();
       })["catch"](function (error) {
         _this2.$parent.$emit("changeloadingstatus", false);
 
@@ -852,7 +874,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchEmails: function fetchEmails() {
       var _this3 = this;
 
-      fetch(EMAILS_BY_CLIENTE_ID_API_URL).then(function (resp) {
+      fetch(EMAILS_BY_CLIENTE_ID_API_URL + this.chamado.cliente_id).then(function (resp) {
         return resp.json();
       }).then(function (data) {
         _this3.setEmails(data);
@@ -869,6 +891,10 @@ document.addEventListener("DOMContentLoaded", function () {
         $(this).height($(this).prop('scrollHeight'));
       });
     },
+    initializeModals: function initializeModals() {
+      var modals = document.querySelectorAll('.modal');
+      var instances = M.Modal.init(modals, {});
+    },
     myChangeEvent: function myChangeEvent(val) {
       console.log(val);
     },
@@ -879,6 +905,9 @@ document.addEventListener("DOMContentLoaded", function () {
         id: id,
         text: text
       });
+    },
+    onClientesSelectChange: function onClientesSelectChange(event) {
+      this.chamado.cliente_id = event.target.value;
     },
     onSubmit: function onSubmit(form) {
       if (this.updateMode) {
@@ -972,10 +1001,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       console.log("depois do map", emails);
       this.myOptions = emails;
-    },
-    onClientesSelectChange: function onClientesSelectChange(event) {
-      // limpar select de emails - confirmar antes se der
-      this.chamado.cliente_id = event.target.value;
     }
   },
   computed: {
@@ -2400,7 +2425,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".edit-button,\n.save-button {\n  position: fixed;\n  top: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  cursor: pointer;\n}\n.save-button i {\n  font-size: 30px;\n}\n@media screen and (min-width: 993px) {\n.save-button {\n    padding: 14px;\n    z-index: 10;\n}\n.nav-wrapper ul {\n    margin-right: 60px;\n}\n}", ""]);
+exports.push([module.i, ".edit-button,\n.save-button {\n  position: fixed;\n  top: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  cursor: pointer;\n}\n.save-button i {\n  font-size: 30px;\n}\n.emails-wrapper .select-dropdown.dropdown-trigger {\n  display: none;\n}\n.select2.select2-container.select2-container--default {\n  width: 100% !important;\n}\n@media screen and (min-width: 993px) {\n.save-button {\n    padding: 14px;\n    z-index: 10;\n}\n.nav-wrapper ul {\n    margin-right: 60px;\n}\n}", ""]);
 
 // exports
 
@@ -21795,38 +21820,6 @@ var render = function() {
             : _vm._e(),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
-            _c(
-              "div",
-              { staticClass: "input-field col s12" },
-              [
-                _c("label", [_vm._v("Emails")]),
-                _vm._v(" "),
-                _c("select2-multiple-control", {
-                  attrs: { options: _vm.myOptions },
-                  on: {
-                    change: function($event) {
-                      return _vm.myChangeEvent($event)
-                    },
-                    select: function($event) {
-                      return _vm.mySelectEvent($event)
-                    }
-                  },
-                  model: {
-                    value: _vm.myValue,
-                    callback: function($$v) {
-                      _vm.myValue = $$v
-                    },
-                    expression: "myValue"
-                  }
-                }),
-                _vm._v(" "),
-                _c("h4", [_vm._v("Value: " + _vm._s(_vm.myValue))])
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col s12" }, [
               _c("label", [_vm._v("Descrição")]),
               _vm._v(" "),
@@ -22097,13 +22090,50 @@ var render = function() {
               ])
             : _vm._e(),
           _vm._v(" "),
+          _c("div", { staticClass: "modal", attrs: { id: "modal1" } }, [
+            _c(
+              "div",
+              { staticClass: "modal-content" },
+              [
+                _c("h5", [_vm._v("Enviar e-mail para:")]),
+                _vm._v(" "),
+                _c("select2-multiple-control", {
+                  attrs: { options: _vm.myOptions },
+                  on: {
+                    change: function($event) {
+                      return _vm.myChangeEvent($event)
+                    },
+                    select: function($event) {
+                      return _vm.mySelectEvent($event)
+                    }
+                  },
+                  model: {
+                    value: _vm.chamado.emails,
+                    callback: function($$v) {
+                      _vm.$set(_vm.chamado, "emails", $$v)
+                    },
+                    expression: "chamado.emails"
+                  }
+                }),
+                _vm._v(" "),
+                _c("h4", [_vm._v("Value: " + _vm._s(_vm.chamado.emails))])
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm._m(0)
+          ]),
+          _vm._v(" "),
           _vm.updateMode
             ? _c("div", { staticClass: "row" }, [
                 _vm.chamado.status != "FECHADO"
                   ? _c(
-                      "button",
+                      "a",
                       {
-                        staticClass: "btn waves-effect waves-light red col s12"
+                        staticClass:
+                          "waves-effect waves-light btn modal-trigger",
+                        staticStyle: { width: "100%" },
+                        attrs: { href: "#modal1" }
                       },
                       [_vm._v("Encerrar Chamado")]
                     )
@@ -22120,7 +22150,20 @@ var render = function() {
       )
     : _vm._e()
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        { staticClass: "btn waves-effect waves-light red col s12" },
+        [_vm._v("Confirmar Encerramento")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 

@@ -29,6 +29,7 @@ class ChamadosController extends Controller
                                         'chamados.id',
                                         'chamados.numerochamado',
                                         'clientes.shortname as cliente_shortname',
+                                        'clientes.id as cliente_id',
                                         'status',
                                         'descricao',
                                         'observacao',
