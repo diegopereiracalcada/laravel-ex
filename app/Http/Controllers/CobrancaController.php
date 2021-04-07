@@ -24,11 +24,11 @@ class CobrancaController extends Controller
 
 
     public function simularEnvio(){
-        $this->enviarEmails(false);
+        $this->enviarEmails(true);
     }
     
     public function enviarCobrancas(){
-        $this->enviarEmails(true);
+        $this->enviarEmails(false);
     }
     
     public function enviarEmails($isSimulacao){
