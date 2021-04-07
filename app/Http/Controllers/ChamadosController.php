@@ -184,7 +184,7 @@ class ChamadosController extends Controller
                 ->update(['dt_fechamento' => Carbon::now()]);
 
             if(request('enviaremailfechamento')){
-                (new MailService())->sendFechamento($cliente->email,$cliente->email, $chamado);
+                (new MailService())->sendFechamento($chamado,request('emails'));
             }
         }
  

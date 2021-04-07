@@ -2,8 +2,8 @@
 
 namespace App;
 
+use App\Models\Email;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 
 class MailService {
 
@@ -24,13 +24,18 @@ class MailService {
             $chamado);
     }
 
-    public function sendFechamento($to_name, $to_email, $chamado){
-        $this->sendChamadoMail(
-            "emails.fechamento", 
-            "clickticonsultoria@gmail.com", //HARDCODE
-            "clickticonsultoria@gmail.com", //HARDCODE
-            "Fechamento de Chamado #" . $chamado->numerochamado . " - ClickTI Informática", 
-            $chamado);
+    public function sendFechamento($chamado, $emails){
+        foreach ($emails as $emailId) {
+            $email = Email::find($emailId)->email;
+            
+            $this->sendChamadoMail(
+                "emails.fechamento", 
+                $email, 
+                $email,
+                "Fechamento de Chamado #" . $chamado->numerochamado . " - ClickTI Informática", 
+                $chamado); 
+        }
+        
     }
 
     private function sendChamadoMail($mailView, $to_name, $to_email, $subject, $chamado){
